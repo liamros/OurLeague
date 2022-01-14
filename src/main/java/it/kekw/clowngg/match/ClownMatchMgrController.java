@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("match")
 public class ClownMatchMgrController implements ClownMatchMgr {
 
-    // @Autowired
-    // private ClownMatchMgrImpl clownMatchMgrImpl;
+    @Autowired
+    private ClownMatchMgrImpl clownMatchMgrImpl;
 
     @Override
     @GetMapping("/ping")
     public String ping() {
-        // return clownMatchMgrImpl.ping();
-        return "true";
+        return clownMatchMgrImpl.ping();
     }
     
 }

@@ -7,5 +7,12 @@
       http://www.springframework.org/schema/context
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config/>
-      <!-- bean definitions go here -->
+
+      <bean class='it.kekw.clowngg.match.ClownMatchMgrImpl' id="clownMatchMgrImpl">
+           
+      </bean>
+
+     <bean class="it.kekw.clowngg.match.ClownMatchMgrController" id="clownMatchMgrController"/>     
+
+
 </beans>

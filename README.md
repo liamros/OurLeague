@@ -9,7 +9,7 @@ JDK 11
 
 Scaricare wlp e aggiungere al Path %path%\wlp\bin
 
-mvn install, questo produce un war, posizionato in C:\Users\%user\.m2\repository\it\kekw\clowngg\0.0.1-SNAPSHOT\, questo path va aggiunto al server.xml che si trova in wlp\usr\servers\defaultServer\
+mvn install, questo produce un war, posizionato in C:\Users\%user%\.m2\repository\it\kekw\clowngg\0.0.1-SNAPSHOT\, questo path va aggiunto al server.xml che si trova in wlp\usr\servers\defaultServer\
 
 
 server run defaultSever

@@ -6,7 +6,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public String ping() {
-        return "true";
+        return matchAPI;
     }
 
 

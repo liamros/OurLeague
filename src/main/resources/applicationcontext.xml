@@ -5,13 +5,11 @@
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config />
 
-      <bean class="ClownMatchMgrImpl" id="clownMatchMgrImpl" >
+      <bean class="it.kekw.clowngg.match.ClownMatchMgrImpl" id="clownMatchMgrImpl" >
             <property name="matchAPI">
                   <value>${riot.api.match.history}</value>
             </property>
       </bean>
-
-      <bean class="ClownMatchMgrController" id="clownMatchMgrController" />
 
 
 </beans>

@@ -34,6 +34,7 @@ public class RiotAPIMgr {
         this.authHeaderKey = authHeaderKey;
     }
 
+    // TODO : Firebase persistence + exception handling + make it pretty
     public SummonerDTO getSummonerInfoBySummonerName(String summonerName) throws ClientProtocolException, IOException, Exception {
 
 
@@ -43,8 +44,6 @@ public class RiotAPIMgr {
         try {
             String url = MessageFormat.format(summonerUrl, summonerName);
             HttpGet request = new HttpGet(url);
-
-            // add request headers
             request.addHeader(authHeaderKey, apiToken);
 
             CloseableHttpResponse response = httpClient.execute(request);
@@ -52,7 +51,6 @@ public class RiotAPIMgr {
             try {
                 HttpEntity entity = response.getEntity();
                 if (entity != null) {
-                    // return it as a String
                     dto = MAPPER.readValue(convertHttpEntityToJson(entity), SummonerDTO.class);
                 }
 

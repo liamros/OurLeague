@@ -26,13 +26,8 @@ public class RiotAPIMgr {
 
     private String authHeaderKey;
 
-    public String getAuthHeaderKey() {
-        return authHeaderKey;
-    }
+    
 
-    public void setAuthHeaderKey(String authHeaderKey) {
-        this.authHeaderKey = authHeaderKey;
-    }
 
     // TODO : Firebase persistence + exception handling + make it pretty
     public SummonerDTO getSummonerInfoBySummonerName(String summonerName) throws ClientProtocolException, IOException, Exception {
@@ -63,7 +58,7 @@ public class RiotAPIMgr {
         return dto;
     }
 
-    // TODO : create specific exception for missing response
+    // TODO : create specific exception for missing response + think of a flexible way to generalize rest calls
     private String convertHttpEntityToJson(HttpEntity entity) throws Exception {
         if (entity != null) {
 
@@ -87,5 +82,10 @@ public class RiotAPIMgr {
     public void setSummonerUrl(String summonerUrl) {
         this.summonerUrl = summonerUrl;
     }
+
+    public void setAuthHeaderKey(String authHeaderKey) {
+        this.authHeaderKey = authHeaderKey;
+    }
+
 
 }

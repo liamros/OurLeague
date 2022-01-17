@@ -11,7 +11,7 @@
             </property>
       </bean>
 
-      <bean class="it.kekw.clowngg.riot.api.RiotAPIMgr" id="riotMgr" >
+      <bean class="it.kekw.clowngg.riot.RiotAPIMgr" id="riotMgr" >
             <property name="summonerUrl" value="${riot.api.baseURL}${riot.api.summoner.path}"/>
             <property name="apiToken" value="${riot.api.token}"/>
             <property name="authHeaderKey" value="${riot.api.auth.header.key}"/>

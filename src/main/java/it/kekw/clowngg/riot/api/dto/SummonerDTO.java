@@ -4,9 +4,9 @@ public class SummonerDTO {
 
     private String puuid;
 
-    private String gamename;
+    private String gameName;
 
-    private String tagline;
+    private String tagLine;
 
     public void setPuuid(String puuid) {
         this.puuid = puuid;
@@ -16,20 +16,20 @@ public class SummonerDTO {
         return puuid;
     }
 
-    public void setGamename(String gamename) {
-        this.gamename = gamename;
+    public void setGameName(String gamename) {
+        this.gameName = gamename;
     }
 
-    public String getGamename() {
-        return gamename;
+    public String getGameName() {
+        return gameName;
     }
 
-    public void setTagline(String tagline) {
-        this.tagline = tagline;
+    public void setTagLine(String tagline) {
+        this.tagLine = tagline;
     }
 
-    public String getTagline() {
-        return tagline;
+    public String getTagLine() {
+        return tagLine;
     }
 
 }

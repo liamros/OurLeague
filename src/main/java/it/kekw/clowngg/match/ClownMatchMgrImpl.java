@@ -2,8 +2,8 @@ package it.kekw.clowngg.match;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import it.kekw.clowngg.riot.api.RiotAPIMgr;
-import it.kekw.clowngg.riot.api.dto.SummonerDTO;
+import it.kekw.clowngg.riot.RiotAPIMgr;
+import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 

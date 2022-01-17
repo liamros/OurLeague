@@ -1,4 +1,4 @@
-package it.kekw.clowngg.riot.api.dto;
+package it.kekw.clowngg.riot.dto;
 
 public class SummonerDTO {
 

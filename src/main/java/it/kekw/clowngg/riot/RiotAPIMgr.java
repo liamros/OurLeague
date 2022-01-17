@@ -1,4 +1,4 @@
-package it.kekw.clowngg.riot.api;
+package it.kekw.clowngg.riot;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
-import it.kekw.clowngg.riot.api.dto.SummonerDTO;
+import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public class RiotAPIMgr {
 

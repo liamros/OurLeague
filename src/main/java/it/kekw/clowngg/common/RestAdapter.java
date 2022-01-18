@@ -1,20 +1,30 @@
 package it.kekw.clowngg.common;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,56 +57,124 @@ public class RestAdapter implements InvocationHandler {
         String url = sb.toString();
         Class<?> responseCls = method.getReturnType();
         Object dto = null;
-        switch (op.getHttpMethod()) {
-            case "GET":
-                dto = doGet(url, responseCls, args);
-                break;
-            default:
-                LOGGER.info("KEKW");
+        try {
+            switch (op.getHttpMethod()) {
+                case "GET":
+                    dto = doGet(url, responseCls, args);
+                    break;
+                // TODO: test
+                case "POST":
+                    dto = doPost(url, responseCls, args[0]);
+                    break;
+                // TODO: test
+                case "PUT":
+                    dto = doPut(url, responseCls, args[0]);
+                    break;
+                default:
+                    LOGGER.info("KEKW");
+            }
+        } catch (Exception e) {
+            LOGGER.error("ERROR: Error occured while performing http call", e);
         }
 
         return dto;
 
     }
 
-    private Object doGet(String url, Class<?> responseClass, Object... parameters) {
-        Object dto = null;
+    /**
+     * @param url         URL to be formatted with parameters
+     * @param responseCls Response dto class type
+     * @param parameters  GET request parameters
+     * @return Object parsed DTO response
+     * @throws IOException
+     */
+    private Object doGet(String url, Class<?> responseCls, Object... parameters) throws IOException {
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        try {
-            url = MessageFormat.format(url, parameters);
-            HttpGet request = new HttpGet(url);
-
-            Map<String, String> map = (Map<String, String>) headers.get();
-            if (map != null) {
-                for (Entry<String, String> entry : map.entrySet()) {
-                    request.addHeader(entry.getKey(), entry.getValue());
-                }
-                headers.remove();
-            }
-
-            CloseableHttpResponse response = httpClient.execute(request);
-            LOGGER.info("INFO: Http call performed to {} with response code {}", url, response.getStatusLine().getStatusCode());
-
-            try {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    dto = MAPPER.readValue(entity.getContent(), responseClass);
-                }
-
-            } finally {
-                response.close();
-            }
-        } catch (Exception e) {
-            LOGGER.error("ERROR: Error occured while performing http call", e);
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-            }
-        }
+        url = MessageFormat.format(url, parameters);
+        HttpGet request = new HttpGet(url);
+        addHeaderToRequest(request);
+        Object dto = performHttpRequest(httpClient, request, responseCls);
+        httpClient.close();
         return dto;
+    }
 
+    /**
+     * @param url
+     * @param responseCls Response dto class type
+     * @param requestBody Request payload DTO
+     * @return Object parsed DTO response
+     * @throws Exception
+     */
+    private Object doPost(String url, Class<?> responseCls, Object requestBody) throws Exception {
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPost request = new HttpPost(url);
+        addHeaderToRequest(request);
+        addPayloadToRequest(request, requestBody);
+        Object dto = performHttpRequest(httpClient, request, responseCls);
+        httpClient.close();
+        return dto;
+    }
+
+    /**
+     * @param url
+     * @param responseCls Response dto class type
+     * @param requestBody Request payload DTO
+     * @return Object parsed DTO response
+     * @throws Exception
+     */
+    private Object doPut(String url, Class<?> responseCls, Object requestBody) throws Exception {
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPut request = new HttpPut(url);
+        addHeaderToRequest(request);
+        addPayloadToRequest(request, requestBody);
+        Object dto = performHttpRequest(httpClient, request, responseCls);
+        httpClient.close();
+        return dto;
+    }
+
+    private void addPayloadToRequest(HttpEntityEnclosingRequestBase request, Object requestBody) throws Exception {
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        Field[] fields = requestBody.getClass().getFields();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            params.add(new BasicNameValuePair(field.getName(), (String) field.get(requestBody)));
+        }
+        request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+    }
+
+    private void addHeaderToRequest(HttpRequestBase request) {
+        Map<String, String> map = (Map<String, String>) headers.get();
+        if (map != null) {
+            for (Entry<String, String> entry : map.entrySet()) {
+                request.addHeader(entry.getKey(), entry.getValue());
+            }
+            headers.remove();
+        }
+    }
+
+    /**
+     * Performs the http request and also parses the response to an object of the
+     * responseCls passed
+     * 
+     * @param httpClient
+     * @param request
+     * @param responseCls
+     * @return Object
+     * @throws IOException
+     */
+    private Object performHttpRequest(CloseableHttpClient httpClient, HttpRequestBase request, Class<?> responseCls)
+            throws IOException {
+        CloseableHttpResponse response = httpClient.execute(request);
+        LOGGER.info("INFO: Http call performed to {} with response code {}", request.getURI().toString(),
+                response.getStatusLine().getStatusCode());
+        HttpEntity entity = response.getEntity();
+        Object dto = MAPPER.readValue(entity.getContent(), responseCls);
+        response.close();
+        return dto;
     }
 
     public static void addHeader(String key, String value) {

@@ -21,7 +21,7 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
 
     private ApplicationContext applicationContext;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapterProcessor.class);
 
 
     
@@ -64,6 +64,7 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
                 throw new RuntimeException();
             }
         }
+        LOGGER.info("INFO: Inizialized RestAdapter {} for {}", aBeanName, s);
         return proxy;
 
     }

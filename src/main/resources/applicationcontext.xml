@@ -6,15 +6,39 @@
       <context:annotation-config />
 
       <bean class="it.kekw.clowngg.match.ClownMatchMgrImpl" id="clownMatchMgrImpl" >
-            <property name="matchAPI">
-                  <value>${riot.api.match.history}</value>
-            </property>
+            <property name="apiToken" value="${riot.api.token}"/>
+            <property name="authHeaderKey" value="${riot.api.auth.header.key}"/>
       </bean>
 
-      <bean class="it.kekw.clowngg.riot.RiotAPIMgr" id="riotMgr" >
+      <!--<bean class="it.kekw.clowngg.riot.RiotAPIMgr" id="riotMgr" >
             <property name="summonerUrl" value="${riot.api.baseURL}${riot.api.summoner.path}"/>
             <property name="apiToken" value="${riot.api.token}"/>
             <property name="authHeaderKey" value="${riot.api.auth.header.key}"/>
-      </bean>      
+      </bean>   -->
+
+
+      <bean class="it.kekw.clowngg.common.RestAdapter" id="riotMgr">
+            <constructor-arg name="baseUrl" value="${riot.api.baseURL}" />
+            <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.RiotMgrInterface" />
+            <constructor-arg name="operations">
+                  <map>
+                        <entry key="getSummonerInfoBySummonerName">
+                              <bean class="it.kekw.clowngg.common.RestOperation">
+                                    <property name="path" value="${riot.api.summoner.path}" />
+                                    <property name="httpMethod" value="GET" />
+                              </bean>
+                        </entry>
+                  </map>
+            </constructor-arg>
+      </bean>
+
+
+      <bean class="java.util.HashMap" id="restAdapterUsers">
+            <constructor-arg name="m">
+                  <map>
+                        <entry key="riotMgr" value="clownMatchMgrImpl" />
+                  </map>
+            </constructor-arg>
+      </bean>
 
 </beans>

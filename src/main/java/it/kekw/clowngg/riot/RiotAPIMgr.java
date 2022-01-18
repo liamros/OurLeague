@@ -16,7 +16,8 @@ import org.apache.http.impl.client.HttpClients;
 
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
-public class RiotAPIMgr {
+@Deprecated
+public class RiotAPIMgr implements RiotMgrInterface {
 
     final static private ObjectMapper MAPPER = new ObjectMapper();
 

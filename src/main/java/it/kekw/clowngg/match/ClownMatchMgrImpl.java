@@ -1,26 +1,29 @@
 package it.kekw.clowngg.match;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import it.kekw.clowngg.riot.RiotAPIMgr;
+import it.kekw.clowngg.common.RestAdapter;
+import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
+
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 
-    @Autowired
-    private RiotAPIMgr riotMgr;
+    private RiotMgrInterface riotMgr;
 
-    private String matchAPI;
+    private String authHeaderKey;
+
+    private String apiToken;
+
 
     @Override
     public String ping() {
-        return matchAPI;
+        return "true";
     }
 
     @Override
     public String insertSummoner(String summonerName) {
         SummonerDTO dto = null;
         try {
+            RestAdapter.addHeader(authHeaderKey, apiToken);
             dto = riotMgr.getSummonerInfoBySummonerName(summonerName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,18 +33,15 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
 
-
-
-
-
-
-
-    public String getMatchAPI() {
-        return matchAPI;
+    public void setAuthHeaderKey(String authHeaderKey) {
+        this.authHeaderKey = authHeaderKey;
     }
 
-    public void setMatchAPI(String matchAPI) {
-        this.matchAPI = matchAPI;
+
+    public void setApiToken(String apiToken) {
+        this.apiToken = apiToken;
     }
+
+    
 
 }

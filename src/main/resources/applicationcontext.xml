@@ -18,7 +18,7 @@
                   <map>
                         <entry key="getSummonerInfoBySummonerName">
                               <bean class="it.kekw.clowngg.common.RestOperation">
-                                    <property name="path" value="${riot.api.summoner.path}" />
+                                    <property name="path" value="/riot/account/v1/accounts/by-riot-id/{0}/EUW" />
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>

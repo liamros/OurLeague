@@ -1,30 +1,25 @@
 package it.kekw.clowngg.common;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -137,13 +132,9 @@ public class RestAdapter implements InvocationHandler {
 
     private void addPayloadToRequest(HttpEntityEnclosingRequestBase request, Object requestBody) throws Exception {
 
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        Field[] fields = requestBody.getClass().getFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            params.add(new BasicNameValuePair(field.getName(), (String) field.get(requestBody)));
-        }
-        request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        String json = MAPPER.writeValueAsString(requestBody);
+        StringEntity params = new StringEntity(json);
+        request.setEntity(params);
     }
 
     private void addHeaderToRequest(HttpRequestBase request) {

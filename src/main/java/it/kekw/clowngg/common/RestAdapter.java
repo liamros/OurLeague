@@ -27,9 +27,9 @@ public class RestAdapter implements InvocationHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapter.class);
 
-    final static private ObjectMapper MAPPER = new ObjectMapper();
+    private final static ObjectMapper MAPPER = new ObjectMapper();
 
-    static private ThreadLocal<Map<String, String>> headers = new ThreadLocal<Map<String, String>>();
+    private static ThreadLocal<Map<String, String>> headers = new ThreadLocal<Map<String, String>>();
 
     private Class<?> interfaceProxy;
 

@@ -34,7 +34,7 @@ public class RestAdapter implements InvocationHandler {
 
     final static private ObjectMapper MAPPER = new ObjectMapper();
 
-    static private ThreadLocal headers = new ThreadLocal<Map<String, String>>();
+    static private ThreadLocal<Map<String, String>> headers = new ThreadLocal<Map<String, String>>();
 
     private Class<?> interfaceProxy;
 

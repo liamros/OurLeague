@@ -8,4 +8,5 @@ public interface AccountRepository extends CrudRepository<AccountJPA, Long> {
 
     public AccountJPA findByPuuid(String puuid);
 
+
 }

@@ -32,6 +32,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         try {
             RestAdapter.addHeader(authHeaderKey, apiToken);
             dto = riotMgr.getSummonerInfoBySummonerName(summonerName);
+            AccountJPA jpa = new AccountJPA();
+            jpa.setPuuid(dto.getPuuid());
+            jpa.setGameName(dto.getGameName());
+            accountRepository.save(jpa);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();

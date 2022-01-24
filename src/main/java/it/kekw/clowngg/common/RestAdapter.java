@@ -92,6 +92,7 @@ public class RestAdapter implements InvocationHandler {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         url = MessageFormat.format(url, parameters);
+        url = url.replaceAll(" ", "%20");
         HttpGet request = new HttpGet(url);
         addHeaderToRequest(request);
         Object dto = performHttpRequest(httpClient, request, responseCls);

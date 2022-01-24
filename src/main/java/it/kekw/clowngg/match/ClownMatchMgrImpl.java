@@ -8,7 +8,6 @@ import it.kekw.clowngg.match.persistence.repository.AccountRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
-
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     private RiotMgrInterface riotMgr;
@@ -19,7 +18,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Autowired
     private AccountRepository accountRepository;
-
 
     @Override
     public String ping() {
@@ -34,7 +32,11 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             dto = riotMgr.getSummonerInfoBySummonerName(summonerName);
             AccountJPA jpa = new AccountJPA();
             jpa.setPuuid(dto.getPuuid());
-            jpa.setGameName(dto.getGameName());
+            if (dto.getGameName() != null)
+                jpa.setGameName(dto.getGameName());
+            else
+                jpa.setGameName(summonerName);
+            jpa.setTagLine(dto.getTagLine());
             accountRepository.save(jpa);
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,17 +47,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public String getGameNameByPuuid(String puuid) {
-        AccountJPA acc = accountRepository.findByPuuid(puuid);   
+        AccountJPA acc = accountRepository.findByPuuid(puuid);
         return acc.getGameName();
     }
-
-    
-
 
     public void setAuthHeaderKey(String authHeaderKey) {
         this.authHeaderKey = authHeaderKey;
     }
-
 
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;

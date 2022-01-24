@@ -7,4 +7,6 @@ public interface ClownMatchMgr {
 
     public String insertSummoner(String summonerName);
 
+    public String getGameNameByPuuid(String puuid);
+
 }

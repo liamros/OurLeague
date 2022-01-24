@@ -1,6 +1,10 @@
 package it.kekw.clowngg.match;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import it.kekw.clowngg.common.RestAdapter;
+import it.kekw.clowngg.match.persistence.jpa.AccountJPA;
+import it.kekw.clowngg.match.persistence.repository.AccountRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
@@ -12,6 +16,9 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     private String authHeaderKey;
 
     private String apiToken;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
 
     @Override
@@ -32,6 +39,14 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         return dto.getPuuid();
     }
 
+    @Override
+    public String getGameNameByPuuid(String puuid) {
+        AccountJPA acc = accountRepository.findByPuuid(puuid);   
+        return acc.getGameName();
+    }
+
+    
+
 
     public void setAuthHeaderKey(String authHeaderKey) {
         this.authHeaderKey = authHeaderKey;
@@ -41,7 +56,5 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
-
-    
 
 }

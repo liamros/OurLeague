@@ -14,6 +14,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPatch;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -64,6 +65,10 @@ public class RestAdapter implements InvocationHandler {
                 // TODO: test
                 case "PUT":
                     dto = doPut(url, responseCls, args[0]);
+                    break;
+                // TODO: test
+                case "PATCH":
+                    dto = doPatch(url, responseCls, args[0]);
                     break;
                 default:
                     LOGGER.info("KEKW");
@@ -123,6 +128,24 @@ public class RestAdapter implements InvocationHandler {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpPut request = new HttpPut(url);
+        addHeaderToRequest(request);
+        addPayloadToRequest(request, requestBody);
+        Object dto = performHttpRequest(httpClient, request, responseCls);
+        httpClient.close();
+        return dto;
+    }
+
+    /**
+     * @param url
+     * @param responseCls Response dto class type
+     * @param requestBody Request payload DTO
+     * @return Object parsed DTO response
+     * @throws Exception
+     */
+    private Object doPatch(String url, Class<?> responseCls, Object requestBody) throws Exception {
+
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPatch request = new HttpPatch(url);
         addHeaderToRequest(request);
         addPayloadToRequest(request, requestBody);
         Object dto = performHttpRequest(httpClient, request, responseCls);

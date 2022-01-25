@@ -42,7 +42,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
                 jpa.setGameName(summonerName);
             jpa.setTagLine(dto.getTagLine());
             AccountJPA persisted = accountRepository.save(jpa);
-            LOGGER.info("Persisted {}", persisted.toString());
+            LOGGER.info("INFO: Persisted {}", persisted.toString());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -56,6 +56,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         return acc.getGameName();
     }
 
+
+
+
+    
     public void setAuthHeaderKey(String authHeaderKey) {
         this.authHeaderKey = authHeaderKey;
     }

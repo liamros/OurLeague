@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.kekw.clowngg.riot.dto.SummonerDTO;
+
 @RestController
 @RequestMapping("match")
 public class ClownMatchMgrController implements ClownMatchMgr {
@@ -23,7 +25,7 @@ public class ClownMatchMgrController implements ClownMatchMgr {
 
     @Override
     @PutMapping("/insertSummoner")
-    public String insertSummoner(@RequestBody String summonerName) {
+    public SummonerDTO insertSummoner(@RequestBody String summonerName) {
         return clownMatchMgrImpl.insertSummoner(summonerName);
     }
 

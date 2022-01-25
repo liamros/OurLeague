@@ -1,5 +1,7 @@
 package it.kekw.clowngg.match;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.kekw.clowngg.common.RestAdapter;
@@ -9,6 +11,8 @@ import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClownMatchMgrImpl.class);
 
     private RiotMgrInterface riotMgr;
 
@@ -25,7 +29,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public String insertSummoner(String summonerName) {
+    public SummonerDTO insertSummoner(String summonerName) {
         SummonerDTO dto = null;
         try {
             RestAdapter.addHeader(authHeaderKey, apiToken);
@@ -37,12 +41,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             else
                 jpa.setGameName(summonerName);
             jpa.setTagLine(dto.getTagLine());
-            accountRepository.save(jpa);
+            AccountJPA persisted = accountRepository.save(jpa);
+            LOGGER.info("Persisted {}", persisted.toString());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        return dto.getPuuid();
+        return dto;
     }
 
     @Override

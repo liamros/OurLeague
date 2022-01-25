@@ -84,5 +84,5 @@ sketch
 # Support for Project snippet scope
 
 # End of https://www.toptal.com/developers/gitignore/api/java,visualstudiocode,maven,react
-application.properties
-src/main/react-app
+
+src/main/resources/application.properties

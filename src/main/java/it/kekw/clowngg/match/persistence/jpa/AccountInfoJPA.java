@@ -3,6 +3,9 @@ package it.kekw.clowngg.match.persistence.jpa;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,9 @@ public class AccountInfoJPA {
     private String encryptedSummonerId;
     @Column(name = "ACCOUNT_ID")
     private String accountId;
+    @OneToOne
+    @PrimaryKeyJoinColumn(name="ID")
+    private SummonerInfoJPA summoner;
 
     
     public Integer getId() {
@@ -42,6 +48,13 @@ public class AccountInfoJPA {
     }
     public void setAccountId(String accountId) {
         this.accountId = accountId;
+    }
+    
+    public SummonerInfoJPA getSummoner() {
+        return summoner;
+    }
+    public void setSummoner(SummonerInfoJPA summoner) {
+        this.summoner = summoner;
     }
     @Override
     public String toString() {

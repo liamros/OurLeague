@@ -1,10 +1,12 @@
 package it.kekw.clowngg.match.persistence.jpa;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class RankInfoKey {
+public class RankInfoKey implements Serializable {
     
     @Column(name = "ID")
     private Integer id;

@@ -1,7 +1,12 @@
 package it.kekw.clowngg.match.persistence.jpa;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -13,6 +18,7 @@ import javax.persistence.Table;
 public class SummonerInfoJPA {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "GAME_NAME")
     private String gameName;
@@ -20,12 +26,12 @@ public class SummonerInfoJPA {
     private Integer summonerLevel;
     @Column(name = "SUMMONER_ICON_ID")
     private Integer summonerIconId;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ID")
     private AccountInfoJPA accountInfo;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
     @JoinColumn(name = "ID")
-    private RankInfoJPA rankInfo;
+    private List<RankInfoJPA> rankInfo;
 
     
     public Integer getId() {
@@ -58,10 +64,10 @@ public class SummonerInfoJPA {
     public void setAccountInfo(AccountInfoJPA accountInfo) {
         this.accountInfo = accountInfo;
     }
-    public RankInfoJPA getRankInfo() {
+    public List<RankInfoJPA> getRankInfo() {
         return rankInfo;
     }
-    public void setRankInfo(RankInfoJPA rankInfo) {
+    public void setRankInfo(List<RankInfoJPA> rankInfo) {
         this.rankInfo = rankInfo;
     }
     @Override

@@ -16,9 +16,15 @@
             <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.RiotMgrInterface" />
             <constructor-arg name="operations">
                   <map>
-                        <entry key="getSummonerInfoBySummonerName">
+                        <entry key="getAccountInfoBySummonerName">
                               <bean class="it.kekw.clowngg.common.RestOperation">
-                                    <property name="path" value="/riot/account/v1/accounts/by-riot-id/{0}/EUW" />
+                                    <property name="path" value="/lol/summoner/v4/summoners/by-name/{0}" />
+                                    <property name="httpMethod" value="GET" />
+                              </bean>
+                        </entry>
+                        <entry key="getRankedInfoByEncryptedSummonerId">
+                              <bean class="it.kekw.clowngg.common.RestOperation">
+                                    <property name="path" value="/lol/league/v4/entries/by-summoner/{0}" />
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>

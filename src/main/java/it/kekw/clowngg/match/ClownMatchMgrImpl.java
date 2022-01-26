@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.kekw.clowngg.common.RestAdapter;
-import it.kekw.clowngg.match.persistence.jpa.AccountJPA;
+import it.kekw.clowngg.common.constants.RankedQueueType;
+import it.kekw.clowngg.match.persistence.jpa.AccountInfoJPA;
 import it.kekw.clowngg.match.persistence.repository.AccountRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
+import it.kekw.clowngg.riot.dto.RankedInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
@@ -30,30 +32,22 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public SummonerDTO insertSummoner(String summonerName) {
-        SummonerDTO dto = null;
+        SummonerDTO summonerDto = null;
         try {
             RestAdapter.addHeader(authHeaderKey, apiToken);
-            dto = riotMgr.getSummonerInfoBySummonerName(summonerName);
-            AccountJPA jpa = new AccountJPA();
-            jpa.setPuuid(dto.getPuuid());
-            if (dto.getGameName() != null)
-                jpa.setGameName(dto.getGameName());
-            else
-                jpa.setGameName(summonerName);
-            jpa.setTagLine(dto.getTagLine());
-            AccountJPA persisted = accountRepository.save(jpa);
-            LOGGER.info("INFO: Persisted {}", persisted.toString());
+            summonerDto = riotMgr.getAccountInfoBySummonerName(summonerName);
+            RankedInfoDTO rankedInfoDto = riotMgr.getRankedInfoByEncryptedSummonerId(summonerDto.getId());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        return dto;
+        return summonerDto;
     }
 
     @Override
     public String getGameNameByPuuid(String puuid) {
-        AccountJPA acc = accountRepository.findByPuuid(puuid);
-        return acc.getGameName();
+        AccountInfoJPA acc = accountRepository.findByPuuid(puuid);
+        return acc.getEncryptedSummonerId();
     }
 
 

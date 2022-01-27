@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.kekw.clowngg.common.RestAdapter;
-import it.kekw.clowngg.common.constants.RankedQueueType;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
@@ -47,31 +46,17 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             summonerDto = riotMgr.getAccountInfoBySummonerName(summonerName);
             RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankedInfoDTO> rankedInfoDtos = riotMgr.getRankedInfoByEncryptedSummonerId(summonerDto.getId());
-            SummonerInfoJPA summonerJpa = new SummonerInfoJPA();
-            summonerJpa.setGameName(summonerDto.getName());
-            summonerJpa.setSummonerIconId(summonerDto.getProfileIconId());
-            summonerJpa.setSummonerLevel(summonerDto.getSummonerLevel());
-            summonerJpa.setId(summonerJpa.getId());
-            summonerJpa.setEncryptedSummonerId(summonerDto.getId());
-            summonerJpa.setPuuid(summonerDto.getPuuid());
-            summonerJpa.setAccountId(summonerDto.getAccountId());
+            SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("Persisted {}", summonerJpa);
             for (RankedInfoDTO rankedInfoDto : rankedInfoDtos) {
-                Integer queueTypeId;
+                RankInfoJPA rankJpa;
                 try {
-                    queueTypeId = RankedQueueType.valueOf(rankedInfoDto.getQueueType()).id();
+                    rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 } catch (IllegalArgumentException e) {continue;}
-                RankInfoJPA rankedJpa = new RankInfoJPA();
-                rankedJpa.setSummInfoId(summonerJpa.getId());
-                rankedJpa.setTier(rankedInfoDto.getTier());
-                rankedJpa.setDivision(rankedInfoDto.getRank());
-                rankedJpa.setLp(rankedInfoDto.getLeaguePoints());
-                rankedJpa.setWins(rankedInfoDto.getWins());
-                rankedJpa.setLosses(rankedInfoDto.getLosses());
-                rankedJpa.setQueueTypeId(queueTypeId);
-                rankedJpa = rankRepository.save(rankedJpa);
-                LOGGER.info("Persisted {}", rankedJpa);
+                
+                rankJpa = rankRepository.save(rankJpa);
+                LOGGER.info("Persisted {}", rankJpa);
             }
         } catch (Exception e) {
             e.printStackTrace();

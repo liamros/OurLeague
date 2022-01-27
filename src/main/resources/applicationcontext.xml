@@ -5,7 +5,7 @@
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config />
 
-      <bean class="it.kekw.clowngg.match.ClownMatchMgrImpl" id="clownMatchMgrImpl" >
+      <bean class="it.kekw.clowngg.match.impl.ClownMatchMgrImpl" id="clownMatchMgrImpl" >
             <property name="apiToken" value="${riot.api.token}"/>
             <property name="authHeaderKey" value="${riot.api.auth.header.key}"/>
       </bean>

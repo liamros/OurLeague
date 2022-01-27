@@ -1,4 +1,4 @@
-package it.kekw.clowngg.match.persistence.jpa;
+package it.kekw.clowngg.match.impl.persistence.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

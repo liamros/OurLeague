@@ -1,4 +1,4 @@
-package it.kekw.clowngg.match;
+package it.kekw.clowngg.match.impl;
 
 import java.util.List;
 
@@ -9,10 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.common.constants.RankedQueueType;
-import it.kekw.clowngg.match.persistence.jpa.RankInfoJPA;
-import it.kekw.clowngg.match.persistence.jpa.SummonerInfoJPA;
-import it.kekw.clowngg.match.persistence.repository.RankInfoRepository;
-import it.kekw.clowngg.match.persistence.repository.SummonerInfoRepository;
+import it.kekw.clowngg.match.ClownMatchMgr;
+import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
+import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
+import it.kekw.clowngg.match.impl.persistence.repository.RankInfoRepository;
+import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.RankedInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;

@@ -1,4 +1,4 @@
-package it.kekw.clowngg.match.persistence.jpa;
+package it.kekw.clowngg.match.impl.persistence.entity;
 
 import java.util.List;
 

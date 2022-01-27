@@ -13,3 +13,9 @@ mvn install, questo produce un war, posizionato in C:\Users\%user%\.m2\repositor
 
 
 server run defaultSever
+
+---
+
+***Data Structure Diagram***
+
+![alt text](https://github.com/liamros/clown.gg/blob/master/SQL/diagram.png?raw=true)

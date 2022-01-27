@@ -54,9 +54,10 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
 
         Object o = applicationContext.getBean(s);
 
-        
-        /* checks if the bean is a spring proxy, in that case, the user class will be
-         * different by the object's which will be a CGLIB-generated subclass */
+        /**
+         * checks if the bean is a spring proxy, in that case, the user class will be
+         * different by the object's which will be a CGLIB-generated subclass
+         */
         if (!ClassUtils.getUserClass(o).equals(o)) {
             try {
                 o = ((Advised) o).getTargetSource().getTarget();

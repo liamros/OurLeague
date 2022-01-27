@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,11 +25,14 @@ public class SummonerInfoJPA {
     private Integer summonerLevel;
     @Column(name = "SUMMONER_ICON_ID")
     private Integer summonerIconId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ID")
-    private AccountInfoJPA accountInfo;
+    @Column(name = "PUUID")
+    private String puuid;
+    @Column(name = "ENCRYPTED_SUMMONER_ID")
+    private String encryptedSummonerId;
+    @Column(name = "ACCOUNT_ID")
+    private String accountId;
     @OneToMany(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "ID")
+    @JoinColumn(name = "SUMM_INFO_ID", referencedColumnName = "ID")
     private List<RankInfoJPA> rankInfo;
 
     
@@ -58,11 +60,23 @@ public class SummonerInfoJPA {
     public void setSummonerIconId(Integer summonerIconId) {
         this.summonerIconId = summonerIconId;
     }
-    public AccountInfoJPA getAccountInfo() {
-        return accountInfo;
+    public String getPuuid() {
+        return puuid;
     }
-    public void setAccountInfo(AccountInfoJPA accountInfo) {
-        this.accountInfo = accountInfo;
+    public void setPuuid(String puuid) {
+        this.puuid = puuid;
+    }
+    public String getEncryptedSummonerId() {
+        return encryptedSummonerId;
+    }
+    public void setEncryptedSummonerId(String encryptedSummonerId) {
+        this.encryptedSummonerId = encryptedSummonerId;
+    }
+    public String getAccountId() {
+        return accountId;
+    }
+    public void setAccountId(String accountId) {
+        this.accountId = accountId;
     }
     public List<RankInfoJPA> getRankInfo() {
         return rankInfo;
@@ -72,8 +86,8 @@ public class SummonerInfoJPA {
     }
     @Override
     public String toString() {
-        return "SummonerInfoJPA [gameName=" + gameName + ", id=" + id + ", summonerIconId=" + summonerIconId
-                + ", summonerLevel=" + summonerLevel + "]";
-    }
-    
+        return "SummonerInfoJPA [accountId=" + accountId + ", encryptedSummonerId=" + encryptedSummonerId
+                + ", gameName=" + gameName + ", id=" + id + ", puuid=" + puuid + ", rankInfo=" + rankInfo
+                + ", summonerIconId=" + summonerIconId + ", summonerLevel=" + summonerLevel + "]";
+    }    
 }

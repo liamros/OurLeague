@@ -1,6 +1,5 @@
 package it.kekw.clowngg.match;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,11 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.common.constants.RankedQueueType;
-import it.kekw.clowngg.match.persistence.jpa.AccountInfoJPA;
-import it.kekw.clowngg.match.persistence.jpa.QueueJPA;
 import it.kekw.clowngg.match.persistence.jpa.RankInfoJPA;
 import it.kekw.clowngg.match.persistence.jpa.SummonerInfoJPA;
-import it.kekw.clowngg.match.persistence.repository.AccountInfoRepository;
 import it.kekw.clowngg.match.persistence.repository.RankInfoRepository;
 import it.kekw.clowngg.match.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
@@ -32,8 +28,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     private String apiToken;
 
     @Autowired
-    private AccountInfoRepository accountRepository;
-    @Autowired
     private SummonerInfoRepository summonerRepository;
     @Autowired
     private RankInfoRepository rankRepository;
@@ -44,6 +38,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
+    @Transactional
     public SummonerDTO insertSummoner(String summonerName) {
         SummonerDTO summonerDto = null;
         try {
@@ -55,27 +50,28 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             summonerJpa.setGameName(summonerDto.getName());
             summonerJpa.setSummonerIconId(summonerDto.getProfileIconId());
             summonerJpa.setSummonerLevel(summonerDto.getSummonerLevel());
+            summonerJpa.setId(summonerJpa.getId());
+            summonerJpa.setEncryptedSummonerId(summonerDto.getId());
+            summonerJpa.setPuuid(summonerDto.getPuuid());
+            summonerJpa.setAccountId(summonerDto.getAccountId());
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("Persisted {}", summonerJpa);
             for (RankedInfoDTO rankedInfoDto : rankedInfoDtos) {
+                Integer queueTypeId;
+                try {
+                    queueTypeId = RankedQueueType.valueOf(rankedInfoDto.getQueueType()).id();
+                } catch (IllegalArgumentException e) {continue;}
                 RankInfoJPA rankedJpa = new RankInfoJPA();
-                rankedJpa.setId(summonerJpa.getId());
+                rankedJpa.setSummInfoId(summonerJpa.getId());
                 rankedJpa.setTier(rankedInfoDto.getTier());
                 rankedJpa.setDivision(rankedInfoDto.getRank());
                 rankedJpa.setLp(rankedInfoDto.getLeaguePoints());
                 rankedJpa.setWins(rankedInfoDto.getWins());
                 rankedJpa.setLosses(rankedInfoDto.getLosses());
-                rankedJpa.setQueueTypeId(RankedQueueType.valueOf(rankedInfoDto.getQueueType()).id());
+                rankedJpa.setQueueTypeId(queueTypeId);
                 rankedJpa = rankRepository.save(rankedJpa);
                 LOGGER.info("Persisted {}", rankedJpa);
             }
-            AccountInfoJPA accountJpa = new AccountInfoJPA();
-            accountJpa.setId(summonerJpa.getId());
-            accountJpa.setEncryptedSummonerId(summonerDto.getId());
-            accountJpa.setPuuid(summonerDto.getPuuid());
-            accountJpa.setAccountId(summonerDto.getAccountId());
-            accountJpa = accountRepository.save(accountJpa);
-            LOGGER.info("Persisted {}", accountJpa);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException();
@@ -85,8 +81,8 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public String getGameNameByPuuid(String puuid) {
-        AccountInfoJPA acc = accountRepository.findByPuuid(puuid);
-        return acc.getEncryptedSummonerId();
+        SummonerInfoJPA jpa = summonerRepository.findByPuuid(puuid);
+        return jpa.getPuuid();
     }
 
 

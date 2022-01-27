@@ -6,4 +6,5 @@ import it.kekw.clowngg.match.persistence.jpa.SummonerInfoJPA;
 
 public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, Long> {
     
+    public SummonerInfoJPA findByPuuid(String puuid);
 }

@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -19,16 +18,15 @@ import lombok.Data;
 public class RankInfoJPA {
 
     @Data
+    @SuppressWarnings("unused")
     public static class PrimaryKeys implements Serializable {
-        private Integer id;
+        private Integer summInfoId;
         private Integer queueTypeId;
     }
 
-    // @EmbeddedId
-    // private RankInfoJPA key;
     @Id
-    @Column(name = "ID")
-    private Integer id;
+    @Column(name = "SUMM_INFO_ID")
+    private Integer summInfoId;
     @Id
     @Column(name = "QUEUE_TYPE_ID", insertable = false, updatable = false)
     private Integer queueTypeId;
@@ -43,19 +41,9 @@ public class RankInfoJPA {
     @Column(name = "LOSSES")
     private Integer losses;
     @ManyToOne
-    @JoinColumn(name="ID", insertable = false, updatable = false)
+    @JoinColumn(name="SUMM_INFO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private SummonerInfoJPA summoner;
-    // @ManyToOne
-    // @JoinColumn(name = "QUEUE_TYPE_ID")
-    // private QueueJPA queue;
 
-    // public RankInfoJPA getKey() {
-    // return key;
-    // }
-
-    // public void setKey(RankInfoJPA key) {
-    // this.key = key;
-    // }
 
     public String getTier() {
         return tier;
@@ -98,12 +86,12 @@ public class RankInfoJPA {
     }
     
 
-    public Integer getId() {
-        return id;
+    public Integer getSummInfoId() {
+        return summInfoId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setSummInfoId(Integer summInfoId) {
+        this.summInfoId = summInfoId;
     }
 
     public Integer getQueueTypeId() {
@@ -122,15 +110,11 @@ public class RankInfoJPA {
         this.summoner = summoner;
     }
 
-    // public QueueJPA getQueue() {
-    // return queue;
-    // }
-    // public void setQueue(QueueJPA queue) {
-    // this.queue = queue;
-    // }
-    // @Override
-    // public String toString() {
-    //     return "RankInfoJPA [division=" + division + ", key=" + key + ", losses=" + losses + ", lp=" + lp + ", tier="
-    //             + tier + ", wins=" + wins + "]";
-    // }
+    @Override
+    public String toString() {
+        return "RankInfoJPA [division=" + division + ", losses=" + losses + ", lp=" + lp + ", queueTypeId="
+                + queueTypeId + ", summInfoId=" + summInfoId + ", summoner=" + summoner + ", tier=" + tier + ", wins="
+                + wins + "]";
+    }
+
 }

@@ -57,7 +57,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
                 LOGGER.info("Persisted {}", rankJpa);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("ERROR: Error while performing insertSummoner", e);
             throw new RuntimeException();
         }
         return summonerDto;

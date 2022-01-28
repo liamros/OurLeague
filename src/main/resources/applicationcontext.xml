@@ -11,7 +11,7 @@
       </bean>
 
 
-      <bean class="it.kekw.clowngg.common.RestAdapter" id="riotMgr">
+      <bean class="it.kekw.clowngg.common.RestAdapter" id="riotManager">
             <constructor-arg name="baseUrl" value="${riot.api.baseURL}" />
             <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.RiotMgrInterface" />
             <constructor-arg name="operations">
@@ -22,7 +22,7 @@
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>
-                        <entry key="getRankedInfoByEncryptedSummonerId">
+                        <entry key="getRankInfoByEncryptedSummonerId">
                               <bean class="it.kekw.clowngg.common.RestOperation">
                                     <property name="path" value="/lol/league/v4/entries/by-summoner/{0}" />
                                     <property name="httpMethod" value="GET" />
@@ -36,7 +36,7 @@
       <bean class="java.util.HashMap" id="restAdapterUsers">
             <constructor-arg name="m">
                   <map>
-                        <entry key="riotMgr" value="clownMatchMgrImpl" />
+                        <entry key="riotManager" value="clownMatchMgrImpl" />
                   </map>
             </constructor-arg>
       </bean>

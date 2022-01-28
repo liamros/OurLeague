@@ -3,7 +3,7 @@ package it.kekw.clowngg.match.impl;
 import it.kekw.clowngg.common.constants.RankedQueueType;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
-import it.kekw.clowngg.riot.dto.RankedInfoDTO;
+import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public final class ClownMatchMgrUtility {
@@ -22,8 +22,13 @@ public final class ClownMatchMgrUtility {
         return jpa;
     }
 
-    public static RankInfoJPA generateRankedInfoJpa(RankedInfoDTO dto, int summonerInfoId) throws IllegalArgumentException {
-        Integer queueTypeId = RankedQueueType.valueOf(dto.getQueueType()).id();
+    public static RankInfoJPA generateRankedInfoJpa(RankInfoDTO dto, Integer summonerInfoId) {
+        Integer queueTypeId;
+        try {
+            queueTypeId = RankedQueueType.valueOf(dto.getQueueType()).id();
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
         RankInfoJPA jpa = new RankInfoJPA();
         jpa.setSummInfoId(summonerInfoId);
         jpa.setTier(dto.getTier());

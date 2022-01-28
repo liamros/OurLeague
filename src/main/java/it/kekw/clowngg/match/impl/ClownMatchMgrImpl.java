@@ -14,14 +14,14 @@ import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.repository.RankInfoRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
-import it.kekw.clowngg.riot.dto.RankedInfoDTO;
+import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClownMatchMgrImpl.class);
 
-    private RiotMgrInterface riotMgr;
+    private RiotMgrInterface riotManager;
 
     private String authHeaderKey;
 
@@ -43,18 +43,16 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         SummonerDTO summonerDto = null;
         try {
             RestAdapter.addHeader(authHeaderKey, apiToken);
-            summonerDto = riotMgr.getAccountInfoBySummonerName(summonerName);
+            summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
             RestAdapter.addHeader(authHeaderKey, apiToken);
-            List<RankedInfoDTO> rankedInfoDtos = riotMgr.getRankedInfoByEncryptedSummonerId(summonerDto.getId());
+            List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("Persisted {}", summonerJpa);
-            for (RankedInfoDTO rankedInfoDto : rankedInfoDtos) {
+            for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
-                try {
-                    rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
-                } catch (IllegalArgumentException e) {continue;}
-                
+                rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
+                if (rankJpa == null) continue;
                 rankJpa = rankRepository.save(rankJpa);
                 LOGGER.info("Persisted {}", rankJpa);
             }
@@ -71,10 +69,25 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         return jpa.getPuuid();
     }
 
+    @Override
+    @Transactional
+    public void updateAllRanks() {
 
+        Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        for (SummonerInfoJPA summonerJpa : list) {
+            Integer id = summonerJpa.getId();
+            String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
+            RestAdapter.addHeader(authHeaderKey, apiToken);
+            List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
+            for (RankInfoDTO rankDto : rankInfoDtos) {
+                RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
+                if (rankJpa == null) continue;
+                rankRepository.save(rankJpa);
+                LOGGER.info("Persisted {}", rankJpa);
+            }
+        }
+    }
 
-
-    
     public void setAuthHeaderKey(String authHeaderKey) {
         this.authHeaderKey = authHeaderKey;
     }

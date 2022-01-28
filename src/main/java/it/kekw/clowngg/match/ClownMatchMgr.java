@@ -11,4 +11,6 @@ public interface ClownMatchMgr {
 
     public String getGameNameByPuuid(String puuid);
 
+    public void updateAllRanks();
+
 }

@@ -36,5 +36,11 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     public String getGameNameByPuuid(@RequestParam String puuid) {
         return clownMatchMgrImpl.getGameNameByPuuid(puuid);
     }
+
+    @Override
+    @GetMapping("/updateAllRanks")
+    public void updateAllRanks() {
+        clownMatchMgrImpl.updateAllRanks();
+    }
     
 }

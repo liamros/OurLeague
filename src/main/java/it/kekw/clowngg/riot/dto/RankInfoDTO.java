@@ -1,6 +1,6 @@
 package it.kekw.clowngg.riot.dto;
 
-public class RankedInfoDTO {
+public class RankInfoDTO {
 
     private String leagueId;
     private String queueType;

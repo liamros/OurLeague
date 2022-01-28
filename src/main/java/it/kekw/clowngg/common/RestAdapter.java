@@ -26,7 +26,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class RestAdapter implements InvocationHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapter.class);
@@ -62,15 +61,15 @@ public class RestAdapter implements InvocationHandler {
                     break;
                 // TODO: test
                 case "POST":
-                    dto = doPost(url, method, args[0]);
+                    dto = doPost(new HttpPost(url), method, args[0]);
                     break;
                 // TODO: test
                 case "PUT":
-                    dto = doPut(url, method, args[0]);
+                    dto = doPost(new HttpPut(url), method, args[0]);
                     break;
                 // TODO: test
                 case "PATCH":
-                    dto = doPatch(url, method, args[0]);
+                    dto = doPost(new HttpPatch(url), method, args[0]);
                     break;
                 default:
                     LOGGER.info("KEKW");
@@ -109,46 +108,9 @@ public class RestAdapter implements InvocationHandler {
      * @return Object parsed DTO response
      * @throws Exception
      */
-    private Object doPost(String url, Method method, Object requestBody) throws Exception {
+    private Object doPost(HttpEntityEnclosingRequestBase request, Method method, Object requestBody) throws Exception {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost request = new HttpPost(url);
-        addHeaderToRequest(request);
-        addPayloadToRequest(request, requestBody);
-        Object dto = performHttpRequest(httpClient, request, method);
-        httpClient.close();
-        return dto;
-    }
-
-    /**
-     * @param url
-     * @param responseCls Response dto class type
-     * @param requestBody Request payload DTO
-     * @return Object parsed DTO response
-     * @throws Exception
-     */
-    private Object doPut(String url, Method method, Object requestBody) throws Exception {
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPut request = new HttpPut(url);
-        addHeaderToRequest(request);
-        addPayloadToRequest(request, requestBody);
-        Object dto = performHttpRequest(httpClient, request, method);
-        httpClient.close();
-        return dto;
-    }
-
-    /**
-     * @param url
-     * @param responseCls Response dto class type
-     * @param requestBody Request payload DTO
-     * @return Object parsed DTO response
-     * @throws Exception
-     */
-    private Object doPatch(String url, Method method, Object requestBody) throws Exception {
-
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPatch request = new HttpPatch(url);
         addHeaderToRequest(request);
         addPayloadToRequest(request, requestBody);
         Object dto = performHttpRequest(httpClient, request, method);
@@ -192,8 +154,9 @@ public class RestAdapter implements InvocationHandler {
         Object dto;
         if (List.class.isAssignableFrom(method.getReturnType())) {
             ParameterizedType t = (ParameterizedType) method.getGenericReturnType();
-            dto = MAPPER.readValue(entity.getContent(), MAPPER.getTypeFactory().constructParametricType(List.class, (Class<?>) t.getActualTypeArguments()[0]));
-        } else 
+            dto = MAPPER.readValue(entity.getContent(), MAPPER.getTypeFactory().constructParametricType(List.class,
+                    (Class<?>) t.getActualTypeArguments()[0]));
+        } else
             dto = MAPPER.readValue(entity.getContent(), method.getReturnType());
         response.close();
         return dto;

@@ -112,17 +112,12 @@ public class RestAdapter implements InvocationHandler {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         addHeaderToRequest(request);
-        addPayloadToRequest(request, requestBody);
-        Object dto = performHttpRequest(httpClient, request, method);
-        httpClient.close();
-        return dto;
-    }
-
-    private void addPayloadToRequest(HttpEntityEnclosingRequestBase request, Object requestBody) throws Exception {
-
         String json = MAPPER.writeValueAsString(requestBody);
         StringEntity params = new StringEntity(json);
         request.setEntity(params);
+        Object dto = performHttpRequest(httpClient, request, method);
+        httpClient.close();
+        return dto;
     }
 
     private void addHeaderToRequest(HttpRequestBase request) {

@@ -1,5 +1,6 @@
 # clown.gg
 
+***Base Information***
 
 Maven download https://maven.apache.org/download.cgi
     Variabili d'ambiente : MAVEN_HOME=%path%\apache-maven-3.8.4
@@ -19,3 +20,20 @@ server run defaultSever
 ***Data Structure Diagram***
 
 ![alt text](https://github.com/liamros/clown.gg/blob/master/SQL/diagram.png?raw=true)
+
+---
+
+***TODOs***
+
+- [x] Initial data structure
+- [x] Insert Summoner API
+- [x] Update All Ranks API
+- [ ] Initial data for FE API
+- [ ] Add default headers configuration to RestAdapter
+- [ ] Evaluate possibility of a batch which periodically updates ranks on DB
+- [ ] Custom DTOs for response
+- [ ] Custom Exceptions and Exception handling
+- [ ] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
+- [x] Initialize React
+- [ ] Design homepage
+- [ ] Code homepage

@@ -1,7 +1,0 @@
-jdbcSettings:
-  url: "jdbc:mysql://localhost:3306/league"
-  username: "root"
-  password: "Cartellina.8"
-  driverClassName: "com.mysql.jdbc.Driver"
-
-packageName: "it.kekw.clowngg.match.persistence.jpa.example"

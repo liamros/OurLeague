@@ -1,7 +1,6 @@
 
 riot.api.token=<your-token>
 riot.api.baseURL=https://euw1.api.riotgames.com/
-#riot.api.summoner.path=/riot/account/v1/accounts/by-riot-id/{0}/EUW
 riot.api.auth.header.key=X-Riot-Token
 
 

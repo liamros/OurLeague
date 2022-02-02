@@ -1,5 +1,8 @@
 package it.kekw.clowngg.match;
 
+import java.util.List;
+
+import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public interface ClownMatchMgr {
@@ -12,5 +15,7 @@ public interface ClownMatchMgr {
     public String getGameNameByPuuid(String puuid);
 
     public void updateAllRanks();
+
+    public List<ShowCaseDetailDTO> getShowCaseDetails();
 
 }

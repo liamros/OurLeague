@@ -1,7 +1,9 @@
 package it.kekw.clowngg.match.impl;
 
 import it.kekw.clowngg.common.constants.RankedQueueType;
+import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
+import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
@@ -38,5 +40,14 @@ public final class ClownMatchMgrUtility {
         jpa.setLosses(dto.getLosses());
         jpa.setQueueTypeId(queueTypeId);
         return jpa;
+    }
+
+    public static ShowCaseDetailDTO generateShowCaseDetailDTO(ShowCaseDetailJPA jpa) {
+        ShowCaseDetailDTO dto = new ShowCaseDetailDTO();
+        dto.setStatName(jpa.getStatName());
+        dto.setSummonerName(jpa.getSummoner().getGameName());
+        dto.setValue(jpa.getValue());
+        dto.setDescription(jpa.getDescription());
+        return dto;
     }
 }

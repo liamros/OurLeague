@@ -1,5 +1,6 @@
 package it.kekw.clowngg.match.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,9 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.match.ClownMatchMgr;
+import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
+import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.repository.RankInfoRepository;
+import it.kekw.clowngg.match.impl.persistence.repository.ShowCaseDetailRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
@@ -31,6 +35,8 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     private SummonerInfoRepository summonerRepository;
     @Autowired
     private RankInfoRepository rankRepository;
+    @Autowired
+    private ShowCaseDetailRepository showCaseDetailRepository;
 
     @Override
     public String ping() {
@@ -52,7 +58,8 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
                 rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
-                if (rankJpa == null) continue;
+                if (rankJpa == null)
+                    continue;
                 rankJpa = rankRepository.save(rankJpa);
                 LOGGER.info("Persisted {}", rankJpa);
             }
@@ -81,11 +88,25 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfoDTO rankDto : rankInfoDtos) {
                 RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
-                if (rankJpa == null) continue;
+                if (rankJpa == null)
+                    continue;
                 rankRepository.save(rankJpa);
                 LOGGER.info("Persisted {}", rankJpa);
             }
         }
+    }
+
+    @Override
+    public List<ShowCaseDetailDTO> getShowCaseDetails() {
+        
+        Iterable<ShowCaseDetailJPA> list = showCaseDetailRepository.findAll();
+        List<ShowCaseDetailDTO> dtos = new ArrayList<>(); 
+        for (ShowCaseDetailJPA showCaseDetailJpa : list) {           
+            dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa));
+        }
+
+        return dtos;
+    
     }
 
     public void setAuthHeaderKey(String authHeaderKey) {

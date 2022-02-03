@@ -34,6 +34,10 @@ server run defaultSever
 - [ ] Custom DTOs for response
 - [ ] Custom Exceptions and Exception handling
 - [ ] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
+- [ ] MatchHistory API
 - [x] Initialize React
-- [ ] Design homepage
-- [ ] Code homepage
+- [x] Design homepage
+- [ ] ShowCase FE
+- [ ] StatsSection FE
+- [ ] PairStatsSection FE
+- [ ] MatchHistory FE

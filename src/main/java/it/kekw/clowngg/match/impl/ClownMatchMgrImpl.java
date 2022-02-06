@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
@@ -27,10 +26,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     private RiotMgrInterface riotManager;
 
-    private String authHeaderKey;
-
-    private String apiToken;
-
     @Autowired
     private SummonerInfoRepository summonerRepository;
     @Autowired
@@ -48,9 +43,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public SummonerDTO insertSummoner(String summonerName) {
         SummonerDTO summonerDto = null;
         try {
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
@@ -87,7 +80,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         for (SummonerInfoJPA summonerJpa : list) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfoDTO rankDto : rankInfoDtos) {
                 RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
@@ -115,12 +107,5 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     
     }
 
-    public void setAuthHeaderKey(String authHeaderKey) {
-        this.authHeaderKey = authHeaderKey;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
 
 }

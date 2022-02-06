@@ -34,6 +34,8 @@ public class RestAdapter implements InvocationHandler {
 
     private static ThreadLocal<Map<String, String>> headers = new ThreadLocal<Map<String, String>>();
 
+    private Map<String, String> defaultHeaders;
+
     private Class<?> interfaceProxy;
 
     private String baseUrl;
@@ -44,6 +46,13 @@ public class RestAdapter implements InvocationHandler {
         this.interfaceProxy = interfaceProxy;
         this.baseUrl = baseUrl;
         this.operations = operations;
+    }
+
+    public RestAdapter(Class<?> interfaceProxy, String baseUrl, Map<String, RestOperation> operations, Map<String, String> defaultHeaders) {
+        this.interfaceProxy = interfaceProxy;
+        this.baseUrl = baseUrl;
+        this.operations = operations;
+        this.defaultHeaders = defaultHeaders;
     }
 
     @Override
@@ -127,6 +136,11 @@ public class RestAdapter implements InvocationHandler {
                 request.addHeader(entry.getKey(), entry.getValue());
             }
             headers.remove();
+        }
+        if (defaultHeaders != null) {
+            for (Entry<String, String> entry : defaultHeaders.entrySet()) {
+                request.addHeader(entry.getKey(), entry.getValue());
+            }
         }
     }
 

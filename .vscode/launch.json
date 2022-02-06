@@ -16,6 +16,13 @@
             "request": "launch",
             "mainClass": "it.kekw.clowngg.ClownggApplication",
             "projectName": "clowngg"
+        },
+        {
+            "type": "pwa-chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "/../src/main/react-app/src"
         }
     ]
 }

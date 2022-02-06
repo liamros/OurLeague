@@ -30,7 +30,7 @@ public class RestAdapter implements InvocationHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapter.class);
 
-    private final static ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static ThreadLocal<Map<String, String>> headers = new ThreadLocal<Map<String, String>>();
 

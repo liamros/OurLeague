@@ -17,6 +17,7 @@ import it.kekw.clowngg.match.impl.ClownMatchMgrImpl;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 @RestController
+// CrossOrigin only for development purposes
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("match")
 public class ClownMatchMgrController implements ClownMatchMgr {

@@ -54,15 +54,17 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
-            LOGGER.info("Persisted {}", summonerJpa);
+            LOGGER.info("INFO: Persisted {}", summonerJpa);
+            List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
                 rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
                     continue;
-                rankJpa = rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                rankJpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+            rankRepository.saveAll(rankJpas);
         } catch (Exception e) {
             LOGGER.error("ERROR: Error while performing insertSummoner", e);
             throw new RuntimeException();
@@ -81,6 +83,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public void updateAllRanks() {
 
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        List<RankInfoJPA> jpas = new ArrayList<>();
         for (SummonerInfoJPA summonerJpa : list) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
@@ -90,10 +93,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
                 RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
-                rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                jpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+
         }
+        rankRepository.saveAll(jpas);
+        LOGGER.info("INFO: Persisted rankInfoJpas");
     }
 
     @Override

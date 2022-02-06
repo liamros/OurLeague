@@ -29,7 +29,7 @@ server run defaultSever
 - [x] Insert Summoner API
 - [x] Update All Ranks API
 - [ ] Initial data for FE API
-- [ ] Add default headers configuration to RestAdapter
+- [x] Add default headers configuration to RestAdapter
 - [ ] Evaluate possibility of a batch which periodically updates ranks on DB
 - [ ] Custom DTOs for response
 - [ ] Custom Exceptions and Exception handling

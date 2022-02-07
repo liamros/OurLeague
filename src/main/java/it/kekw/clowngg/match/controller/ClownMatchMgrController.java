@@ -1,8 +1,10 @@
 package it.kekw.clowngg.match.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,10 +47,10 @@ public class ClownMatchMgrController implements ClownMatchMgr {
 
     @Override
     @GetMapping("/getWinRate")
-    public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
+    public List<Float> getWinRateBySummInfoId(@RequestParam Integer summInfoId) {
         return clownMatchMgrImpl.getWinRateBySummInfoId(summInfoId);
     }
-    
+
     @Override
     @GetMapping("/updateAllRanks")
     public void updateAllRanks() {
@@ -62,9 +64,15 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     }
 
     @Override
-    @GetMapping("/setShowCaseDetails")
-    public void setShowCaseDetails() {
-        clownMatchMgrImpl.setShowCaseDetails();
+    @GetMapping("/insertShowCaseDetails")
+    public void insertShowCaseDetails() {
+        clownMatchMgrImpl.insertShowCaseDetails();
     }
-   
+
+    @Override
+    @GetMapping(value = "/getProfileIcon", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getProfileIconImage(@RequestParam String profileIconNumber) throws IOException {
+        return clownMatchMgrImpl.getProfileIconImage(profileIconNumber);
+    }
+
 }

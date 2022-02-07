@@ -34,11 +34,32 @@
             </constructor-arg>
       </bean>
 
+      <bean class="it.kekw.clowngg.common.RestAdapter" id="ddragonApi">
+            <constructor-arg name="baseUrl" value="${riot.ddragon.api.baseURL}" />
+            <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.IDdragon" />
+            <constructor-arg name="operations">
+                  <map>
+                        <entry key="getProfileIcon">
+                              <bean class="it.kekw.clowngg.common.RestOperation">
+                                    <property name="path" value="/cdn/12.3.1/img/profileicon/{0}.png" />
+                                    <property name="httpMethod" value="GET" />
+                              </bean>
+                        </entry>
+                  </map>
+            </constructor-arg>
+            <constructor-arg name="defaultHeaders">
+                  <map>
+                        <entry key="${riot.api.auth.header.key}" value="${riot.api.token}" />
+                  </map>
+            </constructor-arg>
+      </bean>
+
 
       <bean class="java.util.HashMap" id="restAdapterUsers">
             <constructor-arg name="m">
                   <map>
                         <entry key="riotManager" value="clownMatchMgrImpl" />
+                        <entry key="ddragonApi" value="clownMatchMgrImpl" />
                   </map>
             </constructor-arg>
       </bean>

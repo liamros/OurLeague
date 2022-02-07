@@ -1,5 +1,9 @@
 package it.kekw.clowngg.match.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
@@ -17,9 +20,11 @@ import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.repository.RankInfoRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.ShowCaseDetailRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
+import it.kekw.clowngg.riot.IDdragon;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
+import net.coobird.thumbnailator.Thumbnails;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 
@@ -27,9 +32,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     private RiotMgrInterface riotManager;
 
-    private String authHeaderKey;
-
-    private String apiToken;
+    private IDdragon ddragonApi;
 
     @Autowired
     private SummonerInfoRepository summonerRepository;
@@ -48,21 +51,21 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public SummonerDTO insertSummoner(String summonerName) {
         SummonerDTO summonerDto = null;
         try {
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
-            LOGGER.info("Persisted {}", summonerJpa);
+            LOGGER.info("INFO: Persisted {}", summonerJpa);
+            List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
                 rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
                     continue;
-                rankJpa = rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                rankJpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+            rankRepository.saveAll(rankJpas);
         } catch (Exception e) {
             LOGGER.error("ERROR: Error while performing insertSummoner", e);
             throw new RuntimeException();
@@ -91,19 +94,22 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public void updateAllRanks() {
 
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        List<RankInfoJPA> jpas = new ArrayList<>();
         for (SummonerInfoJPA summonerJpa : list) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfoDTO rankDto : rankInfoDtos) {
                 RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
-                rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                jpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+
         }
+        rankRepository.saveAll(jpas);
+        LOGGER.info("INFO: Persisted rankInfoJpas");
     }
 
     @Override
@@ -114,16 +120,14 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         for (ShowCaseDetailJPA showCaseDetailJpa : list) {           
             dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa));
         }
-
         return dtos;
-    
     }
 
     @Override
-    public void setShowCaseDetails() {
+    public void insertShowCaseDetails() {
      
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        RankInfoJPA rankJpa = LowerWinRate();
+        RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
         showCaseJpa.setStatName("Worst WinRate");
         showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
         showCaseJpa.setValue(rankJpa.getWinrate());
@@ -134,26 +138,19 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         
     }
 
-    public RankInfoJPA LowerWinRate(){
-
-        RankInfoJPA lowerWinRateJPA = null;
-        Float lowerWinRate= (float) 101;
-        Iterable<RankInfoJPA> jpas = rankRepository.findAll();
-        for (RankInfoJPA rankInfoJPA : jpas) {
-            if(rankInfoJPA.getWinrate() < lowerWinRate) {
-                lowerWinRateJPA = rankInfoJPA;
-                lowerWinRate = rankInfoJPA.getWinrate();
-            }
-        } 
-        return lowerWinRateJPA;
+    @Override
+    public byte[] getProfileIconImage(String profileIconNumber) throws IOException {
+        byte[] byteArray = ddragonApi.getProfileIcon(profileIconNumber);
+        InputStream in = new ByteArrayInputStream(byteArray);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Thumbnails.of(in)
+                .size(100, 100)
+                .outputFormat("PNG")
+                .outputQuality(1)
+                .toOutputStream(outputStream);
+        byte[] data = outputStream.toByteArray();
+        return data;
     }
 
-    public void setAuthHeaderKey(String authHeaderKey) {
-        this.authHeaderKey = authHeaderKey;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
 
 }

@@ -2,6 +2,7 @@
 riot.api.token=<your-token>
 riot.api.baseURL=https://euw1.api.riotgames.com/
 riot.api.auth.header.key=X-Riot-Token
+riot.ddragon.api.baseURL=http://ddragon.leagueoflegends.com
 
 
 spring.jpa.hibernate.ddl-auto=none

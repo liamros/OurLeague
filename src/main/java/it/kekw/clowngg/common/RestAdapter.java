@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -48,7 +49,8 @@ public class RestAdapter implements InvocationHandler {
         this.operations = operations;
     }
 
-    public RestAdapter(Class<?> interfaceProxy, String baseUrl, Map<String, RestOperation> operations, Map<String, String> defaultHeaders) {
+    public RestAdapter(Class<?> interfaceProxy, String baseUrl, Map<String, RestOperation> operations,
+            Map<String, String> defaultHeaders) {
         this.interfaceProxy = interfaceProxy;
         this.baseUrl = baseUrl;
         this.operations = operations;
@@ -161,7 +163,9 @@ public class RestAdapter implements InvocationHandler {
                 response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
         Object dto;
-        if (List.class.isAssignableFrom(method.getReturnType())) {
+        if (byte[].class.isAssignableFrom(method.getReturnType())) {
+            dto = IOUtils.toByteArray(entity.getContent());
+        } else if (List.class.isAssignableFrom(method.getReturnType())) {
             ParameterizedType t = (ParameterizedType) method.getGenericReturnType();
             dto = MAPPER.readValue(entity.getContent(), MAPPER.getTypeFactory().constructParametricType(List.class,
                     (Class<?>) t.getActualTypeArguments()[0]));

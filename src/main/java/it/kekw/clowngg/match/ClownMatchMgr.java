@@ -1,5 +1,6 @@
 package it.kekw.clowngg.match;
 
+import java.io.IOException;
 import java.util.List;
 
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
@@ -20,6 +21,8 @@ public interface ClownMatchMgr {
 
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 
-    public void setShowCaseDetails(); 
+    public void insertShowCaseDetails(); 
+
+    public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
 
 }

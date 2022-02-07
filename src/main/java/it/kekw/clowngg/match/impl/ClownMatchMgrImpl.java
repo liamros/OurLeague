@@ -73,7 +73,17 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     @Override
     public String getGameNameByPuuid(String puuid) {
         SummonerInfoJPA jpa = summonerRepository.findByPuuid(puuid);
-        return jpa.getPuuid();
+        return jpa.getGameName();
+    }   
+    
+    @Override
+    public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
+        List<Float> list = new ArrayList<Float>();
+        List<RankInfoJPA> jpas = rankRepository.findBySummInfoId(summInfoId);
+        for (RankInfoJPA rankInfoJPA : jpas) {
+            list.add(rankInfoJPA.getWinrate());
+        } 
+        return list;
     }
 
     @Override
@@ -109,6 +119,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     
     }
 
+    @Override
+    public List<ShowCaseDetailDTO> setShowCaseDetails() {
+     
+        
+        return null;
+    }
+
     public void setAuthHeaderKey(String authHeaderKey) {
         this.authHeaderKey = authHeaderKey;
     }
@@ -116,5 +133,9 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;
     }
+
+
+
+    
 
 }

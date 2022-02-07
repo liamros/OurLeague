@@ -22,6 +22,12 @@ public class RankInfoJPA {
     public static class PrimaryKeys implements Serializable {
         private Integer summInfoId;
         private Integer queueTypeId;
+        public PrimaryKeys() {
+        }   
+        public PrimaryKeys(Integer summInfoId, Integer queueTypeId){
+            this.summInfoId = summInfoId;
+            this.queueTypeId = queueTypeId;
+        }   
     }
 
     @Id
@@ -43,7 +49,6 @@ public class RankInfoJPA {
     @ManyToOne
     @JoinColumn(name="SUMM_INFO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private SummonerInfoJPA summoner;
-
 
     public String getTier() {
         return tier;
@@ -84,7 +89,6 @@ public class RankInfoJPA {
     public void setLosses(Integer losses) {
         this.losses = losses;
     }
-    
 
     public Integer getSummInfoId() {
         return summInfoId;
@@ -108,6 +112,10 @@ public class RankInfoJPA {
 
     public void setSummoner(SummonerInfoJPA summoner) {
         this.summoner = summoner;
+    }
+
+    public Float getWinrate() {
+        return (((float)this.wins/((float)(this.wins+this.losses)))*100);
     }
 
     @Override

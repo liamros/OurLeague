@@ -16,6 +16,10 @@ public interface ClownMatchMgr {
 
     public void updateAllRanks();
 
+    public List<Float> getWinRateBySummInfoId(Integer summInfoId);
+
     public List<ShowCaseDetailDTO> getShowCaseDetails();
+
+    public List<ShowCaseDetailDTO> setShowCaseDetails(); 
 
 }

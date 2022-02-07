@@ -41,6 +41,12 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     }
 
     @Override
+    @GetMapping("/getWinRate")
+    public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
+        return clownMatchMgrImpl.getWinRateBySummInfoId(summInfoId);
+    }
+    
+    @Override
     @GetMapping("/updateAllRanks")
     public void updateAllRanks() {
         clownMatchMgrImpl.updateAllRanks();
@@ -50,6 +56,12 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     @GetMapping("/getShowCaseDetails")
     public List<ShowCaseDetailDTO> getShowCaseDetails() {
         return clownMatchMgrImpl.getShowCaseDetails();
+    }
+
+    @Override
+    @GetMapping("/setShowCaseDetails")
+    public List<ShowCaseDetailDTO> setShowCaseDetails() {
+        return clownMatchMgrImpl.setShowCaseDetails();
     }
    
 }

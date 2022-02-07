@@ -2,6 +2,7 @@ package it.kekw.clowngg.riot;
 
 import java.util.List;
 
+import it.kekw.clowngg.riot.dto.MatchDTO;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 

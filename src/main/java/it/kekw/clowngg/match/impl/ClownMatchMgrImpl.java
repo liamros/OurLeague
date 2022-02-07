@@ -124,10 +124,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public void setShowCaseDetails() {
+    public void insertShowCaseDetails() {
      
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        RankInfoJPA rankJpa = LowerWinRate();
+        RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
         showCaseJpa.setStatName("Worst WinRate");
         showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
         showCaseJpa.setValue(rankJpa.getWinrate());
@@ -136,21 +136,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         showCaseDetailRepository.save(showCaseJpa);
         LOGGER.info("Persisted {}", showCaseJpa);
         
-    }
-
-    public RankInfoJPA LowerWinRate(){
-
-        RankInfoJPA lowerWinRateJPA = null;
-        Float lowerWinRate= (float) 101;
-        Iterable<RankInfoJPA> jpas = rankRepository.findAll();
-        for (RankInfoJPA rankInfoJPA : jpas) {
-            if(rankInfoJPA.getWinrate() < lowerWinRate) {
-                lowerWinRateJPA = rankInfoJPA;
-                lowerWinRate = rankInfoJPA.getWinrate();
-            }
-        } 
-        return lowerWinRateJPA;
-
     }
 
     @Override

@@ -21,7 +21,7 @@ public interface ClownMatchMgr {
 
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 
-    public void setShowCaseDetails(); 
+    public void insertShowCaseDetails(); 
 
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
 

@@ -124,9 +124,33 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public List<ShowCaseDetailDTO> setShowCaseDetails() {
-        // TODO Auto-generated method stub
-        return null;
+    public void setShowCaseDetails() {
+     
+        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
+        RankInfoJPA rankJpa = LowerWinRate();
+        showCaseJpa.setStatName("Worst WinRate");
+        showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
+        showCaseJpa.setValue(rankJpa.getWinrate());
+        showCaseJpa.setDescription("Lowest WinRate");
+
+        showCaseDetailRepository.save(showCaseJpa);
+        LOGGER.info("Persisted {}", showCaseJpa);
+        
+    }
+
+    public RankInfoJPA LowerWinRate(){
+
+        RankInfoJPA lowerWinRateJPA = null;
+        Float lowerWinRate= (float) 101;
+        Iterable<RankInfoJPA> jpas = rankRepository.findAll();
+        for (RankInfoJPA rankInfoJPA : jpas) {
+            if(rankInfoJPA.getWinrate() < lowerWinRate) {
+                lowerWinRateJPA = rankInfoJPA;
+                lowerWinRate = rankInfoJPA.getWinrate();
+            }
+        } 
+        return lowerWinRateJPA;
+
     }
 
     @Override

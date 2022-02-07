@@ -65,8 +65,8 @@ public class ClownMatchMgrController implements ClownMatchMgr {
 
     @Override
     @GetMapping("/setShowCaseDetails")
-    public List<ShowCaseDetailDTO> setShowCaseDetails() {
-        return clownMatchMgrImpl.setShowCaseDetails();
+    public void setShowCaseDetails() {
+        clownMatchMgrImpl.setShowCaseDetails();
     }
 
     @Override

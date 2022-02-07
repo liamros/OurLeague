@@ -17,7 +17,7 @@ public class ShowCaseDetailJPA {
     @Column(name = "SUMM_INFO_ID")
     private Integer summInfoId;
     @Column(name = "VALUE")
-    private Integer value;
+    private Float value;
     @Column(name = "DESCRIPTION")
     private String description;
     @ManyToOne
@@ -42,11 +42,11 @@ public class ShowCaseDetailJPA {
         this.summInfoId = summInfoId;
     }
 
-    public Integer getValue() {
+    public Float getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Float value) {
         this.value = value;
     }
 

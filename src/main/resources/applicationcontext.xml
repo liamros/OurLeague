@@ -25,6 +25,18 @@
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>
+                        <entry key="getMatchIdsByPuuid">
+                              <bean class="it.kekw.clowngg.common.RestOperation">
+                                    <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}" />
+                                    <property name="httpMethod" value="GET" />
+                              </bean>
+                        </entry>
+                        <entry key="getMatchById">
+                              <bean class="it.kekw.clowngg.common.RestOperation">
+                                    <property name="path" value="/lol/match/v5/matches/{0}" />
+                                    <property name="httpMethod" value="GET" />
+                              </bean>
+                        </entry>
                   </map>
             </constructor-arg>
             <constructor-arg name="defaultHeaders">

@@ -11,4 +11,8 @@ public interface RiotMgrInterface {
 
     public List<RankInfoDTO> getRankInfoByEncryptedSummonerId(String encryptedSummonerId);
 
+    public List<String> getMatchIdsByPuuid(String puuid, String rankedType, Integer count);
+
+    public MatchDTO getMatchById(String matchId);
+
 }

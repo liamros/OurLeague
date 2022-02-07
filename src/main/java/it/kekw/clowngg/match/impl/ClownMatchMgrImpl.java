@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.kekw.clowngg.common.RestAdapter;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
@@ -27,10 +26,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     private RiotMgrInterface riotManager;
 
-    private String authHeaderKey;
-
-    private String apiToken;
-
     @Autowired
     private SummonerInfoRepository summonerRepository;
     @Autowired
@@ -48,21 +43,21 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public SummonerDTO insertSummoner(String summonerName) {
         SummonerDTO summonerDto = null;
         try {
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = ClownMatchMgrUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
-            LOGGER.info("Persisted {}", summonerJpa);
+            LOGGER.info("INFO: Persisted {}", summonerJpa);
+            List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
                 rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
                     continue;
-                rankJpa = rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                rankJpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+            rankRepository.saveAll(rankJpas);
         } catch (Exception e) {
             LOGGER.error("ERROR: Error while performing insertSummoner", e);
             throw new RuntimeException();
@@ -91,19 +86,22 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public void updateAllRanks() {
 
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        List<RankInfoJPA> jpas = new ArrayList<>();
         for (SummonerInfoJPA summonerJpa : list) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
-            RestAdapter.addHeader(authHeaderKey, apiToken);
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfoDTO rankDto : rankInfoDtos) {
                 RankInfoJPA rankJpa = ClownMatchMgrUtility.generateRankedInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
-                rankRepository.save(rankJpa);
-                LOGGER.info("Persisted {}", rankJpa);
+                jpas.add(rankJpa);
+                LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
+
         }
+        rankRepository.saveAll(jpas);
+        LOGGER.info("INFO: Persisted rankInfoJpas");
     }
 
     @Override
@@ -121,17 +119,15 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public List<ShowCaseDetailDTO> setShowCaseDetails() {
-     
-        
+        // TODO Auto-generated method stub
         return null;
     }
 
-    public void setAuthHeaderKey(String authHeaderKey) {
-        this.authHeaderKey = authHeaderKey;
+    @Override
+    public byte[] getProfileIconImage(Integer profileIconNumber) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
 
 }

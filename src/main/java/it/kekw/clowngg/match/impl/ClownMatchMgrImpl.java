@@ -1,5 +1,6 @@
 package it.kekw.clowngg.match.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.repository.RankInfoRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.ShowCaseDetailRepository;
 import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
+import it.kekw.clowngg.riot.IDdragon;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
@@ -25,6 +27,8 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClownMatchMgrImpl.class);
 
     private RiotMgrInterface riotManager;
+
+    private IDdragon ddragonApi;
 
     @Autowired
     private SummonerInfoRepository summonerRepository;
@@ -124,9 +128,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public byte[] getProfileIconImage(Integer profileIconNumber) {
-        // TODO Auto-generated method stub
-        return null;
+    public byte[] getProfileIconImage(Integer profileIconNumber) throws IOException {
+        byte[] byteArray = ddragonApi.getProfileIcon(profileIconNumber);
+       
+        return byteArray;
     }
 
 

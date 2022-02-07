@@ -1,8 +1,10 @@
 package it.kekw.clowngg.match.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,7 +50,7 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
         return clownMatchMgrImpl.getWinRateBySummInfoId(summInfoId);
     }
-    
+
     @Override
     @GetMapping("/updateAllRanks")
     public void updateAllRanks() {
@@ -66,5 +68,11 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     public List<ShowCaseDetailDTO> setShowCaseDetails() {
         return clownMatchMgrImpl.setShowCaseDetails();
     }
-   
+
+    @Override
+    @GetMapping(value = "/getProfileIcon", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] getProfileIconImage(@RequestParam Integer profileIconNumber) throws IOException {
+        return clownMatchMgrImpl.getProfileIconImage(profileIconNumber);
+    }
+
 }

@@ -1,14 +1,17 @@
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom'
+import ResponsiveAppBar from './components/header/ResponsiveAppBar';
+import ShowCase from './components/showcase/ShowCase';
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <header className="App-header">
-          
-
+        <header>  
+        <ResponsiveAppBar/>
+        <ShowCase/>
         </header>
+        
       </Router>
     </div>
   );

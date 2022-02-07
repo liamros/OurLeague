@@ -5,10 +5,7 @@
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config />
 
-      <bean class="it.kekw.clowngg.match.impl.ClownMatchMgrImpl" id="clownMatchMgrImpl" >
-            <property name="apiToken" value="${riot.api.token}"/>
-            <property name="authHeaderKey" value="${riot.api.auth.header.key}"/>
-      </bean>
+      <bean class="it.kekw.clowngg.match.impl.ClownMatchMgrImpl" id="clownMatchMgrImpl" />
 
 
       <bean class="it.kekw.clowngg.common.RestAdapter" id="riotManager">
@@ -28,6 +25,11 @@
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>
+                  </map>
+            </constructor-arg>
+            <constructor-arg name="defaultHeaders">
+                  <map>
+                        <entry key="${riot.api.auth.header.key}" value="${riot.api.token}" />
                   </map>
             </constructor-arg>
       </bean>

@@ -15,109 +15,157 @@ public class RankInfoDTO {
     private Boolean inactive;
     private Boolean freshBlood;
     private Boolean hotStreak;
-    
+    private MiniSeries miniSeries;
+
+    public static class MiniSeries {
+        private Integer target;
+        private Integer wins;
+        private Integer losses;
+        private String progress;
+
+        public Integer getTarget() {
+            return target;
+        }
+
+        public void setTarget(Integer target) {
+            this.target = target;
+        }
+
+        public Integer getWins() {
+            return wins;
+        }
+
+        public void setWins(Integer wins) {
+            this.wins = wins;
+        }
+
+        public Integer getLosses() {
+            return losses;
+        }
+
+        public void setLosses(Integer losses) {
+            this.losses = losses;
+        }
+
+        public String getProgress() {
+            return progress;
+        }
+
+        public void setProgress(String progress) {
+            this.progress = progress;
+        }
+    }
+
     public String getLeagueId() {
-    return leagueId;
+        return leagueId;
     }
-    
+
     public void setLeagueId(String leagueId) {
-    this.leagueId = leagueId;
+        this.leagueId = leagueId;
     }
-    
+
     public String getQueueType() {
-    return queueType;
+        return queueType;
     }
-    
+
     public void setQueueType(String queueType) {
-    this.queueType = queueType;
+        this.queueType = queueType;
     }
-    
+
     public String getTier() {
-    return tier;
+        return tier;
     }
-    
+
     public void setTier(String tier) {
-    this.tier = tier;
+        this.tier = tier;
     }
-    
+
     public String getRank() {
-    return rank;
+        return rank;
     }
-    
+
     public void setRank(String rank) {
-    this.rank = rank;
+        this.rank = rank;
     }
-    
+
     public String getSummonerId() {
-    return summonerId;
+        return summonerId;
     }
-    
+
     public void setSummonerId(String summonerId) {
-    this.summonerId = summonerId;
+        this.summonerId = summonerId;
     }
-    
+
     public String getSummonerName() {
-    return summonerName;
+        return summonerName;
     }
-    
+
     public void setSummonerName(String summonerName) {
-    this.summonerName = summonerName;
+        this.summonerName = summonerName;
     }
-    
+
     public Integer getLeaguePoints() {
-    return leaguePoints;
+        return leaguePoints;
     }
-    
+
     public void setLeaguePoints(Integer leaguePoints) {
-    this.leaguePoints = leaguePoints;
+        this.leaguePoints = leaguePoints;
     }
-    
+
     public Integer getWins() {
-    return wins;
+        return wins;
     }
-    
+
     public void setWins(Integer wins) {
-    this.wins = wins;
+        this.wins = wins;
     }
-    
+
     public Integer getLosses() {
-    return losses;
+        return losses;
     }
-    
+
     public void setLosses(Integer losses) {
-    this.losses = losses;
+        this.losses = losses;
     }
-    
+
     public Boolean getVeteran() {
-    return veteran;
+        return veteran;
     }
-    
+
     public void setVeteran(Boolean veteran) {
-    this.veteran = veteran;
+        this.veteran = veteran;
     }
-    
+
     public Boolean getInactive() {
-    return inactive;
+        return inactive;
     }
-    
+
     public void setInactive(Boolean inactive) {
-    this.inactive = inactive;
+        this.inactive = inactive;
     }
-    
+
     public Boolean getFreshBlood() {
-    return freshBlood;
+        return freshBlood;
     }
-    
+
     public void setFreshBlood(Boolean freshBlood) {
-    this.freshBlood = freshBlood;
+        this.freshBlood = freshBlood;
     }
-    
+
     public Boolean getHotStreak() {
-    return hotStreak;
+        return hotStreak;
     }
-    
+
     public void setHotStreak(Boolean hotStreak) {
-    this.hotStreak = hotStreak;
+        this.hotStreak = hotStreak;
     }
-    
+
+    public MiniSeries getMiniSeries() {
+        return miniSeries;
     }
+
+    public void setMiniSeries(MiniSeries miniSeries) {
+        this.miniSeries = miniSeries;
+    }
+
+}

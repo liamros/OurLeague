@@ -134,8 +134,4 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         this.apiToken = apiToken;
     }
 
-
-
-    
-
 }

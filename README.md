@@ -29,11 +29,15 @@ server run defaultSever
 - [x] Insert Summoner API
 - [x] Update All Ranks API
 - [ ] Initial data for FE API
-- [ ] Add default headers configuration to RestAdapter
+- [x] Add default headers configuration to RestAdapter
 - [ ] Evaluate possibility of a batch which periodically updates ranks on DB
 - [ ] Custom DTOs for response
 - [ ] Custom Exceptions and Exception handling
 - [ ] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
+- [ ] MatchHistory API
 - [x] Initialize React
-- [ ] Design homepage
-- [ ] Code homepage
+- [x] Design homepage
+- [ ] ShowCase FE
+- [ ] StatsSection FE
+- [ ] PairStatsSection FE
+- [ ] MatchHistory FE

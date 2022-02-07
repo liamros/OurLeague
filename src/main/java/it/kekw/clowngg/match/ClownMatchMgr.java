@@ -20,6 +20,6 @@ public interface ClownMatchMgr {
 
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 
-    public List<ShowCaseDetailDTO> setShowCaseDetails(); 
+    public void setShowCaseDetails(); 
 
 }

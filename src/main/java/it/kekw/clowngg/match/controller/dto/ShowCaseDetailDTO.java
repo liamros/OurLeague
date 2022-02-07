@@ -4,7 +4,7 @@ public class ShowCaseDetailDTO {
     
     private String statName;
     private String summonerName;
-    private Integer value;
+    private Float value;
     private String description;
     
     public String getStatName() {
@@ -19,10 +19,10 @@ public class ShowCaseDetailDTO {
     public void setSummonerName(String summonerName) {
         this.summonerName = summonerName;
     }
-    public Integer getValue() {
+    public Float getValue() {
         return value;
     }
-    public void setValue(Integer value) {
+    public void setValue(Float value) {
         this.value = value;
     }
     public String getDescription() {

@@ -23,6 +23,6 @@ public interface ClownMatchMgr {
 
     public List<ShowCaseDetailDTO> setShowCaseDetails(); 
 
-    public byte[] getProfileIconImage(Integer profileIconNumber) throws IOException;
+    public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
 
 }

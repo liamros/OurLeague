@@ -1,6 +1,9 @@
 package it.kekw.clowngg.match.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +24,7 @@ import it.kekw.clowngg.riot.IDdragon;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
+import net.coobird.thumbnailator.Thumbnails;
 
 public class ClownMatchMgrImpl implements ClownMatchMgr {
 
@@ -116,9 +120,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         for (ShowCaseDetailJPA showCaseDetailJpa : list) {           
             dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa));
         }
-
         return dtos;
-    
     }
 
     @Override
@@ -128,10 +130,17 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public byte[] getProfileIconImage(Integer profileIconNumber) throws IOException {
+    public byte[] getProfileIconImage(String profileIconNumber) throws IOException {
         byte[] byteArray = ddragonApi.getProfileIcon(profileIconNumber);
-       
-        return byteArray;
+        InputStream in = new ByteArrayInputStream(byteArray);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Thumbnails.of(in)
+                .size(100, 100)
+                .outputFormat("PNG")
+                .outputQuality(1)
+                .toOutputStream(outputStream);
+        byte[] data = outputStream.toByteArray();
+        return data;
     }
 
 

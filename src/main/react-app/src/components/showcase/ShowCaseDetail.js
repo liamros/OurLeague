@@ -43,7 +43,7 @@ class ShowCaseDetail extends React.Component {
                     (<CardMedia
                         component="img"
                         image={this.state.profileIcon}
-                        style={{borderRadius: "50%"}}
+                        style={{borderRadius: "50%", width: "20%", marginLeft: "auto", marginRight: "auto"}}
                     />) : null
                 }
                 <Typography style={styles}>{summonerName}</Typography>

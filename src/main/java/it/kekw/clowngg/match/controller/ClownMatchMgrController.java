@@ -71,7 +71,7 @@ public class ClownMatchMgrController implements ClownMatchMgr {
 
     @Override
     @GetMapping(value = "/getProfileIcon", produces = MediaType.IMAGE_PNG_VALUE)
-    public byte[] getProfileIconImage(@RequestParam Integer profileIconNumber) throws IOException {
+    public byte[] getProfileIconImage(@RequestParam String profileIconNumber) throws IOException {
         return clownMatchMgrImpl.getProfileIconImage(profileIconNumber);
     }
 

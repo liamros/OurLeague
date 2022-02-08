@@ -160,7 +160,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         List<String> matchesIds = new ArrayList<>();
         List<MatchDTO> matches = new ArrayList<>();
         try {
-            matchesIds = riotManager.getMatchIdsByPuuid(puuid, rankedType, count);
+            //matchesIds = riotManager.getMatchIdsByPuuid(puuid, rankedType, count);
             for (String matchId : matchesIds) {
                //matches.add(riotManager.getMatchById(matchId));
             }

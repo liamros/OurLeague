@@ -62,7 +62,7 @@ public class RestAdapter implements InvocationHandler {
 
         RestOperation op = operations.get(method.getName());
         if (op.getBaseUrlRouting() != null) {
-            baseUrl = String.format(baseUrl, op.getBaseUrlRouting());
+            baseUrl = MessageFormat.format(baseUrl, op.getBaseUrlRouting());
         }
         StringBuffer sb = new StringBuffer(baseUrl);
         sb.append(op.getPath());

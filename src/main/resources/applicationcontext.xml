@@ -17,28 +17,28 @@
                               <bean class="it.kekw.clowngg.common.RestOperation">
                                     <property name="path" value="/lol/summoner/v4/summoners/by-name/{0}" />
                                     <property name="httpMethod" value="GET" />
-                                    <property name="routing" value="euw1"/>
+                                    <property name="baseUrlRouting" value="euw1"/>
                               </bean>
                         </entry>
                         <entry key="getRankInfoByEncryptedSummonerId">
                               <bean class="it.kekw.clowngg.common.RestOperation">
                                     <property name="path" value="/lol/league/v4/entries/by-summoner/{0}" />
                                     <property name="httpMethod" value="GET" />
-                                    <property name="routing" value="euw1"/>
+                                    <property name="baseUrlRouting" value="euw1"/>
                               </bean>
                         </entry>
                         <entry key="getMatchIdsByPuuid">
                               <bean class="it.kekw.clowngg.common.RestOperation">
                                     <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}" />
                                     <property name="httpMethod" value="GET" />
-                                    <property name="routing" value="europe"/>
+                                    <property name="baseUrlRouting" value="europe"/>
                               </bean>
                         </entry>
                         <entry key="getMatchById">
                               <bean class="it.kekw.clowngg.common.RestOperation">
                                     <property name="path" value="/lol/match/v5/matches/{0}" />
                                     <property name="httpMethod" value="GET" />
-                                    <property name="routing" value="europe"/>
+                                    <property name="baseUrlRouting" value="europe"/>
                               </bean>
                         </entry>
                   </map>

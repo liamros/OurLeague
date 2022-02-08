@@ -48,6 +48,7 @@ public final class ClownMatchMgrUtility {
         dto.setSummonerName(jpa.getSummoner().getGameName());
         dto.setValue(jpa.getValue());
         dto.setDescription(jpa.getDescription());
+        dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
         return dto;
     }
 }

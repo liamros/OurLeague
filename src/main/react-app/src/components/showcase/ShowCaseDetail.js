@@ -9,7 +9,7 @@ class ShowCaseDetail extends React.Component {
         super(props);
         this.state = {
             stats: props.stats,
-            profileIconNum: props.profileIconNum,
+            profileIconNum: props.stats.profileIconNum,
             profileIcon: null
         };
     }

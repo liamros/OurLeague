@@ -25,13 +25,13 @@ class ShowCase extends React.Component {
 
     render() {
 
-        let list = [4070, 5213, 1641]
+        // let list = [4070, 5213, 1641]
         // var list = [{ statName: "KDA", summonerName: "Shakobi", value: 2.7, description: "kekw" }, { statName: "WinRate", summonerName: "Cavendish31", value: 55, description: "kekw" }]
         return (
             <Container style={{width: "100%", marginTop : "2%"}}>{
                 this.state.showCaseDetails ?
-                this.state.showCaseDetails.map((element, index) => {
-                    return <ShowCaseDetail key={element.statName} stats={element} profileIconNum={list[index]} />
+                this.state.showCaseDetails.map(element => {
+                    return <ShowCaseDetail key={element.statName} stats={element} /*profileIconNum={list[index]}*/ />
                 }) : <p>'Loading...'</p>
             }
             </Container>

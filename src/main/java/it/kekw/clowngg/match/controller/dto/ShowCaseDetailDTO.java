@@ -6,6 +6,8 @@ public class ShowCaseDetailDTO {
     private String summonerName;
     private Float value;
     private String description;
+
+    private Integer profileIconNum;
     
     public String getStatName() {
         return statName;
@@ -31,5 +33,12 @@ public class ShowCaseDetailDTO {
     public void setDescription(String description) {
         this.description = description;
     }
+    public Integer getProfileIconNum() {
+        return profileIconNum;
+    }
+    public void setProfileIconNum(Integer profileIconNum) {
+        this.profileIconNum = profileIconNum;
+    }
+    
 
 }

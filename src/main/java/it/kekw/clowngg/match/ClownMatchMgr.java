@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
+import it.kekw.clowngg.riot.dto.MatchDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 public interface ClownMatchMgr {
-    
 
     public String ping();
 
@@ -19,9 +19,11 @@ public interface ClownMatchMgr {
 
     public List<Float> getWinRateBySummInfoId(Integer summInfoId);
 
+    public List<MatchDTO> getMatchesByPuuid(String puuid, String rankedType, Integer count);
+
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 
-    public void insertShowCaseDetails(); 
+    public void insertShowCaseDetails();
 
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
 

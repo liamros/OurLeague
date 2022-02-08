@@ -22,6 +22,7 @@ import it.kekw.clowngg.match.impl.persistence.repository.ShowCaseDetailRepositor
 import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.IDdragon;
 import it.kekw.clowngg.riot.RiotMgrInterface;
+import it.kekw.clowngg.riot.dto.MatchDTO;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 import net.coobird.thumbnailator.Thumbnails;
@@ -77,15 +78,15 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     public String getGameNameByPuuid(String puuid) {
         SummonerInfoJPA jpa = summonerRepository.findByPuuid(puuid);
         return jpa.getGameName();
-    }   
-    
+    }
+
     @Override
     public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
         List<Float> list = new ArrayList<Float>();
         List<RankInfoJPA> jpas = rankRepository.findBySummInfoId(summInfoId);
         for (RankInfoJPA rankInfoJPA : jpas) {
             list.add(rankInfoJPA.getWinrate());
-        } 
+        }
         return list;
     }
 
@@ -114,10 +115,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public List<ShowCaseDetailDTO> getShowCaseDetails() {
-        
+
         Iterable<ShowCaseDetailJPA> list = showCaseDetailRepository.findAll();
-        List<ShowCaseDetailDTO> dtos = new ArrayList<>(); 
-        for (ShowCaseDetailJPA showCaseDetailJpa : list) {           
+        List<ShowCaseDetailDTO> dtos = new ArrayList<>();
+        for (ShowCaseDetailJPA showCaseDetailJpa : list) {
             dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa));
         }
         return dtos;
@@ -125,7 +126,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     public void insertShowCaseDetails() {
-     
+
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
         RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
         showCaseJpa.setStatName("Worst WinRate");
@@ -135,7 +136,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
         showCaseDetailRepository.save(showCaseJpa);
         LOGGER.info("Persisted {}", showCaseJpa);
-        
+
     }
 
     @Override
@@ -152,5 +153,25 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         return data;
     }
 
+    @Override
+    @Transactional
+    public List<MatchDTO> getMatchesByPuuid(String puuid, String rankedType, Integer count) {
+
+        List<String> matchesIds = new ArrayList<>();
+        List<MatchDTO> matches = new ArrayList<>();
+        try {
+            matchesIds = riotManager.getMatchIdsByPuuid(puuid, rankedType, count);
+            for (String matchId : matchesIds) {
+               //matches.add(riotManager.getMatchById(matchId));
+            }
+
+            //matches.add(riotManager.getMatchById("EUW1_5717622986"));
+
+        } catch (Exception e) {
+            LOGGER.error("ERROR: Error while performing getMatchesBySummInfoId", e);
+            throw new RuntimeException();
+        }
+        return matches;
+    }
 
 }

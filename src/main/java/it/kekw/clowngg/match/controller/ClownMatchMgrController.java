@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.ClownMatchMgrImpl;
+import it.kekw.clowngg.riot.dto.MatchDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
 @RestController
@@ -49,6 +50,12 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     @GetMapping("/getWinRate")
     public List<Float> getWinRateBySummInfoId(@RequestParam Integer summInfoId) {
         return clownMatchMgrImpl.getWinRateBySummInfoId(summInfoId);
+    }
+
+    @Override
+    @GetMapping("/getMatches")
+    public List<MatchDTO> getMatchesByPuuid(@RequestParam String puuid, String rankedType, Integer count) {
+        return clownMatchMgrImpl.getMatchesByPuuid(puuid, rankedType, count);
     }
 
     @Override

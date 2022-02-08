@@ -31,6 +31,7 @@ public class Challenges {
     private Integer epicMonsterKillsNearEnemyJungler;
     private Integer epicMonsterKillsWithin30SecondsOfSpawn;
     private Integer epicMonsterSteals;
+    private Integer firstTurretKilledTime;
     private Integer flawlessAces;
     private Integer fullTeamTakedown;
     private Double gameLength;
@@ -323,6 +324,14 @@ public class Challenges {
 
     public void setEpicMonsterSteals(Integer epicMonsterSteals) {
         this.epicMonsterSteals = epicMonsterSteals;
+    }
+
+    public Integer getFirstTurretKilledTime() {
+        return firstTurretKilledTime;
+    }
+
+    public void setFirstTurretKilledTime(Integer firstTurretKilledTime) {
+        this.firstTurretKilledTime = firstTurretKilledTime;
     }
 
     public Integer getFlawlessAces() {

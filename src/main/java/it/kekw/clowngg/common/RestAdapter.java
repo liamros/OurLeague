@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.io.IOUtils;
@@ -165,6 +166,7 @@ public class RestAdapter implements InvocationHandler {
         LOGGER.info("INFO: Http call performed to {} with response code {}", request.getURI().toString(),
                 response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Object dto;
         if (byte[].class.isAssignableFrom(method.getReturnType())) {
             dto = IOUtils.toByteArray(entity.getContent());

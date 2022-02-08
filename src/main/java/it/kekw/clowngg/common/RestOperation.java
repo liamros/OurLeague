@@ -6,6 +6,8 @@ public class RestOperation {
 
     private String httpMethod;
 
+    private String baseUrlRouting;
+
     
 
     public String getPath() {
@@ -23,4 +25,14 @@ public class RestOperation {
     public void setHttpMethod(String httpMethod) {
         this.httpMethod = httpMethod;
     }
+
+    public String getBaseUrlRouting() {
+        return baseUrlRouting;
+    }
+
+    public void setBaseUrlRouting(String baseUrlRouting) {
+        this.baseUrlRouting = baseUrlRouting;
+    }
+
+    
 }

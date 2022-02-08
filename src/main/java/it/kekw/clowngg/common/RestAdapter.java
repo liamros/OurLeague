@@ -61,6 +61,9 @@ public class RestAdapter implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         RestOperation op = operations.get(method.getName());
+        if (op.getBaseUrlRouting() != null) {
+            baseUrl = String.format(baseUrl, op.getBaseUrlRouting());
+        }
         StringBuffer sb = new StringBuffer(baseUrl);
         sb.append(op.getPath());
         String url = sb.toString();

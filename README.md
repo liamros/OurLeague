@@ -38,7 +38,8 @@ server run defaultSever
 - [ ] MatchHistory API
 - [x] Initialize React
 - [x] Design homepage
-- [ ] ShowCase FE
+- [x] ShowCase FE
+- [ ] Animate and style ShowCase FE
 - [ ] StatsSection FE
 - [ ] PairStatsSection FE
 - [ ] MatchHistory FE

@@ -2,3 +2,9 @@
   text-align: center;
 }
 
+
+.showcaseDetail:hover {
+  background-color: brown;
+  transition: 3s;
+}
+

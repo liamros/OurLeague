@@ -9,7 +9,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   display:flex;
   flex-flow:column;
-  background-color: black ;
+  /* background-color: black ; */
 }
 
 code {

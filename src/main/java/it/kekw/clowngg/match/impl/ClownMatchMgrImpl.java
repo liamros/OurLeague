@@ -23,6 +23,7 @@ import it.kekw.clowngg.match.impl.persistence.repository.SummonerInfoRepository;
 import it.kekw.clowngg.riot.IDdragon;
 import it.kekw.clowngg.riot.RiotMgrInterface;
 import it.kekw.clowngg.riot.dto.MatchDTO;
+import it.kekw.clowngg.riot.dto.Participant;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 import net.coobird.thumbnailator.Thumbnails;
@@ -88,6 +89,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             list.add(rankInfoJPA.getWinrate());
         }
         return list;
+    }
+
+    @Override
+    public Integer getKdaByMatch(MatchDTO match, String puuid) {
+
+        Participant participant = getParticipantByMatch(match, puuid);
+        return participant.getChallenges().getKda();
     }
 
     @Override
@@ -162,7 +170,7 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         try {
             matchesIds = riotManager.getMatchIdsByPuuid(puuid, rankedType, count);
             for (String matchId : matchesIds) {
-               matches.add(riotManager.getMatchById(matchId));
+                matches.add(riotManager.getMatchById(matchId));
             }
 
         } catch (Exception e) {
@@ -170,6 +178,17 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
             throw new RuntimeException();
         }
         return matches;
+    }
+
+    public Participant getParticipantByMatch(MatchDTO match, String puuid) {
+
+        List<Participant> participants = match.getInfo().getParticipants();
+
+        for (Participant participant : participants) {
+            if (participant.getPuuid().equals(puuid))
+                return participant;
+        }
+        return null;
     }
 
 }

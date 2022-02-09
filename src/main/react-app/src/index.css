@@ -7,9 +7,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  display:flex;
-  flex-flow:column;
-  /* background-color: black ; */
+  display: flex;
+  flex-flow: column;
+  background-color: #F5F5F5;
 }
 
 code {

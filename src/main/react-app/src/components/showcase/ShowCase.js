@@ -29,6 +29,7 @@ const ShowCase = () => {
           opacity: 1,
           transition: {
             delay: i * 0.5,
+            duration: 1,
           },
         }),
         hidden: { opacity: 0 },

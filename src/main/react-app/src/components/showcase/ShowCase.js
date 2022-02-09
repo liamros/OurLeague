@@ -1,6 +1,6 @@
-import ShowCaseDetail from "./ShowCaseDetail"
 import * as React from 'react';
-import { Container } from "@mui/material";
+import ShowCaseDetail from "./ShowCaseDetail";
+import { motion } from "framer-motion"
 
 class ShowCase extends React.Component {
 
@@ -28,13 +28,16 @@ class ShowCase extends React.Component {
         // let list = [4070, 5213, 1641]
         // var list = [{ statName: "KDA", summonerName: "Shakobi", value: 2.7, description: "kekw" }, { statName: "WinRate", summonerName: "Cavendish31", value: 55, description: "kekw" }]
         return (
-            <Container style={{width: "100%", height: "100%", margin: "0%", marginTop : "2%", padding: "0%", display: "inline-block"}}>{
+            //<Container style={{width: "100%", height: "100%", margin: "0%", marginTop : "2%", padding: "0%", display: "inline-block"}}>
+            <motion.div animate={{ scale: 0.8 }} style={{width: "100%", height: "100%", margin: "0%", marginTop : "2%", padding: "0%", display: "inline-block"}}>
+                {
                 this.state.showCaseDetails ?
                 this.state.showCaseDetails.map(element => {
                     return <ShowCaseDetail key={element.statName} stats={element} /*profileIconNum={list[index]}*/ />
                 }) : <p>'Loading...'</p>
             }
-            </Container>
+            </motion.div>
+            //</Container>
 
         )
 

@@ -1,4 +1,4 @@
-import { Card, CardMedia, Typography, typographyClasses } from "@mui/material";
+import { Card, CardMedia, Typography } from "@mui/material";
 import * as React from 'react';
 
 

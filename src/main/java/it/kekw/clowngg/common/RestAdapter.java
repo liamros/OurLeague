@@ -27,8 +27,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 
-public class RestAdapter implements InvocationHandler {
+public class RestAdapter implements InvocationHandler, InitializingBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestAdapter.class);
 
@@ -62,6 +63,7 @@ public class RestAdapter implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
         RestOperation op = operations.get(method.getName());
+        String baseUrl = this.baseUrl;
         if (op.getBaseUrlRouting() != null) {
             baseUrl = MessageFormat.format(baseUrl, op.getBaseUrlRouting());
         }
@@ -91,6 +93,7 @@ public class RestAdapter implements InvocationHandler {
             }
         } catch (Exception e) {
             LOGGER.error("ERROR: Error occured while performing http call", e);
+            throw e;
         }
 
         return dto;
@@ -102,13 +105,14 @@ public class RestAdapter implements InvocationHandler {
      * @param responseCls Response dto class type
      * @param parameters  GET request parameters
      * @return Object parsed DTO response
-     * @throws IOException
+     * @throws Exception
      */
-    private Object doGet(String url, Method method, Object... parameters) throws IOException {
+    private Object doGet(String url, Method method, Object... parameters) throws Exception {
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         url = MessageFormat.format(url, parameters);
         url = url.replaceAll(" ", "%20");
+        url = url.replaceAll("null", "");
         HttpGet request = new HttpGet(url);
         addHeaderToRequest(request);
         Object dto = performHttpRequest(httpClient, request, method);
@@ -158,15 +162,24 @@ public class RestAdapter implements InvocationHandler {
      * @param request
      * @param responseCls
      * @return Object
-     * @throws IOException
+     * @throws Exception
      */
     private Object performHttpRequest(CloseableHttpClient httpClient, HttpRequestBase request, Method method)
-            throws IOException {
+            throws Exception {
+
         CloseableHttpResponse response = httpClient.execute(request);
+        
+        if (response.getStatusLine().getStatusCode() >= 400) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            String statusMessage = response.getStatusLine().getReasonPhrase();
+            String errMsg = "Http request failed -- Status Message: {0} - {1} -- URL : {2}";
+            errMsg = MessageFormat.format(errMsg, statusCode, statusMessage, request.getURI().toString());
+            response.close();
+            throw new Exception(errMsg);
+        }
         LOGGER.info("INFO: Http call performed to {} with response code {}", request.getURI().toString(),
                 response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
-        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         Object dto;
         if (byte[].class.isAssignableFrom(method.getReturnType())) {
             dto = IOUtils.toByteArray(entity.getContent());
@@ -193,6 +206,11 @@ public class RestAdapter implements InvocationHandler {
 
     public Class<?> getInterfaceProxy() {
         return this.interfaceProxy;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
 }

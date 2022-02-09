@@ -27,6 +27,14 @@ const ShowCaseDetail = (props) => {
                 console.log(error))
     }
 
+    const onHover = (e) => {
+        let borderColor = e.target.style.borderColor
+        if (borderColor) {
+            e.target.style.borderColor = null
+        } else {
+            e.target.style.borderColor = "rgb(208, 168, 92)"
+        }
+    }
 
     var statName = stats.statName
     var description = stats.description
@@ -45,6 +53,8 @@ const ShowCaseDetail = (props) => {
                         elevation={10}
                         style={styles.card}
                         className="showcaseDetail"
+                        // onMouseOver={onHover}
+                        // onMouseOut={onHover}
                     >
                         <CardMedia
                             component="img"
@@ -68,12 +78,13 @@ const styles = {
     typography: {
         margin: "2%",
         color: "rgb(208, 168, 92)",
+        fontSize: "0.9vw",
     },
     typographyTitle: {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.2rem"
+        fontSize: "1.0vw",
     },
     card: {
         width: '100%',

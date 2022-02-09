@@ -41,13 +41,14 @@ const ShowCase = () => {
                     showCaseDetails.map((element, i) => {
                         return (
                             <motion.li
+                                key={i}
                                 custom={i}
                                 style={styles.detailContainer}
                                 initial="hidden"
                                 animate="visible"
                                 variants={variants}
                             >
-                                <ShowCaseDetail key={element.statName} stats={element} /*profileIconNum={list[index]}*/ />
+                                <ShowCaseDetail key={i} stats={element} /*profileIconNum={list[index]}*/ />
                             </motion.li>
                         )
                     }) : <p>'Loading...'</p>

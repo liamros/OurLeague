@@ -28,7 +28,7 @@ server run defaultSever
 - [x] Initial data structure
 - [x] Insert Summoner API
 - [x] Update All Ranks API
-- [ ] Initial data for FE API
+- [ ] Showcase data for FE API
 - [x] ProfileIcon API with img resizing
 - [x] Add default headers configuration to RestAdapter
 - [ ] Evaluate possibility of a batch which periodically updates ranks on DB

@@ -1,6 +1,7 @@
 import { Card, CardMedia, CircularProgress, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import * as React from 'react';
+import { Link } from "react-router-dom";
 
 
 
@@ -41,34 +42,41 @@ const ShowCaseDetail = (props) => {
     var summonerName = stats.summonerName
     var value = stats.value
     return (
-        <motion.div 
+        <motion.div
             // drag="x"
             // dragConstraints={{ left: -100, right: 100 }}
             whileHover={{ scale: 1.1 }}
-            // whileTap={{ scale: 0.9 }}
-            style={styles.container}>
+            whileTap={{ scale: 0.9 }}
+            style={styles.container}
+            layoutId={`card-${stats.statName}`}
+            >
             {
                 profileIcon ?
-                    (<Card
-                        elevation={10}
-                        style={styles.card}
-                        className="showcaseDetail"
-                        // onMouseOver={onHover}
-                        // onMouseOut={onHover}
-                    >
-                        <CardMedia
-                            component="img"
-                            image={profileIcon}
-                            style={styles.cardMedia}
-                        />
-                        <Typography style={styles.typographyTitle}>{summonerName}</Typography>
-                        <Typography style={styles.typography}>{statName}</Typography>
-                        {value ?
-                            <Typography style={styles.typography}>{value}</Typography>
-                            : <Typography style={styles.typography}>{description}</Typography>}
+                    (
+                        <li style={{position: "relative"}}>
+                            <Card
+                                elevation={10}
+                                style={styles.card}
+                                className="showcaseDetail"
+                            // onMouseOver={onHover}
+                            // onMouseOut={onHover}
+                            >
+                                <CardMedia
+                                    component="img"
+                                    image={profileIcon}
+                                    style={styles.cardMedia}
+                                />
+                                <Typography style={styles.typographyTitle}>{summonerName}</Typography>
+                                <Typography style={styles.typography}>{statName}</Typography>
+                                {value ?
+                                    <Typography style={styles.typography}>{value}</Typography>
+                                    : <Typography style={styles.typography}>{description}</Typography>}
 
 
-                    </Card>) : <CircularProgress />}
+                            </Card>
+                            <Link to={statName} className={`card-open-link`} />
+                        </li>) : <CircularProgress />
+            }
         </motion.div>
     );
 

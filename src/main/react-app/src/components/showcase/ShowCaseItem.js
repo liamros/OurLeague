@@ -1,14 +1,13 @@
-import React from 'react'
-import { Link } from "react-router-dom";
+import { Card, CardMedia, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import React from 'react';
 import { LoremIpsum } from "react-lorem-ipsum";
-import { Card, CardMedia, CircularProgress, Typography } from "@mui/material";
-import { useStore } from 'react-redux';
+import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
 
-export const ShowCaseItem = ({ id }) => {
+const ShowCaseItem = ({ id, showCaseDetails }) => {
 
-    const store = useStore()
-    var stats = store.getState()["showCaseDetails"][id]
+    const stats = showCaseDetails[id]
 
 
 
@@ -71,6 +70,8 @@ export const ShowCaseItem = ({ id }) => {
     )
 }
 
+
+
 const styles = {
     typography: {
         margin: "2%",
@@ -104,3 +105,14 @@ const styles = {
         padding: "0%"
     }
 }
+
+
+function mapStateToProps(state) {
+    return {
+        showCaseDetails: state.showCaseDetails,
+    }
+}
+
+export default connect(
+    mapStateToProps,
+)(ShowCaseItem)

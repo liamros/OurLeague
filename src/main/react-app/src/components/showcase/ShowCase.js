@@ -2,7 +2,7 @@ import { AnimatePresence } from "framer-motion";
 import React from 'react';
 import { connect } from "react-redux";
 import { fetchShowCaseDetails } from "../../actions";
-import { ShowCaseItem } from "./ShowCaseItem";
+import ShowCaseItem from "./ShowCaseItem";
 import ShowCaseList from "./ShowCaseList";
 
 const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) => {

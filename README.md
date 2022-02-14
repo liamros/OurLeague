@@ -41,7 +41,7 @@ server run defaultSever
 - [x] Initialize React
 - [x] Design homepage
 - [x] ShowCase FE
-- [ ] Animate and style ShowCase FE
+- [x] Animate and style ShowCase FE
 - [ ] StatsSection FE
 - [ ] PairStatsSection FE
 - [ ] MatchHistory FE

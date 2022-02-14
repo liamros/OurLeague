@@ -51,7 +51,7 @@ export const ShowCaseItem = ({ id, stats }) => {
                             elevation={10}
                             style={styles.card}
                             // className="showcaseDetail"
-                            className="content-container open"
+                            className="content-container"
                         >
                             <CardMedia
                                 component="img"

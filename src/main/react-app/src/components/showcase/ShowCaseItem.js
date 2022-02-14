@@ -44,14 +44,14 @@ export const ShowCaseItem = ({ id, stats }) => {
             >
                 <Link to="/" />
             </motion.div>
-            {profileIcon ?
+            
                 (<div className="card-content-container open">
-                    <motion.div layoutId={`card-${id}`}>
+                    <motion.div layoutId={`card-${id}`} className="content-container">
                         <Card
                             elevation={10}
                             style={styles.card}
                             // className="showcaseDetail"
-                            className="content-container"
+                            className="content-container open"
                         >
                             <CardMedia
                                 component="img"
@@ -76,7 +76,7 @@ export const ShowCaseItem = ({ id, stats }) => {
                         </Card>
                     </motion.div>
 
-                </div>) : <CircularProgress />}
+                </div>) 
         </>
     )
 }

@@ -62,7 +62,7 @@
 }
 
 .content-container {
-  /* padding: 460px 35px 35px 35px; */
+  margin: auto;
   max-width: 700px;
   width: 90vw;
 }

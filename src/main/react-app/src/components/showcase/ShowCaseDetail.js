@@ -53,7 +53,7 @@ const ShowCaseDetail = (props) => {
             {
                 profileIcon ?
                     (
-                        <li style={{position: "relative"}}>
+                        <div style={{position: "relative"}}>
                             <Card
                                 elevation={10}
                                 style={styles.card}
@@ -75,7 +75,7 @@ const ShowCaseDetail = (props) => {
 
                             </Card>
                             <Link to={statName} className={`card-open-link`} />
-                        </li>) : <CircularProgress />
+                        </div>) : <CircularProgress />
             }
         </motion.div>
     );

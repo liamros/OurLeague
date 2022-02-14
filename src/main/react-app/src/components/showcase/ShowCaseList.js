@@ -21,7 +21,7 @@ const ShowCaseList = ({ selectedId, showCaseDetails }) => {
     }
 
     return (
-        <ul>
+        <ul className="container">
             {
                 showCaseDetails.map((stats, i) => {
                     return (

@@ -33,7 +33,7 @@ export const ShowCaseItem = ({ id }) => {
                 <Link to="/" />
             </motion.div>
 
-            (<div className="card-content-container open">
+            <div className="card-content-container open">
                 <motion.div layoutId={`card-${id}`} className="content-container">
                     <Card
                         elevation={10}
@@ -66,7 +66,7 @@ export const ShowCaseItem = ({ id }) => {
                     </Card>
                 </motion.div>
 
-            </div>)
+            </div>
         </>
     )
 }

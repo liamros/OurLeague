@@ -54,11 +54,11 @@ public final class ClownMatchMgrUtility {
         dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
 
         if (rank == null) {
-            dto.setTier("Unranked");
+            dto.setTier("UNRANKED");
             dto.setWins(0);
             dto.setLosses(0);
         } else {
-            
+
             dto.setQueueType(RankedQueueType.getById(rank.getQueueTypeId()).name());
             dto.setTier(rank.getTier());
             dto.setDivision(rank.getDivision());
@@ -72,8 +72,19 @@ public final class ClownMatchMgrUtility {
     public static RankInfoJPA getHighestRank(List<RankInfoJPA> list) {
         RankInfoJPA rank = null;
         for (RankInfoJPA rankInfoJPA : list) {
-            if (rank == null || RankedTierType.valueOf(rankInfoJPA.getTier()).ordinal() > RankedTierType
-                    .valueOf(rank.getTier()).ordinal())
+            if (rank != null) {
+                int nextTierOrdinal = RankedTierType.valueOf(rankInfoJPA.getTier()).ordinal();
+                int currTierOrdinal = RankedTierType.valueOf(rank.getTier()).ordinal();
+                if (nextTierOrdinal > currTierOrdinal)
+                    rank = rankInfoJPA;
+                else if (nextTierOrdinal == currTierOrdinal) {
+                    int nextDivOrdinal = RankedTierType.valueOf(rankInfoJPA.getDivision()).ordinal();
+                    int curreDivOrdinal = RankedTierType.valueOf(rank.getDivision()).ordinal();
+                    if (nextDivOrdinal > curreDivOrdinal
+                            || nextDivOrdinal == curreDivOrdinal && rankInfoJPA.getLp() > rank.getLp())
+                        rank = rankInfoJPA;
+                }
+            } else
                 rank = rankInfoJPA;
         }
         return rank;

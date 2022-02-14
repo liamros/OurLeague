@@ -17,6 +17,9 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
 
     const rank = stats.rank
     var tier = rank.tier.toLowerCase()
+    var queueType = "HAS NOT BEEN PLACED"
+    if (rank.queueType)
+        queueType = rank.queueType.replaceAll("_", " ").replaceAll("5x5", "").replaceAll("SR", "")
 
     return (
         <>
@@ -53,21 +56,23 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
                                 : <Typography style={styles.typography}>{description}</Typography>}
                         </motion.div>
                         <motion.div style={styles.typography} animate>
+                            <Typography style={styles.typographyTitle}>{queueType}</Typography>
+                            <CardMedia
+                                component="img"
+                                image={require(`../../img/rank/emblem_${tier}.png`)}
+                                style={styles.cardMediaRank}
+                            />
+                            <Typography style={styles.typography}>{rank.tier}</Typography>
                             {
-                                rank.queueType ?
+                                rank.division && rank.lp ?
                                     (<>
-                                        <Typography style={styles.typographyTitle}>{rank.queueType}</Typography>
-                                        <CardMedia
-                                            component="img"
-                                            image={require(`../../img/rank/emblem_${tier}.png`)}
-                                            style={styles.cardMediaRank}
-                                        />
-
-
-                                        <Typography style={styles.typography}>{rank.tier}</Typography>
                                         <Typography style={styles.typography}>{rank.division}</Typography>
                                         <Typography style={styles.typography}>{rank.lp} LP</Typography>
-                                    </>) : <Typography style={styles.typography}>{rank.tier}</Typography>
+                                    </>) : 
+                                    (<>
+                                        <Typography style={styles.typography}>-</Typography>
+                                        <Typography style={styles.typography}>0 LP</Typography>
+                                    </>)
                             }
                         </motion.div>
 

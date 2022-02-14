@@ -12,7 +12,11 @@ public enum RankedTierType {
     DIAMOND,
     MASTER,
     GRANDMASTER,
-    CHALLENGER;
+    CHALLENGER,
+    IV,
+    III,
+    II,
+    I;
 
 
 }

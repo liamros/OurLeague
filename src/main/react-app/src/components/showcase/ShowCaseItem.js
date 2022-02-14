@@ -3,31 +3,19 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LoremIpsum } from "react-lorem-ipsum";
 import { Card, CardMedia, CircularProgress, Typography } from "@mui/material";
+import { useStore } from 'react-redux';
 
-export const ShowCaseItem = ({ id, stats }) => {
+export const ShowCaseItem = ({ id }) => {
 
-    const [profileIcon, setProfileIcon] = React.useState(null)
+    const store = useStore()
+    var stats = store.getState()["showCaseDetails"][id]
 
-    React.useEffect(() => {
-        getSummonerIcon()
-    }, [])
 
-    const getSummonerIcon = () => {
-        let url = `http://localhost:8080/match/getProfileIcon?profileIconNumber=${stats.profileIconNum}`
-        fetch(url, { mode: 'cors' })
-            .then(response =>
-                response.blob())
-            .then(imgBlob => {
-                const img = URL.createObjectURL(imgBlob)
-                setProfileIcon(img)
-            })
-            .catch(error =>
-                console.log(error))
-    }
+
     var description = stats.description
     var summonerName = stats.summonerName
     var value = stats.value
-
+    var profileIcon = stats.profileIcon
 
 
 
@@ -40,43 +28,45 @@ export const ShowCaseItem = ({ id, stats }) => {
                 transition={{ duration: 0.2, delay: 0.15 }}
                 style={{ pointerEvents: "auto" }}
                 className="overlay"
-                
+
             >
                 <Link to="/" />
             </motion.div>
-            
-                (<div className="card-content-container open">
-                    <motion.div layoutId={`card-${id}`} className="content-container">
-                        <Card
-                            elevation={10}
-                            style={styles.card}
-                            // className="showcaseDetail"
-                            className="content-container"
-                        >
+
+            (<div className="card-content-container open">
+                <motion.div layoutId={`card-${id}`} className="content-container">
+                    <Card
+                        elevation={10}
+                        style={styles.card}
+                        className="content-container"
+                    >
+                        <motion.div layoutId={`card-content-${id}`}>
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
                                 style={styles.cardMedia}
                             />
+
                             <Typography style={styles.typographyTitle}>{summonerName}</Typography>
                             <Typography style={styles.typography}>{id}</Typography>
                             {value ?
                                 <Typography style={styles.typography}>{value}</Typography>
                                 : <Typography style={styles.typography}>{description}</Typography>}
-                            <motion.div style={styles.typography} animate>
-                                <LoremIpsum
-                                    p={6}
-                                    avgWordsPerSentence={6}
-                                    avgSentencesPerParagraph={4}
-                                    
-                                />
-                            </motion.div>
+                        </motion.div>
+                        <motion.div style={styles.typography} animate>
+                            <LoremIpsum
+                                p={6}
+                                avgWordsPerSentence={6}
+                                avgSentencesPerParagraph={4}
+
+                            />
+                        </motion.div>
 
 
-                        </Card>
-                    </motion.div>
+                    </Card>
+                </motion.div>
 
-                </div>) 
+            </div>)
         </>
     )
 }

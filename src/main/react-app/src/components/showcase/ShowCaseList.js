@@ -6,9 +6,6 @@ const ShowCaseList = ({ selectedId, showCaseDetails }) => {
 
 
 
-
-
-
     const variants = {
         visible: i => ({
             opacity: 1,
@@ -20,25 +17,28 @@ const ShowCaseList = ({ selectedId, showCaseDetails }) => {
         hidden: { opacity: 0 },
     }
 
+    var rows = []
+    let i = 0
+    for (let [statName, stats] of Object.entries(showCaseDetails)) {
+        rows.push(
+            <motion.div
+                key={i}
+                custom={i}
+                style={styles.detailContainer}
+                initial="hidden"
+                animate="visible"
+                variants={variants}
+
+            >
+                <ShowCaseDetail key={i} name={statName} stats={stats} isSelected={statName === selectedId} />
+            </motion.div>
+        )
+        i++
+    }
+
     return (
         <ul className="container">
-            {
-                showCaseDetails.map((stats, i) => {
-                    return (
-                        <motion.div
-                            key={i}
-                            custom={i}
-                            style={styles.detailContainer}
-                            initial="hidden"
-                            animate="visible"
-                            variants={variants}
-
-                        >
-                            <ShowCaseDetail key={i} stats={stats} isSelected={stats.statName === selectedId} />
-                        </motion.div>
-                    )
-                })
-            }
+            {rows}
         </ul>
 
     )

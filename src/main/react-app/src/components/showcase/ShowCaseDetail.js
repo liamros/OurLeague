@@ -9,68 +9,45 @@ const ShowCaseDetail = (props) => {
 
 
     const [stats, setStats] = React.useState(props.stats)
-    const [profileIcon, setProfileIcon] = React.useState(null)
 
-    React.useEffect(() => {
-        getSummonerIcon()
-    }, [])
 
-    const getSummonerIcon = () => {
-        let url = `http://localhost:8080/match/getProfileIcon?profileIconNumber=${stats.profileIconNum}`
-        fetch(url, { mode: 'cors' })
-            .then(response =>
-                response.blob())
-            .then(imgBlob => {
-                const img = URL.createObjectURL(imgBlob)
-                setProfileIcon(img)
-            })
-            .catch(error =>
-                console.log(error))
-    }
 
-    const onHover = (e) => {
-        let borderColor = e.target.style.borderColor
-        if (borderColor) {
-            e.target.style.borderColor = null
-        } else {
-            e.target.style.borderColor = "rgb(208, 168, 92)"
-        }
-    }
 
-    var statName = stats.statName
+    var statName = props.name
     var description = stats.description
     var summonerName = stats.summonerName
     var value = stats.value
+    var profileIcon = stats.profileIcon
     return (
         <motion.div
-            // drag="x"
-            // dragConstraints={{ left: -100, right: 100 }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             style={styles.container}
-            layoutId={`card-${stats.statName}`}
-            >
+            layoutId={`card-${statName}`}
+        >
             {
                 profileIcon ?
                     (
-                        <div style={{position: "relative"}}>
+                        <div style={{ position: "relative" }}>
                             <Card
                                 elevation={10}
                                 style={styles.card}
                                 className="showcaseDetail"
-                            // onMouseOver={onHover}
-                            // onMouseOut={onHover}
                             >
-                                <CardMedia
-                                    component="img"
-                                    image={profileIcon}
-                                    style={styles.cardMedia}
-                                />
-                                <Typography style={styles.typographyTitle}>{summonerName}</Typography>
-                                <Typography style={styles.typography}>{statName}</Typography>
-                                {value ?
-                                    <Typography style={styles.typography}>{value}</Typography>
-                                    : <Typography style={styles.typography}>{description}</Typography>}
+                                <motion.div layoutId={`card-content-${statName}`}>
+                                    <CardMedia
+                                        component="img"
+                                        image={profileIcon}
+                                        style={styles.cardMedia}
+
+                                    />
+
+                                    <Typography style={styles.typographyTitle}>{summonerName}</Typography>
+                                    <Typography style={styles.typography}>{statName}</Typography>
+                                    {value ?
+                                        <Typography style={styles.typography}>{value}</Typography>
+                                        : <Typography style={styles.typography}>{description}</Typography>}
+                                </motion.div>
 
 
                             </Card>

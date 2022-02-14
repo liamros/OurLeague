@@ -19,7 +19,15 @@ const showCaseDetails = (state = initialState, action) => {
                     summonerName: element.summonerName,
                     value: element.value,
                     description: element.description,
-                    profileIcon: element.profileIcon
+                    profileIcon: element.profileIcon,
+                    rank: {
+                        queueType: element.queueType,
+                        tier: element.tier,
+                        division: element.division,
+                        lp: element.lp,
+                        wins: element.wins,
+                        losses: element.losses
+                    }
                 }
             })
 

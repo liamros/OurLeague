@@ -1,7 +1,6 @@
 import { Card, CardMedia, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import React from 'react';
-import { LoremIpsum } from "react-lorem-ipsum";
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
@@ -16,7 +15,8 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
     var value = stats.value
     var profileIcon = stats.profileIcon
 
-
+    const rank = stats.rank
+    var tier = rank.tier.toLowerCase()
 
     return (
         <>
@@ -43,7 +43,7 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
-                                style={styles.cardMedia}
+                                style={styles.cardMediaProfile}
                             />
 
                             <Typography style={styles.typographyTitle}>{summonerName}</Typography>
@@ -53,12 +53,22 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
                                 : <Typography style={styles.typography}>{description}</Typography>}
                         </motion.div>
                         <motion.div style={styles.typography} animate>
-                            <LoremIpsum
-                                p={6}
-                                avgWordsPerSentence={6}
-                                avgSentencesPerParagraph={4}
+                            {
+                                rank.queueType ?
+                                    (<>
+                                        <Typography style={styles.typographyTitle}>{rank.queueType}</Typography>
+                                        <CardMedia
+                                            component="img"
+                                            image={require(`../../img/rank/emblem_${tier}.png`)}
+                                            style={styles.cardMediaRank}
+                                        />
 
-                            />
+
+                                        <Typography style={styles.typography}>{rank.tier}</Typography>
+                                        <Typography style={styles.typography}>{rank.division}</Typography>
+                                        <Typography style={styles.typography}>{rank.lp} LP</Typography>
+                                    </>) : <Typography style={styles.typography}>{rank.tier}</Typography>
+                            }
                         </motion.div>
 
 
@@ -91,12 +101,17 @@ const styles = {
         backgroundColor: "rgb(6, 28, 37)",
         border: "3px solid rgb(208, 168, 92)"
     },
-    cardMedia: {
+    cardMediaProfile: {
         borderRadius: "50%",
         width: "20%",
         margin: "auto",
         marginTop: "5%",
         border: "2px solid rgb(208, 168, 92)"
+    },
+    cardMediaRank: {
+        width: "20%",
+        margin: "auto",
+
     },
     container: {
         width: '100%',

@@ -1,3 +1,4 @@
+import { LinearProgress } from "@mui/material";
 import { AnimatePresence } from "framer-motion";
 import React from 'react';
 import { connect } from "react-redux";
@@ -28,7 +29,7 @@ const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) 
                         {statName && <ShowCaseItem id={statName} key="item" />}
                     </AnimatePresence>
                 </>
-            ) : <h1>Loading...</h1>
+            ) : <LinearProgress />
             }
         </>
     );

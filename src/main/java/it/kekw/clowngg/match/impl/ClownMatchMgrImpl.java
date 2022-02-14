@@ -127,7 +127,10 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         Iterable<ShowCaseDetailJPA> list = showCaseDetailRepository.findAll();
         List<ShowCaseDetailDTO> dtos = new ArrayList<>();
         for (ShowCaseDetailJPA showCaseDetailJpa : list) {
-            dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa));
+            List<RankInfoJPA> ranks = rankRepository.findBySummInfoId(showCaseDetailJpa.getSummInfoId());
+            // provisory
+            RankInfoJPA highestRank = ClownMatchMgrUtility.getHighestRank(ranks);
+            dtos.add(ClownMatchMgrUtility.generateShowCaseDetailDTO(showCaseDetailJpa, highestRank));
         }
         return dtos;
     }

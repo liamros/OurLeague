@@ -53,14 +53,9 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     }
 
     @Override
-    public Integer getKdaByMatch(MatchDTO match, String puuid) {
-        return clownMatchMgrImpl.getKdaByMatch(match, puuid);
-    }
-
-    @Override
     @GetMapping("/getMatches")
-    public List<MatchDTO> getMatchesByPuuid(@RequestParam String puuid, String rankedType, Integer count) {
-        return clownMatchMgrImpl.getMatchesByPuuid(puuid, rankedType, count);
+    public List<MatchDTO> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
+        return clownMatchMgrImpl.getMatchesByPuuid(puuid, queueType, count);
     }
 
     @Override
@@ -76,9 +71,9 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     }
 
     @Override
-    @GetMapping("/insertShowCaseDetails")
-    public void insertShowCaseDetails() {
-        clownMatchMgrImpl.insertShowCaseDetails();
+    @GetMapping("/updateShowCaseDetails")
+    public void updateShowCaseDetails() {
+        clownMatchMgrImpl.updateShowCaseDetails();
     }
 
     @Override

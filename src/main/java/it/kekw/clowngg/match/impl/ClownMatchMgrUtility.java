@@ -1,10 +1,14 @@
 package it.kekw.clowngg.match.impl;
 
+import java.util.List;
+
 import it.kekw.clowngg.common.constants.RankedQueueType;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
+import it.kekw.clowngg.riot.dto.MatchDTO;
+import it.kekw.clowngg.riot.dto.Participant;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
@@ -50,5 +54,16 @@ public final class ClownMatchMgrUtility {
         dto.setDescription(jpa.getDescription());
         dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
         return dto;
+    }
+
+    public static Participant getParticipantByMatch(MatchDTO match, String puuid) {
+
+        List<Participant> participants = match.getInfo().getParticipants();
+
+        for (Participant participant : participants) {
+            if (participant.getPuuid().equals(puuid))
+                return participant;
+        }
+        return null;
     }
 }

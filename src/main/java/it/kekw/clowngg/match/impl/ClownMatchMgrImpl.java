@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.kekw.clowngg.common.constants.ShowCaseType;
 import it.kekw.clowngg.match.ClownMatchMgr;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
@@ -92,13 +94,6 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public Integer getKdaByMatch(MatchDTO match, String puuid) {
-
-        Participant participant = getParticipantByMatch(match, puuid);
-        return participant.getChallenges().getKda();
-    }
-
-    @Override
     @Transactional
     public void updateAllRanks() {
 
@@ -133,18 +128,13 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    public void insertShowCaseDetails() {
+    public void updateShowCaseDetails() {
 
-        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
-        showCaseJpa.setStatName("Worst WinRate");
-        showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
-        showCaseJpa.setValue(rankJpa.getWinrate());
-        showCaseJpa.setDescription("Lowest WinRate");
+        List<ShowCaseDetailJPA> listShowCaseUpdated = new ArrayList<>();
+        listShowCaseUpdated.addAll(Arrays.asList(generateLowerWinRate(), generateLowerKda()));
 
-        showCaseDetailRepository.save(showCaseJpa);
-        LOGGER.info("Persisted {}", showCaseJpa);
-
+        showCaseDetailRepository.saveAll(listShowCaseUpdated);
+        LOGGER.info("INFO: Persisted {}", listShowCaseUpdated);
     }
 
     @Override
@@ -163,12 +153,12 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
 
     @Override
     @Transactional
-    public List<MatchDTO> getMatchesByPuuid(String puuid, String rankedType, Integer count) {
+    public List<MatchDTO> getMatchesByPuuid(String puuid, String queueType, Integer count) {
 
         List<String> matchesIds = new ArrayList<>();
         List<MatchDTO> matches = new ArrayList<>();
         try {
-            matchesIds = riotManager.getMatchIdsByPuuid(puuid, rankedType, count);
+            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count);
             for (String matchId : matchesIds) {
                 matches.add(riotManager.getMatchById(matchId));
             }
@@ -180,15 +170,50 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         return matches;
     }
 
-    public Participant getParticipantByMatch(MatchDTO match, String puuid) {
+    private ShowCaseDetailJPA generateLowerWinRate() {
 
-        List<Participant> participants = match.getInfo().getParticipants();
+        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
+        RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
+        showCaseJpa.setStatName(ShowCaseType.WORST_WR.statName());
+        showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
+        showCaseJpa.setValue(rankJpa.getWinrate());
+        showCaseJpa.setDescription("Lowest WinRate");
+        return showCaseJpa;
+    }
 
-        for (Participant participant : participants) {
-            if (participant.getPuuid().equals(puuid))
-                return participant;
+    private ShowCaseDetailJPA generateLowerKda() {
+
+        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
+        Iterable<SummonerInfoJPA> summoners = summonerRepository.findAll();
+        Participant participant = getParticipantWithLowerKda(summoners);
+
+        showCaseJpa.setStatName(ShowCaseType.WORST_KDA.statName());
+        for (SummonerInfoJPA summoner : summoners) {
+            if (participant.getPuuid().equals(summoner.getPuuid()))
+                showCaseJpa.setSummInfoId(summoner.getId());
         }
-        return null;
+        showCaseJpa.setValue(Float.valueOf(String.valueOf(participant.getChallenges().getKda())));
+        showCaseJpa.setDescription("Lowest KDA");
+        return showCaseJpa;
+    }
+
+    private Participant getParticipantWithLowerKda(Iterable<SummonerInfoJPA> summoners) {
+
+        List<MatchDTO> matches = new ArrayList<>();
+        Double lowerKda = (double) showCaseDetailRepository.findByStatName(ShowCaseType.WORST_KDA.statName())
+                .getValue();
+        Participant participant = null;
+
+        for (MatchDTO matchDTO : matches) {
+            for (SummonerInfoJPA summoner : summoners) {
+                if (lowerKda == null || ClownMatchMgrUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
+                        .getChallenges().getKda() < lowerKda)
+                    lowerKda = ClownMatchMgrUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()
+                            .getKda();
+                participant = ClownMatchMgrUtility.getParticipantByMatch(matchDTO, summoner.getPuuid());
+            }
+        }
+        return participant;
     }
 
 }

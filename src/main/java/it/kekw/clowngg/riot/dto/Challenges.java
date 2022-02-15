@@ -44,7 +44,7 @@ public class Challenges {
     private Integer jungleCsBefore10Minutes;
     private Integer junglerKillsEarlyJungle;
     private Integer junglerTakedownsNearDamagedEpicMonster;
-    private Integer kda;
+    private Double kda;
     private Double killParticipation;
     private Integer killsNearEnemyTurret;
     private Integer killsOnLanersEarlyJungleAsJungler;
@@ -430,11 +430,11 @@ public class Challenges {
         this.junglerTakedownsNearDamagedEpicMonster = junglerTakedownsNearDamagedEpicMonster;
     }
 
-    public Integer getKda() {
+    public Double getKda() {
         return kda;
     }
 
-    public void setKda(Integer kda) {
+    public void setKda(Double kda) {
         this.kda = kda;
     }
 

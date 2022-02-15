@@ -3,6 +3,7 @@ package it.kekw.clowngg.match.impl;
 import java.util.List;
 
 import it.kekw.clowngg.common.constants.RankedQueueType;
+import it.kekw.clowngg.common.constants.RankedTierType;
 import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
@@ -46,13 +47,27 @@ public final class ClownMatchMgrUtility {
         return jpa;
     }
 
-    public static ShowCaseDetailDTO generateShowCaseDetailDTO(ShowCaseDetailJPA jpa) {
+    public static ShowCaseDetailDTO generateShowCaseDetailDTO(ShowCaseDetailJPA jpa, RankInfoJPA rank) {
         ShowCaseDetailDTO dto = new ShowCaseDetailDTO();
         dto.setStatName(jpa.getStatName());
         dto.setSummonerName(jpa.getSummoner().getGameName());
         dto.setValue(jpa.getValue());
         dto.setDescription(jpa.getDescription());
         dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
+
+        if (rank == null) {
+            dto.setTier("UNRANKED");
+            dto.setWins(0);
+            dto.setLosses(0);
+        } else {
+
+            dto.setQueueType(RankedQueueType.getById(rank.getQueueTypeId()).name());
+            dto.setTier(rank.getTier());
+            dto.setDivision(rank.getDivision());
+            dto.setLp(rank.getLp());
+            dto.setWins(rank.getWins());
+            dto.setLosses(rank.getLosses());
+        }
         return dto;
     }
 
@@ -65,5 +80,26 @@ public final class ClownMatchMgrUtility {
                 return participant;
         }
         return null;
+    }
+    
+    public static RankInfoJPA getHighestRank(List<RankInfoJPA> list) {
+        RankInfoJPA rank = null;
+        for (RankInfoJPA rankInfoJPA : list) {
+            if (rank != null) {
+                int nextTierOrdinal = RankedTierType.valueOf(rankInfoJPA.getTier()).ordinal();
+                int currTierOrdinal = RankedTierType.valueOf(rank.getTier()).ordinal();
+                if (nextTierOrdinal > currTierOrdinal)
+                    rank = rankInfoJPA;
+                else if (nextTierOrdinal == currTierOrdinal) {
+                    int nextDivOrdinal = RankedTierType.valueOf(rankInfoJPA.getDivision()).ordinal();
+                    int curreDivOrdinal = RankedTierType.valueOf(rank.getDivision()).ordinal();
+                    if (nextDivOrdinal > curreDivOrdinal
+                            || nextDivOrdinal == curreDivOrdinal && rankInfoJPA.getLp() > rank.getLp())
+                        rank = rankInfoJPA;
+                }
+            } else
+                rank = rankInfoJPA;
+        }
+        return rank;
     }
 }

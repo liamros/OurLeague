@@ -1,50 +1,55 @@
-import * as React from 'react';
-import ShowCaseDetail from "./ShowCaseDetail";
-import { motion } from "framer-motion"
+import { LinearProgress } from "@mui/material";
+import { AnimatePresence } from "framer-motion";
+import React from 'react';
+import { connect } from "react-redux";
+import { fetchShowCaseDetails } from "../../actions";
+import ShowCaseItem from "./ShowCaseItem";
+import ShowCaseList from "./ShowCaseList";
 
-class ShowCase extends React.Component {
+const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) => {
 
-    constructor(props) {
-        super(props)
-        this.state = {showCaseDetails: null}
-    }
+    
 
-    componentDidMount() {
-        this.getShowCaseDetails()
-    }
+    React.useEffect(() => {
+        fetchShowCaseDetails()
+    }, [])
 
-    getShowCaseDetails() {
-        fetch('http://localhost:8080/match/getShowCaseDetails', { mode: 'cors' })
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({showCaseDetails: data})
-            }).catch(console.log)
-    }
+    let statName = null
+    if (match)
+        statName = match.params.statName
 
 
-
-    render() {
-
-        // let list = [4070, 5213, 1641]
-        // var list = [{ statName: "KDA", summonerName: "Shakobi", value: 2.7, description: "kekw" }, { statName: "WinRate", summonerName: "Cavendish31", value: 55, description: "kekw" }]
-        return (
-            //<Container style={{width: "100%", height: "100%", margin: "0%", marginTop : "2%", padding: "0%", display: "inline-block"}}>
-            <motion.div animate={{ scale: 0.8 }} style={{width: "100%", height: "100%", margin: "0%", marginTop : "2%", padding: "0%", display: "inline-block"}}>
-                {
-                this.state.showCaseDetails ?
-                this.state.showCaseDetails.map(element => {
-                    return <ShowCaseDetail key={element.statName} stats={element} /*profileIconNum={list[index]}*/ />
-                }) : <p>'Loading...'</p>
+    console.log(statName)
+    return (
+        <>
+            {!isFetching && showCaseDetails ? (
+                <>
+                    <ShowCaseList selectedId={statName} showCaseDetails={showCaseDetails} />
+                    <AnimatePresence>
+                        {statName && <ShowCaseItem id={statName} key="item" />}
+                    </AnimatePresence>
+                </>
+            ) : <LinearProgress />
             }
-            </motion.div>
-            //</Container>
+        </>
+    );
+}
 
-        )
+function mapStateToProps(state) {
+    return {
+        showCaseDetails: state.showCaseDetails,
+        isFetching: state.isFetching,
+    }
+}
 
-
+function mapDispatchToProps(dispatch) {
+    return {
+        fetchShowCaseDetails: () => dispatch(fetchShowCaseDetails())
     }
 }
 
 
-
-export default ShowCase
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ShowCase)

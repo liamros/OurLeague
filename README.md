@@ -28,18 +28,20 @@ server run defaultSever
 - [x] Initial data structure
 - [x] Insert Summoner API
 - [x] Update All Ranks API
-- [ ] Initial data for FE API
+- [ ] Showcase data for FE API
 - [x] ProfileIcon API with img resizing
 - [x] Add default headers configuration to RestAdapter
 - [ ] Evaluate possibility of a batch which periodically updates ranks on DB
 - [ ] Custom DTOs for response
 - [ ] Custom Exceptions and Exception handling
-- [ ] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
+- [x] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
+- [ ] UpdateMatches API
+- [ ] Batch update matches
 - [ ] MatchHistory API
 - [x] Initialize React
 - [x] Design homepage
 - [x] ShowCase FE
-- [ ] Animate and style ShowCase FE
+- [x] Animate and style ShowCase FE
 - [ ] StatsSection FE
 - [ ] PairStatsSection FE
 - [ ] MatchHistory FE

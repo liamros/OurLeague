@@ -87,7 +87,9 @@ public class SummonerInfoJPA {
     @Override
     public String toString() {
         return "SummonerInfoJPA [accountId=" + accountId + ", encryptedSummonerId=" + encryptedSummonerId
-                + ", gameName=" + gameName + ", id=" + id + ", puuid=" + puuid + ", rankInfo=" + rankInfo
-                + ", summonerIconId=" + summonerIconId + ", summonerLevel=" + summonerLevel + "]";
-    }    
+                + ", gameName=" + gameName + ", id=" + id + ", puuid=" + puuid + ", summonerIconId=" + summonerIconId
+                + ", summonerLevel=" + summonerLevel + "]";
+    }
+
+     
 }

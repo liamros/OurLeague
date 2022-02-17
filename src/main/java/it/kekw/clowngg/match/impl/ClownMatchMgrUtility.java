@@ -16,11 +16,15 @@ public final class ClownMatchMgrUtility {
     }
 
     public static SummonerInfoJPA generateSummonerInfoJpa(SummonerDTO dto) {
+        return generateSummonerInfoJpa(dto, null);
+    }
+
+    public static SummonerInfoJPA generateSummonerInfoJpa(SummonerDTO dto, Integer id) {
         SummonerInfoJPA jpa = new SummonerInfoJPA();
         jpa.setGameName(dto.getName());
         jpa.setSummonerIconId(dto.getProfileIconId());
         jpa.setSummonerLevel(dto.getSummonerLevel());
-        jpa.setId(jpa.getId());
+        jpa.setId(id);
         jpa.setEncryptedSummonerId(dto.getId());
         jpa.setPuuid(dto.getPuuid());
         jpa.setAccountId(dto.getAccountId());

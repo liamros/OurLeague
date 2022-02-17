@@ -99,12 +99,16 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
     }
 
     @Override
-    @Transactional
     public void updateAllRanks() {
-
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        this.updateAllRanks(list);
+    }
+
+    @Transactional
+    private void updateAllRanks(Iterable<SummonerInfoJPA> summInfoJpas) {
+
         List<RankInfoJPA> jpas = new ArrayList<>();
-        for (SummonerInfoJPA summonerJpa : list) {
+        for (SummonerInfoJPA summonerJpa : summInfoJpas) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
@@ -119,6 +123,20 @@ public class ClownMatchMgrImpl implements ClownMatchMgr {
         }
         rankRepository.saveAll(jpas);
         LOGGER.info("INFO: Persisted rankInfoJpas");
+    }
+
+    @Override
+    @Transactional
+    public void updateAllSummoners() {
+        Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
+        for (SummonerInfoJPA jpa : list) {
+            SummonerDTO dto = riotManager.getAccountInfoBySummonerName(jpa.getGameName());
+            jpa.setSummonerLevel(dto.getSummonerLevel());
+            jpa.setSummonerIconId(dto.getProfileIconId());
+            summonerRepository.updateSummonerLvlAndIcon(jpa.getId(), jpa.getSummonerLevel(), jpa.getSummonerIconId());
+            LOGGER.info("INFO: Updated SummonerInfo {}", jpa);
+        }
+        updateAllRanks(list);
     }
 
     @Override

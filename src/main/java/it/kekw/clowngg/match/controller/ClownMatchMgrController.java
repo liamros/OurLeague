@@ -68,6 +68,12 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     public void updateAllRanks() {
         clownMatchMgrImpl.updateAllRanks();
     }
+    
+    @Override
+    @GetMapping("/updateAllSummoners")
+    public void updateAllSummoners() {
+        clownMatchMgrImpl.updateAllSummoners();
+    }
 
     @Override
     @GetMapping("/getShowCaseDetails")
@@ -86,5 +92,6 @@ public class ClownMatchMgrController implements ClownMatchMgr {
     public byte[] getProfileIconImage(@RequestParam String profileIconNumber) throws IOException {
         return clownMatchMgrImpl.getProfileIconImage(profileIconNumber);
     }
+
 
 }

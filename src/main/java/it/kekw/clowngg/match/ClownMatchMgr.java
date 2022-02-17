@@ -17,6 +17,8 @@ public interface ClownMatchMgr {
 
     public void updateAllRanks();
 
+    public void updateAllSummoners();
+
     public List<Float> getWinRateBySummInfoId(Integer summInfoId);
 
     public Integer getKdaByMatch(MatchDTO match, String puuid);

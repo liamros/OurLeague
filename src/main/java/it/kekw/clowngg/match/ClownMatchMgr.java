@@ -21,13 +21,11 @@ public interface ClownMatchMgr {
 
     public List<Float> getWinRateBySummInfoId(Integer summInfoId);
 
-    public Integer getKdaByMatch(MatchDTO match, String puuid);
-
-    public List<MatchDTO> getMatchesByPuuid(String puuid, String rankedType, Integer count);
+    public List<MatchDTO> getMatchesByPuuid(String puuid, String queueType, Integer count);
 
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 
-    public void insertShowCaseDetails();
+    public void updateShowCaseDetails();
 
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
 

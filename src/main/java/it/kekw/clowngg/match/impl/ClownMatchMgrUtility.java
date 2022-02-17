@@ -8,6 +8,8 @@ import it.kekw.clowngg.match.controller.dto.ShowCaseDetailDTO;
 import it.kekw.clowngg.match.impl.persistence.entity.RankInfoJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
 import it.kekw.clowngg.match.impl.persistence.entity.SummonerInfoJPA;
+import it.kekw.clowngg.riot.dto.MatchDTO;
+import it.kekw.clowngg.riot.dto.Participant;
 import it.kekw.clowngg.riot.dto.RankInfoDTO;
 import it.kekw.clowngg.riot.dto.SummonerDTO;
 
@@ -73,6 +75,17 @@ public final class ClownMatchMgrUtility {
         return dto;
     }
 
+    public static Participant getParticipantByMatch(MatchDTO match, String puuid) {
+
+        List<Participant> participants = match.getInfo().getParticipants();
+
+        for (Participant participant : participants) {
+            if (participant.getPuuid().equals(puuid))
+                return participant;
+        }
+        return null;
+    }
+    
     public static RankInfoJPA getHighestRank(List<RankInfoJPA> list) {
         RankInfoJPA rank = null;
         for (RankInfoJPA rankInfoJPA : list) {

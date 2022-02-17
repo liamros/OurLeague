@@ -6,4 +6,6 @@ import it.kekw.clowngg.match.impl.persistence.entity.ShowCaseDetailJPA;
 
 public interface ShowCaseDetailRepository extends CrudRepository<ShowCaseDetailJPA, Long> {
 
+    public ShowCaseDetailJPA findByStatName(String statName);
+
 }

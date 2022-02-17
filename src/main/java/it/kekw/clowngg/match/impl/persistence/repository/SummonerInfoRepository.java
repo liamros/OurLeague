@@ -1,6 +1,8 @@
 package it.kekw.clowngg.match.impl.persistence.repository;
 
 import org.springframework.data.jpa.repository.Modifying;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,5 +19,8 @@ public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, 
     @Modifying
     @Query(value = "UPDATE SummonerInfoJPA s SET s.summonerLevel = :summonerLevel, s.summonerIconId = :summonerIconId WHERE s.id = :summInfoId")
     public void updateSummonerLvlAndIcon(Integer summInfoId, Integer summonerLevel, Integer summonerIconId);
+    
+    @Query(value = "SELECT puuid FROM summoner_info", nativeQuery = true)
+    public List<String> getAllPuiid();
 
 }

@@ -12,9 +12,9 @@
         },
         {
             "type": "java",
-            "name": "Launch ClownggApplication",
+            "name": "Launch OurLeagueApplication",
             "request": "launch",
-            "mainClass": "it.kekw.clowngg.ClownggApplication",
+            "mainClass": "it.our.league.OurLeagueApplication",
             "projectName": "clowngg"
         },
         {

@@ -5,37 +5,37 @@
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config />
 
-      <bean class="it.kekw.clowngg.match.impl.ClownMatchMgrImpl" id="clownMatchMgrImpl" />
+      <bean class="it.our.league.match.impl.LeagueMatchImpl" id="leagueMatchImpl" />
 
 
-      <bean class="it.kekw.clowngg.common.RestAdapter" id="riotManager">
+      <bean class="it.our.league.common.RestAdapter" id="riotManager">
             <constructor-arg name="baseUrl" value="${riot.api.baseURL}" />
-            <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.RiotMgrInterface" />
+            <constructor-arg name="interfaceProxy" value="it.our.league.riot.RiotManagerInterface" />
             <constructor-arg name="operations">
                   <map>
                         <entry key="getAccountInfoBySummonerName">
-                              <bean class="it.kekw.clowngg.common.RestOperation">
+                              <bean class="it.our.league.common.RestOperation">
                                     <property name="path" value="/lol/summoner/v4/summoners/by-name/{0}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="euw1"/>
                               </bean>
                         </entry>
                         <entry key="getRankInfoByEncryptedSummonerId">
-                              <bean class="it.kekw.clowngg.common.RestOperation">
+                              <bean class="it.our.league.common.RestOperation">
                                     <property name="path" value="/lol/league/v4/entries/by-summoner/{0}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="euw1"/>
                               </bean>
                         </entry>
                         <entry key="getMatchIdsByPuuid">
-                              <bean class="it.kekw.clowngg.common.RestOperation">
+                              <bean class="it.our.league.common.RestOperation">
                                     <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="europe"/>
                               </bean>
                         </entry>
                         <entry key="getMatchById">
-                              <bean class="it.kekw.clowngg.common.RestOperation">
+                              <bean class="it.our.league.common.RestOperation">
                                     <property name="path" value="/lol/match/v5/matches/{0}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="europe"/>
@@ -50,13 +50,13 @@
             </constructor-arg>
       </bean>
 
-      <bean class="it.kekw.clowngg.common.RestAdapter" id="ddragonApi">
+      <bean class="it.our.league.common.RestAdapter" id="ddragonApi">
             <constructor-arg name="baseUrl" value="${riot.ddragon.api.baseURL}" />
-            <constructor-arg name="interfaceProxy" value="it.kekw.clowngg.riot.IDdragon" />
+            <constructor-arg name="interfaceProxy" value="it.our.league.riot.IDdragon" />
             <constructor-arg name="operations">
                   <map>
                         <entry key="getProfileIcon">
-                              <bean class="it.kekw.clowngg.common.RestOperation">
+                              <bean class="it.our.league.common.RestOperation">
                                     <property name="path" value="/cdn/12.3.1/img/profileicon/{0}.png" />
                                     <property name="httpMethod" value="GET" />
                               </bean>
@@ -74,8 +74,8 @@
       <bean class="java.util.HashMap" id="restAdapterUsers">
             <constructor-arg name="m">
                   <map>
-                        <entry key="riotManager" value="clownMatchMgrImpl" />
-                        <entry key="ddragonApi" value="clownMatchMgrImpl" />
+                        <entry key="riotManager" value="leagueMatchImpl" />
+                        <entry key="ddragonApi" value="leagueMatchImpl" />
                   </map>
             </constructor-arg>
       </bean>

@@ -1,4 +1,4 @@
-# clown.gg
+# OurLeague.gg
 
 ***Base Information***
 

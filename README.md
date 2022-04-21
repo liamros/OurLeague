@@ -1,7 +1,7 @@
 # OurLeague
 
 
-OurLeague is a webpage finalized to present data fetched from Riot public APIs. 
+OurLeague is a webpage finalized to present data of League of Legends fetched from Riot public APIs. 
 It is limited to a small circle of players, thus "OurLeague".
 
 It's main features, for now, are celebrating the players with selected best stats, 

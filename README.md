@@ -2,18 +2,45 @@
 
 ***Base Information***
 
-Maven download https://maven.apache.org/download.cgi
-    Variabili d'ambiente : MAVEN_HOME=%path%\apache-maven-3.8.4
-                           aggiungere nel Path %path\apache-maven-3.8.4\bin
-                           
-JDK 11
+OurLeague is a webpage finalized to present data fetched from Riot public APIs. 
+It is limited to a small circle of players, thus "OurLeague".
 
-Scaricare wlp e aggiungere al Path %path%\wlp\bin
+It's main features, for now, are celebrating the players with selected best stats, 
+and to offer a set of graphs rappresenting different data related to game player performance
+over time.
 
-mvn install, questo produce un war, posizionato in C:\Users\%user%\.m2\repository\it\kekw\clowngg\0.0.1-SNAPSHOT\, questo path va aggiunto al server.xml che si trova in wlp\usr\servers\defaultServer\
+In the future, there will be more graphs, stats between players, match history and more!
 
 
-server run defaultSever
+Riot public APIs can be found [here](https://developer.riotgames.com/apis)
+
+---
+
+
+***System Design***
+
+Java web application which runs on "some" server. (not deployed yet, tbd)
+
+The web app relise on a MySQL database, where data fetched from Riot APIs is stored.
+This data includes Account information such as different types of IDs, ign, profile icon etc.,
+basic match information and support tables for presentation.
+This DB is necessary because the access to Riot public APIs is limited.
+
+Thus, for read operations the web app will only utilize data from its DB, and this may result in it being stale,
+so to make sure everything is up to date, the user must call the offered update API.
+
+The decision of a manual update process is always result of the limited access to Riot's public APIs.
+
+The bulk of the match data is saved on a Non-relational DB, due to the massive amount of information a single
+match holds, and the number of them.
+On the MySQL DB are saved the IDs to reference such matches, and the relations with the players.
+
+Frontend is in React.
+
+It utilizes motion.div library to animate the web page's features, and all the presented data is fetched from
+the web application.
+No cache is implemted yet.
+
 
 ---
 

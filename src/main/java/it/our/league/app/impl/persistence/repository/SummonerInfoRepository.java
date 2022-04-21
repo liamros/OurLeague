@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 
-public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, Long> {
+public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, Integer> {
 
     public SummonerInfoJPA findByPuuid(String puuid);
 

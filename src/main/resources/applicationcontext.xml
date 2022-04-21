@@ -7,6 +7,8 @@
 
       <bean class="it.our.league.app.impl.LeagueSummonerImpl" id="leagueSummonerImpl" />
 
+      <bean class="it.our.league.app.impl.LeagueMatchImpl" id="leagueMatchImpl" />
+
 
       <bean class="it.our.league.common.RestAdapter" id="riotManager">
             <constructor-arg name="baseUrl" value="${riot.api.baseURL}" />
@@ -29,7 +31,7 @@
                         </entry>
                         <entry key="getMatchIdsByPuuid">
                               <bean class="it.our.league.common.RestOperation">
-                                    <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}" />
+                                    <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}&amp;startTime={3,number,#}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="europe"/>
                               </bean>
@@ -76,6 +78,7 @@
                   <map>
                         <entry key="riotManager" value="leagueSummonerImpl" />
                         <entry key="ddragonApi" value="leagueSummonerImpl" />
+                        <entry key="riotManager" value="leagueMatchImpl" />
                   </map>
             </constructor-arg>
       </bean>

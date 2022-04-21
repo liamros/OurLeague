@@ -40,7 +40,7 @@ public class RelSummonerMatchJPA {
     private String matchId;
     @Column(name = "WIN")
     private Boolean win;
-    @Column(name = "PATCH")
+    @Column(name = "UPDATE_TIME")
     private Timestamp updateTime;
     @ManyToOne
     @JoinColumn(name="SUMM_INFO_ID", referencedColumnName = "ID", insertable = false, updatable = false)

@@ -1,9 +1,12 @@
 package it.our.league.app.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.entity.RankInfoJPA;
+import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.RankedQueueType;
@@ -105,5 +108,32 @@ public final class LeagueAppUtility {
                 rank = rankInfoJPA;
         }
         return rank;
+    }
+
+    public static List<MatchInfoJPA> generateMatchInfoJpas(List<String> matchIds) {
+
+        List<MatchInfoJPA> list = new ArrayList<>();
+        for(String matchId: matchIds) {
+            MatchInfoJPA jpa = new MatchInfoJPA();
+            jpa.setMatchId(matchId);
+            list.add(jpa);
+        }
+        return list;
+    }
+
+    public static RelSummonerMatchJPA generateRelSummonerMatchJpa(int summInfoId, String matchId) {
+
+        RelSummonerMatchJPA jpa = new RelSummonerMatchJPA();
+        jpa.setSummInfoId(summInfoId);
+        jpa.setMatchId(matchId);
+        return jpa;
+    }
+
+    public static List<RelSummonerMatchJPA> generateRelSummonerMatchJpas(int summInfoId, List<String> matchIds) {
+
+        List<RelSummonerMatchJPA> list = new ArrayList<>();
+        for(String matchId: matchIds)
+            list.add(generateRelSummonerMatchJpa(summInfoId, matchId));
+        return list;
     }
 }

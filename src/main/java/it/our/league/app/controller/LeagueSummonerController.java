@@ -26,7 +26,7 @@ import it.our.league.riot.dto.SummonerDTO;
 public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Autowired
-    private LeagueSummonerImpl leagueMatchImpl;
+    private LeagueSummonerManager leagueMatchImpl;
 
     @Override
     @GetMapping("/ping")

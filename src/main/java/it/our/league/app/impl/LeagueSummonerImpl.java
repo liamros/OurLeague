@@ -188,7 +188,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
         List<String> matchesIds = new ArrayList<>();
         List<MatchDTO> matches = new ArrayList<>();
         try {
-            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count);
+            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count, null);
             for (String matchId : matchesIds) {
                 matches.add(riotManager.getMatchById(matchId));
             }

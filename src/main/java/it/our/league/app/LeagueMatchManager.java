@@ -10,5 +10,7 @@ public interface LeagueMatchManager {
 
     public MatchDTO getMatchData(String matchId);
 
+    // provisory
+    public int populateMatchInfo();
 
 }

@@ -1,6 +1,7 @@
 package it.our.league.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +23,6 @@ public class LeagueMatchController implements LeagueMatchManager {
         return leagueMatchImpl.updateMatchHistory(summInfoId);
     }
 
-    @Override
     public int completeMatchData(String matchId) {
         // TODO Auto-generated method stub
         return 0;
@@ -32,6 +32,12 @@ public class LeagueMatchController implements LeagueMatchManager {
     public MatchDTO getMatchData(String matchId) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    @GetMapping("/populateMatchInfo")
+    public int populateMatchInfo() {
+        return leagueMatchImpl.populateMatchInfo();
     }
     
 }

@@ -58,5 +58,14 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public int populateMatchInfo() {
+        List<String> matchIds = matchInfoRepository.getAllPendingMatches();
+
+        // TODO : fetch data, persist it to DB and MongoDB
+
+        return 0;
+    }
     
 }

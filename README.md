@@ -1,6 +1,5 @@
-# OurLeague.gg
+# OurLeague
 
-***Base Information***
 
 OurLeague is a webpage finalized to present data fetched from Riot public APIs. 
 It is limited to a small circle of players, thus "OurLeague".
@@ -14,10 +13,9 @@ In the future, there will be more graphs, stats between players, match history a
 
 Riot public APIs can be found [here](https://developer.riotgames.com/apis)
 
----
 
 
-***System Design***
+## System Design
 
 Java web application which runs on "some" server. (not deployed yet, tbd)
 
@@ -42,15 +40,13 @@ the web application.
 No cache is implemted yet.
 
 
----
 
-***Data Structure Diagram***
+## Data Structure Diagram
 
 ![alt text](https://github.com/liamros/clown.gg/blob/master/src/main/resources/SQL/diagram.png?raw=true)
 
----
 
-***TODOs***
+## TODOs
 
 - [x] Initial data structure
 - [x] Insert Summoner API

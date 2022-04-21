@@ -161,7 +161,15 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Override
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException {
-        byte[] byteArray = ddragonApi.getProfileIcon(profileIconNumber);
+        byte[] byteArray;
+        try {
+            byteArray = ddragonApi.getProfileIcon(profileIconNumber);
+        } catch (Exception e) {
+            if (e.getCause().getMessage().contains("Status Message: 403")) 
+                byteArray = ddragonApi.getProfileIcon("0");
+            else
+                throw e;
+        }
         InputStream in = new ByteArrayInputStream(byteArray);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Thumbnails.of(in)

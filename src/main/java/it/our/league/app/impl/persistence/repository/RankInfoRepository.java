@@ -1,12 +1,12 @@
-package it.our.league.match.impl.persistence.repository;
+package it.our.league.app.impl.persistence.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import it.our.league.match.impl.persistence.entity.RankInfoJPA;
-import it.our.league.match.impl.persistence.entity.RankInfoJPA.PrimaryKeys;
+import it.our.league.app.impl.persistence.entity.RankInfoJPA;
+import it.our.league.app.impl.persistence.entity.RankInfoJPA.PrimaryKeys;
 
 public interface RankInfoRepository extends CrudRepository<RankInfoJPA, PrimaryKeys> {
 

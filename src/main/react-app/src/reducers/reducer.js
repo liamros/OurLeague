@@ -42,7 +42,7 @@ const showCaseDetails = (state = initialState, action) => {
 }
 
 const getSummonerIcon = (profileIconNum) => {
-    let url = `http://localhost:8080/match/getProfileIcon?profileIconNumber=${profileIconNum}`
+    let url = `http://localhost:8080/summoner/getProfileIcon?profileIconNumber=${profileIconNum}`
     const img = fetch(url, { mode: 'cors' })
         .then(response =>
             response.blob())

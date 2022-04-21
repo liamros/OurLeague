@@ -1,4 +1,4 @@
-package it.our.league.match.impl.persistence.repository;
+package it.our.league.app.impl.persistence.repository;
 
 import org.springframework.data.jpa.repository.Modifying;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.our.league.match.impl.persistence.entity.SummonerInfoJPA;
+import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 
 public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, Long> {
 

@@ -1,5 +1,5 @@
 export const getShowCaseDetails = () => {
-    const data = fetch('http://localhost:8080/match/getShowCaseDetails', { mode: 'cors' })
+    const data = fetch('http://localhost:8080/summoner/getShowCaseDetails', { mode: 'cors' })
         .then(res => res.json())
         .then((data) => {
             return data
@@ -9,7 +9,7 @@ export const getShowCaseDetails = () => {
 
 
 export const getSummonerIcon = (profileIconNum) => {
-    let url = `http://localhost:8080/match/getProfileIcon?profileIconNumber=${profileIconNum}`
+    let url = `http://localhost:8080/summoner/getProfileIcon?profileIconNumber=${profileIconNum}`
     const img = fetch(url, { mode: 'cors' })
         .then(response =>
             response.blob())

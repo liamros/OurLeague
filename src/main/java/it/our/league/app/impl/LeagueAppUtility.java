@@ -1,20 +1,20 @@
-package it.our.league.match.impl;
+package it.our.league.app.impl;
 
 import java.util.List;
 
+import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.impl.persistence.entity.RankInfoJPA;
+import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
+import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.RankedQueueType;
 import it.our.league.common.constants.RankedTierType;
-import it.our.league.match.controller.dto.ShowCaseDetailDTO;
-import it.our.league.match.impl.persistence.entity.RankInfoJPA;
-import it.our.league.match.impl.persistence.entity.ShowCaseDetailJPA;
-import it.our.league.match.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.riot.dto.MatchDTO;
 import it.our.league.riot.dto.Participant;
 import it.our.league.riot.dto.RankInfoDTO;
 import it.our.league.riot.dto.SummonerDTO;
 
-public final class LeagueMatchUtility {
-    private LeagueMatchUtility() {
+public final class LeagueAppUtility {
+    private LeagueAppUtility() {
     }
 
     public static SummonerInfoJPA generateSummonerInfoJpa(SummonerDTO dto) {

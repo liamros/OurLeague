@@ -1,4 +1,4 @@
-package it.our.league.match.controller;
+package it.our.league.app.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.our.league.match.LeagueMatchManager;
-import it.our.league.match.controller.dto.ShowCaseDetailDTO;
-import it.our.league.match.impl.LeagueMatchImpl;
+import it.our.league.app.LeagueSummonerManager;
+import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.impl.LeagueSummonerImpl;
 import it.our.league.riot.dto.MatchDTO;
 import it.our.league.riot.dto.SummonerDTO;
 
 @RestController
 // CrossOrigin only for development purposes
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("match")
-public class LeagueMatchController implements LeagueMatchManager {
+@RequestMapping("summoner")
+public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Autowired
-    private LeagueMatchImpl leagueMatchImpl;
+    private LeagueSummonerImpl leagueMatchImpl;
 
     @Override
     @GetMapping("/ping")

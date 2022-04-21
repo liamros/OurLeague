@@ -1,4 +1,4 @@
-package it.our.league.match.controller.dto;
+package it.our.league.app.controller.dto;
 
 public class ShowCaseDetailDTO {
     

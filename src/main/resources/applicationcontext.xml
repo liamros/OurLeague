@@ -5,7 +5,7 @@
       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
       <context:annotation-config />
 
-      <bean class="it.our.league.match.impl.LeagueMatchImpl" id="leagueMatchImpl" />
+      <bean class="it.our.league.app.impl.LeagueSummonerImpl" id="leagueSummonerImpl" />
 
 
       <bean class="it.our.league.common.RestAdapter" id="riotManager">
@@ -74,8 +74,8 @@
       <bean class="java.util.HashMap" id="restAdapterUsers">
             <constructor-arg name="m">
                   <map>
-                        <entry key="riotManager" value="leagueMatchImpl" />
-                        <entry key="ddragonApi" value="leagueMatchImpl" />
+                        <entry key="riotManager" value="leagueSummonerImpl" />
+                        <entry key="ddragonApi" value="leagueSummonerImpl" />
                   </map>
             </constructor-arg>
       </bean>

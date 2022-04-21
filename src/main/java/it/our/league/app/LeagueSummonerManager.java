@@ -1,13 +1,13 @@
-package it.our.league.match;
+package it.our.league.app;
 
 import java.io.IOException;
 import java.util.List;
 
-import it.our.league.match.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.controller.dto.ShowCaseDetailDTO;
 import it.our.league.riot.dto.MatchDTO;
 import it.our.league.riot.dto.SummonerDTO;
 
-public interface LeagueMatchManager {
+public interface LeagueSummonerManager {
 
     public String ping();
 

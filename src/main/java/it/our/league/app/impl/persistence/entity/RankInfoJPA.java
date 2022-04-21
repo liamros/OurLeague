@@ -1,4 +1,4 @@
-package it.our.league.match.impl.persistence.entity;
+package it.our.league.app.impl.persistence.entity;
 
 import java.io.Serializable;
 

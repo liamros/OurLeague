@@ -1,4 +1,4 @@
-package it.our.league.match.impl;
+package it.our.league.app.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.our.league.app.LeagueSummonerManager;
+import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.impl.persistence.entity.RankInfoJPA;
+import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
+import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
+import it.our.league.app.impl.persistence.repository.RankInfoRepository;
+import it.our.league.app.impl.persistence.repository.ShowCaseDetailRepository;
+import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
 import it.our.league.common.constants.ShowCaseType;
-import it.our.league.match.LeagueMatchManager;
-import it.our.league.match.controller.dto.ShowCaseDetailDTO;
-import it.our.league.match.impl.persistence.entity.RankInfoJPA;
-import it.our.league.match.impl.persistence.entity.ShowCaseDetailJPA;
-import it.our.league.match.impl.persistence.entity.SummonerInfoJPA;
-import it.our.league.match.impl.persistence.repository.RankInfoRepository;
-import it.our.league.match.impl.persistence.repository.ShowCaseDetailRepository;
-import it.our.league.match.impl.persistence.repository.SummonerInfoRepository;
 import it.our.league.riot.IDdragon;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.MatchDTO;
@@ -30,9 +30,9 @@ import it.our.league.riot.dto.RankInfoDTO;
 import it.our.league.riot.dto.SummonerDTO;
 import net.coobird.thumbnailator.Thumbnails;
 
-public class LeagueMatchImpl implements LeagueMatchManager {
+public class LeagueSummonerImpl implements LeagueSummonerManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LeagueMatchImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LeagueSummonerImpl.class);
 
     private RiotManagerInterface riotManager;
 
@@ -57,13 +57,13 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         try {
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
             List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
-            SummonerInfoJPA summonerJpa = LeagueMatchUtility.generateSummonerInfoJpa(summonerDto);
+            SummonerInfoJPA summonerJpa = LeagueAppUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("INFO: Persisted {}", summonerJpa);
             List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
-                rankJpa = LeagueMatchUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
+                rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
                     continue;
                 rankJpas.add(rankJpa);
@@ -109,7 +109,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
             List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfoDTO rankDto : rankInfoDtos) {
-                RankInfoJPA rankJpa = LeagueMatchUtility.generateRankedInfoJpa(rankDto, id);
+                RankInfoJPA rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
                 jpas.add(rankJpa);
@@ -143,8 +143,8 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         for (ShowCaseDetailJPA showCaseDetailJpa : list) {
             List<RankInfoJPA> ranks = rankRepository.findBySummInfoId(showCaseDetailJpa.getSummInfoId());
             // provisory
-            RankInfoJPA highestRank = LeagueMatchUtility.getHighestRank(ranks);
-            dtos.add(LeagueMatchUtility.generateShowCaseDetailDTO(showCaseDetailJpa, highestRank));
+            RankInfoJPA highestRank = LeagueAppUtility.getHighestRank(ranks);
+            dtos.add(LeagueAppUtility.generateShowCaseDetailDTO(showCaseDetailJpa, highestRank));
         }
         return dtos;
     }
@@ -236,11 +236,11 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
         for (MatchDTO matchDTO : matches) {
             for (SummonerInfoJPA summoner : summoners) {
-                if (lowerKda == null || LeagueMatchUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
+                if (lowerKda == null || LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
                         .getChallenges().getKda() < lowerKda)
-                    lowerKda = LeagueMatchUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()
+                    lowerKda = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()
                             .getKda();
-                participant = LeagueMatchUtility.getParticipantByMatch(matchDTO, summoner.getPuuid());
+                participant = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid());
             }
         }
         return participant;

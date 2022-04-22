@@ -10,6 +10,8 @@ public interface LeagueMatchManager {
 
     public Match getMatchData(String matchId);
 
+    public String asyncronousMatchHistoryUpdate();
+
     // provisory
     public int populateMatchInfo();
 

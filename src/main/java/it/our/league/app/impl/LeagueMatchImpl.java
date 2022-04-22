@@ -9,6 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueMatchManager;
@@ -18,6 +19,7 @@ import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
 import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
 import it.our.league.app.mongodb.repository.MatchRepository;
+import it.our.league.app.thread.MatchHistoryRunnable;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.Match;
 
@@ -28,6 +30,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private final long defaultTimestamp = 1641524400;
 
     private RiotManagerInterface riotManager;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     private SummonerInfoRepository summonerInfoRepository;
@@ -45,30 +50,34 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional
     public int updateMatchHistory(int summInfoId) {
 
+        List<String> matchIds = null;
         Optional<SummonerInfoJPA> optional = summonerInfoRepository.findById(summInfoId);
-        if(!optional.isPresent())
+        if (!optional.isPresent())
             return 0;
         SummonerInfoJPA summoner = optional.get();
-        Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(summInfoId);
-        List<String> matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, defaultTimestamp, countMatches);
-        if (matchIds.isEmpty())
-            return 0;
-        Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
+        int count = 0;
+        while (matchIds == null || !matchIds.isEmpty()) {
+            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(summInfoId);
+            matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, defaultTimestamp,
+                    countMatches);
+            Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
+            /**
+             * filter matchIds by removing already existing records on DB, otherwise they'd
+             * be updated with null values
+             */
+            Set<String> existingMatchIds = new HashSet<>();
+            for (MatchInfoJPA jpa : jpas)
+                existingMatchIds.add(jpa.getMatchId());
+            List<String> filteredMatchIds = new ArrayList<>();
+            for (String matchId : matchIds)
+                if (!existingMatchIds.contains(matchId))
+                    filteredMatchIds.add(matchId);
+            matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
+            relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summInfoId, matchIds));
+            count+=matchIds.size();
+        }
 
-        /**
-         *   filter matchIds by removing already existing records on DB, otherwise they'd be updated with null values
-         * */
-        Set<String> existingMatchIds = new HashSet<>();
-        for (MatchInfoJPA jpa : jpas) 
-            existingMatchIds.add(jpa.getMatchId());
-        List<String> filteredMatchIds = new ArrayList<>();
-        for (String matchId : matchIds)
-            if (!existingMatchIds.contains(matchId))
-                filteredMatchIds.add(matchId);
-        matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
-        relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summInfoId, matchIds));
-
-        return matchIds.size();
+        return count;
     }
 
     @Override
@@ -82,6 +91,8 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             LOGGER.info("INFO : Persisted match {} to MongoDB", matchId);
         } catch (Exception e) {
             LOGGER.error("ERROR : Error occured while performing operations with {}", matchId, e);
+            if (e.getCause().getMessage().contains("Http request failed"))
+                throw e;
             return 0;
         }
         return 1;
@@ -97,10 +108,20 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     public int populateMatchInfo() {
         List<String> matchIds = matchInfoRepository.getAllPendingMatches();
         int count = 0;
+
         for (String matchId : matchIds)
             count += completeMatchData(matchId);
-        
+           
         return count;
+    }
+
+    @Override
+    public String asyncronousMatchHistoryUpdate() {
+        Runnable matchHistoryRunnable = new MatchHistoryRunnable();
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(matchHistoryRunnable);
+        Thread thread = new Thread(matchHistoryRunnable);
+        thread.start();
+        return "OK";
     }
     
 }

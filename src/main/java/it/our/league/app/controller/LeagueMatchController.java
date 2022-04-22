@@ -39,5 +39,11 @@ public class LeagueMatchController implements LeagueMatchManager {
     public int populateMatchInfo() {
         return leagueMatchImpl.populateMatchInfo();
     }
+
+    @Override
+    @GetMapping("/asyncronousMatchHistoryUpdate")
+    public String asyncronousMatchHistoryUpdate() {
+        return leagueMatchImpl.asyncronousMatchHistoryUpdate();
+    }
     
 }

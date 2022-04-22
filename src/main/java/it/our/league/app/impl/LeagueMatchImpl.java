@@ -10,6 +10,7 @@ import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
 import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
+import it.our.league.app.mongodb.repository.MatchRepository;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.MatchDTO;
 
@@ -28,6 +29,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Autowired
     private MatchInfoRepository matchInfoRepository;
+
+    @Autowired
+    private MatchRepository matchRepository;
 
     @Override
     public int updateMatchHistory(int summInfoId) {
@@ -50,7 +54,12 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Override
     public int completeMatchData(String matchId) {
         // TODO Auto-generated method stub
-        return 0;
+
+        MatchDTO match = riotManager.getMatchById(matchId);
+
+        matchRepository.save(match);
+
+        return 1;
     }
 
     @Override

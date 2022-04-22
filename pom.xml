@@ -7,8 +7,8 @@
 		<version>2.6.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>it.kekw</groupId>
-	<artifactId>clowngg</artifactId>
+	<groupId>it.our</groupId>
+	<artifactId>league</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>clowngg</name>
@@ -61,6 +61,16 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.11</version>
 		</dependency>
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-sync</artifactId>
+			<!-- <version>4.5.0</version> -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-mongodb</artifactId>
+			<version>3.0.3.RELEASE</version>
+		</dependency>	
 		
 	</dependencies>
 

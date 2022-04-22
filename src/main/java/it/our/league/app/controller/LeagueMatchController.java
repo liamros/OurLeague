@@ -23,9 +23,9 @@ public class LeagueMatchController implements LeagueMatchManager {
         return leagueMatchImpl.updateMatchHistory(summInfoId);
     }
 
-    public int completeMatchData(String matchId) {
-        // TODO Auto-generated method stub
-        return 0;
+    @PostMapping("/completeMatchData")
+    public int completeMatchData(@RequestBody String matchId) {
+        return leagueMatchImpl.completeMatchData(matchId);
     }
 
     @Override

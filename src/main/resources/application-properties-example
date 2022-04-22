@@ -4,6 +4,10 @@ riot.api.baseURL=https://{0}.api.riotgames.com/
 riot.api.auth.header.key=X-Riot-Token
 riot.ddragon.api.baseURL=http://ddragon.leagueoflegends.com
 
+mongodb.db=our_league
+mongodb.host=<HOST>
+mongodb.user=<USER>
+mongodb.password=<PASSWORD>
 
 spring.jpa.hibernate.ddl-auto=none
 spring.datasource.url=jdbc:mysql://localhost:3306/league

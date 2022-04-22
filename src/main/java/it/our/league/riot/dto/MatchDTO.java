@@ -1,6 +1,9 @@
 
 package it.our.league.riot.dto;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "match")
 public class MatchDTO {
 
     private Metadata metadata;

@@ -49,6 +49,12 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Autowired
     private MatchRepository matchRepository;
 
+     /**
+     * Fetches from Riot APIs matchIds which don't exist on the DB.
+     * It persists them, whith no additional data, for their enrichment look at {@linkplain #completeMatchData}
+     * @param summInfoId internal record id of the table SUMMONER_INFO
+     * @return number of matches found
+     */
     @Override
     @Transactional
     public int updateMatchHistory(int summInfoId) {
@@ -86,6 +92,13 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         return count;
     }
 
+    /**
+     * Fetches from DB records from MATCH_INFO that have null values, to enrich them by calling Riot APIs.
+     * It also persists the response to MongoDB
+     * @param matchId 
+     * @return 0 if not successfull, else 1
+     * 
+     */
     @Override
     public int completeMatchData(String matchId) {
         try {

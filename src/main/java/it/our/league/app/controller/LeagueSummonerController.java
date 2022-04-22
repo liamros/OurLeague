@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.ShowCaseDetailDTO;
 import it.our.league.app.impl.LeagueSummonerImpl;
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.SummonerDTO;
 
 @RestController
@@ -54,7 +54,7 @@ public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Override
     @GetMapping("/getMatches")
-    public List<MatchDTO> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
+    public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
         return leagueMatchImpl.getMatchesByPuuid(puuid, queueType, count);
     }
 

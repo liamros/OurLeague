@@ -24,7 +24,7 @@ import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
 import it.our.league.common.constants.ShowCaseType;
 import it.our.league.riot.IDdragon;
 import it.our.league.riot.RiotManagerInterface;
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
 import it.our.league.riot.dto.RankInfoDTO;
 import it.our.league.riot.dto.SummonerDTO;
@@ -183,12 +183,12 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
 
     @Override
     @Transactional
-    public List<MatchDTO> getMatchesByPuuid(String puuid, String queueType, Integer count) {
+    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count) {
 
         List<String> matchesIds = new ArrayList<>();
-        List<MatchDTO> matches = new ArrayList<>();
+        List<Match> matches = new ArrayList<>();
         try {
-            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count, null);
+            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count, null, null);
             for (String matchId : matchesIds) {
                 matches.add(riotManager.getMatchById(matchId));
             }
@@ -229,12 +229,12 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
 
     private Participant getParticipantWithLowerKda(Iterable<SummonerInfoJPA> summoners) {
 
-        List<MatchDTO> matches = new ArrayList<>();
+        List<Match> matches = new ArrayList<>();
         Double lowerKda = (double) showCaseDetailRepository.findByStatName(ShowCaseType.WORST_KDA.statName())
                 .getValue();
         Participant participant = null;
 
-        for (MatchDTO matchDTO : matches) {
+        for (Match matchDTO : matches) {
             for (SummonerInfoJPA summoner : summoners) {
                 if (lowerKda == null || LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
                         .getChallenges().getKda() < lowerKda)

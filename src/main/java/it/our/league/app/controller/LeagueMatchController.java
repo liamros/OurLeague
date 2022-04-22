@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueMatchManager;
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 
 @RestController
 @RequestMapping("match")
@@ -29,7 +29,7 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    public MatchDTO getMatchData(String matchId) {
+    public Match getMatchData(String matchId) {
         // TODO Auto-generated method stub
         return null;
     }

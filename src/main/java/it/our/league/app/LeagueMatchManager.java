@@ -1,6 +1,6 @@
 package it.our.league.app;
 
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 
 public interface LeagueMatchManager {
     
@@ -8,7 +8,7 @@ public interface LeagueMatchManager {
 
     public int completeMatchData(String matchId);
 
-    public MatchDTO getMatchData(String matchId);
+    public Match getMatchData(String matchId);
 
     // provisory
     public int populateMatchInfo();

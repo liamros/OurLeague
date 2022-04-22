@@ -37,7 +37,7 @@
                         </entry>
                         <entry key="getMatchIdsByPuuid">
                               <bean class="it.our.league.common.RestOperation">
-                                    <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}&amp;startTime={3,number,#}" />
+                                    <property name="path" value="/lol/match/v5/matches/by-puuid/{0}/ids?type={1}&amp;count={2}&amp;startTime={3,number,#}&amp;start={4,number,#}" />
                                     <property name="httpMethod" value="GET" />
                                     <property name="baseUrlRouting" value="europe"/>
                               </bean>

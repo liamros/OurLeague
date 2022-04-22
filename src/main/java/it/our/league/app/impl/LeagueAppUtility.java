@@ -1,5 +1,6 @@
 package it.our.league.app.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.RankedQueueType;
 import it.our.league.common.constants.RankedTierType;
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
 import it.our.league.riot.dto.RankInfoDTO;
 import it.our.league.riot.dto.SummonerDTO;
@@ -78,7 +79,7 @@ public final class LeagueAppUtility {
         return dto;
     }
 
-    public static Participant getParticipantByMatch(MatchDTO match, String puuid) {
+    public static Participant getParticipantByMatch(Match match, String puuid) {
 
         List<Participant> participants = match.getInfo().getParticipants();
 
@@ -108,6 +109,21 @@ public final class LeagueAppUtility {
                 rank = rankInfoJPA;
         }
         return rank;
+    }
+
+    public static MatchInfoJPA generateMatchInfoJpa(Match dto) {
+
+        MatchInfoJPA jpa = new MatchInfoJPA();
+        jpa.setMatchId(dto.getMetadata().getMatchId());
+        jpa.setGameCreationTime(new Timestamp(dto.getInfo().getGameCreation()));
+        jpa.setGameStartTime(new Timestamp(dto.getInfo().getGameStartTimestamp()));
+        jpa.setGameEndTime(new Timestamp(dto.getInfo().getGameEndTimestamp()));
+        String[] arr = dto.getInfo().getGameVersion().split("\\.");
+        StringBuffer patch = new StringBuffer(arr[0]);
+        patch.append(".").append(arr[1]);
+        jpa.setPatch(patch.toString());
+        jpa.setQueueTypeId(dto.getInfo().getQueueId());
+        return jpa;
     }
 
     public static List<MatchInfoJPA> generateMatchInfoJpas(List<String> matchIds) {

@@ -4,10 +4,19 @@ package it.our.league.riot.dto;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "match")
-public class MatchDTO {
+public class Match {
 
+    private String matchId;
     private Metadata metadata;
     private Info info;
+
+    public String getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(String matchId) {
+        this.matchId = matchId;
+    }
 
     public Metadata getMetadata() {
         return metadata;

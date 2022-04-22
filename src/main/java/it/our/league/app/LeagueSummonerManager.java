@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import it.our.league.app.controller.dto.ShowCaseDetailDTO;
-import it.our.league.riot.dto.MatchDTO;
+import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.SummonerDTO;
 
 public interface LeagueSummonerManager {
@@ -21,7 +21,7 @@ public interface LeagueSummonerManager {
 
     public List<Float> getWinRateBySummInfoId(Integer summInfoId);
 
-    public List<MatchDTO> getMatchesByPuuid(String puuid, String queueType, Integer count);
+    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count);
 
     public List<ShowCaseDetailDTO> getShowCaseDetails();
 

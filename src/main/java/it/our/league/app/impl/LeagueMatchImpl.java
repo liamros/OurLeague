@@ -58,6 +58,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         int count = 0;
         while (matchIds == null || !matchIds.isEmpty()) {
             Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(summInfoId);
+            /**
+             * countMatches is the index from which starts the list of matchIds that Riot sends
+             */
             matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, defaultTimestamp,
                     countMatches);
             Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);

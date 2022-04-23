@@ -82,9 +82,17 @@
       <bean class="java.util.HashMap" id="restAdapterUsers">
             <constructor-arg name="m">
                   <map>
-                        <entry key="riotManager" value="leagueSummonerImpl" />
-                        <entry key="ddragonApi" value="leagueSummonerImpl" />
-                        <entry key="riotManager" value="leagueMatchImpl" />
+                        <entry key="riotManager" >
+                              <list>
+                                    <value>leagueSummonerImpl</value>
+                                    <value>leagueMatchImpl</value>
+                              </list>
+                        </entry>
+                        <entry key="ddragonApi">
+                              <list>
+                                    <value>leagueSummonerImpl</value>
+                              </list>
+                        </entry>
                   </map>
             </constructor-arg>
       </bean>

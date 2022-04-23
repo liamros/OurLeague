@@ -3,6 +3,7 @@ package it.our.league.common;
 import java.lang.reflect.Field;
 import java.lang.reflect.Proxy;
 import java.util.HashMap;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,7 @@ import org.springframework.util.ClassUtils;
 public class RestAdapterProcessor implements BeanPostProcessor, ApplicationContextAware {
 
     @Autowired
-    private HashMap<String, String> restAdapterUsers;
+    private HashMap<String, List<String>> restAdapterUsers;
 
     private ApplicationContext applicationContext;
 
@@ -43,8 +44,9 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
         if (!clazz.equals(RestAdapter.class))
             return aBean;
 
-        String s = restAdapterUsers.get(aBeanName);
-        if (s == null)
+        List<String> l = restAdapterUsers.get(aBeanName);
+
+        if (l == null || l.isEmpty())
             return aBean;
 
         RestAdapter ra = (RestAdapter) aBean;
@@ -52,32 +54,34 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
         Object proxy = Proxy.newProxyInstance(ra.getInterfaceProxy().getClassLoader(),
                 new Class[] { ra.getInterfaceProxy() }, ra);
 
-        Object o = applicationContext.getBean(s);
+        for (String s : l) {
+            Object o = applicationContext.getBean(s);
 
-        /**
-         * checks if the bean is a spring proxy, in that case, the user class will be
-         * different by the object's which will be a CGLIB-generated subclass
-         */
-        if (!ClassUtils.getUserClass(o).equals(o.getClass())) {
-            try {
-                o = ((Advised) o).getTargetSource().getTarget();
-            } catch (Exception e) {
-                LOGGER.error("ERROR: Error while getting target from CGLIB-generated subclass", e);
-                throw new RuntimeException();
+            /**
+             * checks if the bean is a spring proxy, in that case, the user class will be
+             * different by the object's which will be a CGLIB-generated subclass
+             */
+            if (!ClassUtils.getUserClass(o).equals(o.getClass())) {
+                try {
+                    o = ((Advised) o).getTargetSource().getTarget();
+                } catch (Exception e) {
+                    LOGGER.error("ERROR: Error while getting target from CGLIB-generated subclass", e);
+                    throw new RuntimeException();
+                }
             }
-        }
 
-        for (Field field : o.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                if (field.getType().equals(raInterf))
-                    field.set(o, proxy);
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                LOGGER.error("ERROR: Error during restAdapter assignment", e);
-                throw new RuntimeException();
+            for (Field field : o.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    if (field.getType().equals(raInterf))
+                        field.set(o, proxy);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    LOGGER.error("ERROR: Error during restAdapter assignment", e);
+                    throw new RuntimeException();
+                }
             }
+            LOGGER.info("INFO: Inizialized RestAdapter {} for {}", aBeanName, s);
         }
-        LOGGER.info("INFO: Inizialized RestAdapter {} for {}", aBeanName, s);
         return proxy;
 
     }

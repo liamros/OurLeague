@@ -3,6 +3,7 @@ riot.api.token=<your-token>
 riot.api.baseURL=https://{0}.api.riotgames.com/
 riot.api.auth.header.key=X-Riot-Token
 riot.ddragon.api.baseURL=http://ddragon.leagueoflegends.com
+riot.rate.limit=120000
 
 mongodb.db=our_league
 mongodb.host=<HOST>

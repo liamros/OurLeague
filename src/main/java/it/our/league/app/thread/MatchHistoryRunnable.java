@@ -17,7 +17,7 @@ import it.our.league.riot.dto.Summoner;
  *      <li>Fetches new MatchIds</li>
  *      <li>Enriches the Match Data, also by persisting Riot's massive response to MongoDB</li>
  * </ol>
- * Due to Riot's rate limits, reached such point the thread sleeps for {@link #RIOT_LIMIT_TIMEOUT}
+ * Due to Riot's rate limits, reached such point the thread sleeps for {@link #riotRateLimit}
  * reached such point, it then carries on with its operations
  * @author Liam Rossi
  */
@@ -25,7 +25,8 @@ public class MatchHistoryRunnable implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchHistoryRunnable.class);
 
-    private static final long RIOT_LIMIT_TIMEOUT = 120000;
+    @Autowired
+    private Long riotRateLimit;
 
     @Autowired
     private LeagueSummonerManager leagueSummonerImpl;
@@ -53,8 +54,8 @@ public class MatchHistoryRunnable implements Runnable {
                 
                 if (e.getCause().getMessage().contains("Too Many Requests")) {
                     try {
-                        LOGGER.info("INFO: Reached Riot's request limit, thread sleeping for {}ms", RIOT_LIMIT_TIMEOUT);
-                        Thread.sleep(RIOT_LIMIT_TIMEOUT);
+                        LOGGER.info("INFO: Reached Riot's request limit, thread sleeping for {}ms", riotRateLimit);
+                        Thread.sleep(riotRateLimit);
                     } catch (InterruptedException e1) {
                         LOGGER.error("ERROR: Error while thread sleeping", e1);
                     }

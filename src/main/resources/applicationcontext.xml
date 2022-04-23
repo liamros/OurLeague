@@ -97,6 +97,9 @@
             </constructor-arg>
       </bean>
 
+      <bean id="riotRateLimit" class="java.lang.Long">
+            <constructor-arg name="value" value="${riot.rate.limit}"/>
+      </bean>
 
       <!-- MONGODB CONFIG -->
       <mongo:mongo-client id="mongoClient" connection-string="mongodb+srv://${mongodb.user}:${mongodb.password}@${mongodb.host}/${mongodb.db}"/>

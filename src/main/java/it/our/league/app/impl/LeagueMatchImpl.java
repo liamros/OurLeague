@@ -49,8 +49,8 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
      /**
      * Fetches from Riot APIs matchIds which don't exist on the DB.
-     * It persists them, whith no additional data, for their enrichment look at {@linkplain #completeMatchData}
-     * @param summInfoId internal record id of the table SUMMONER_INFO
+     * It persists them, whith no additional data, for their enrichment look at {@link #completeMatchData}
+     * @param puuid Riot's puuid assigned to Summoner
      * @return number of matches found
      */
     @Override
@@ -62,7 +62,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         if (summInfoId == null)
             return 0;
         int count = 0;
-        while (matchIds == null || !matchIds.isEmpty()) {
+        do {
             Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(puuid);
             /**
              * countMatches is the index from which starts the list of matchIds that Riot sends
@@ -84,7 +84,10 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
             relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summInfoId, matchIds));
             count+=matchIds.size();
-        }
+        } while (matchIds.size() == 100);
+        /**
+         * while condition is matchIds.size() == 100 because if it's less, there are no more games to fetch (count = 100)
+         */
 
         return count;
     }

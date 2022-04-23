@@ -20,7 +20,7 @@ public interface RelSummonerMatchRepository extends CrudRepository<RelSummonerMa
     public Integer getNumberOfMatches(long summInfoId);
 
     @Query(
-    value= "SELECT count(m.match_id) FROM summoner_info s, match_info m, rel_summoner_match rel WHERE s.id = rel.summ_info_id AND m.match_id = rel.match_id AND rel.puuid = ?",
+    value= "SELECT count(m.match_id) FROM summoner_info s, match_info m, rel_summoner_match rel WHERE s.id = rel.summ_info_id AND m.match_id = rel.match_id AND s.puuid = ?",
     nativeQuery = true)
     public Integer getNumberOfMatches(String puuid);
 

@@ -3,14 +3,14 @@ package it.our.league.riot;
 import java.util.List;
 
 import it.our.league.riot.dto.Match;
-import it.our.league.riot.dto.RankInfoDTO;
-import it.our.league.riot.dto.SummonerDTO;
+import it.our.league.riot.dto.RankInfo;
+import it.our.league.riot.dto.Summoner;
 
 public interface RiotManagerInterface {
 
-    public SummonerDTO getAccountInfoBySummonerName(String summonerName);
+    public Summoner getAccountInfoBySummonerName(String summonerName);
 
-    public List<RankInfoDTO> getRankInfoByEncryptedSummonerId(String encryptedSummonerId);
+    public List<RankInfo> getRankInfoByEncryptedSummonerId(String encryptedSummonerId);
 
     public List<String> getMatchIdsByPuuid(String puuid, String queueType, Integer count, Long startTime, Integer startIndex);
 

@@ -26,8 +26,8 @@ import it.our.league.riot.IDdragon;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
-import it.our.league.riot.dto.RankInfoDTO;
-import it.our.league.riot.dto.SummonerDTO;
+import it.our.league.riot.dto.RankInfo;
+import it.our.league.riot.dto.Summoner;
 import net.coobird.thumbnailator.Thumbnails;
 
 public class LeagueSummonerImpl implements LeagueSummonerManager {
@@ -52,16 +52,16 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
 
     @Override
     @Transactional
-    public SummonerDTO insertSummoner(String summonerName) {
-        SummonerDTO summonerDto = null;
+    public Summoner insertSummoner(String summonerName) {
+        Summoner summonerDto = null;
         try {
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
-            List<RankInfoDTO> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
+            List<RankInfo> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
             SummonerInfoJPA summonerJpa = LeagueAppUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("INFO: Persisted {}", summonerJpa);
             List<RankInfoJPA> rankJpas = new ArrayList<>();
-            for (RankInfoDTO rankedInfoDto : rankedInfoDtos) {
+            for (RankInfo rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
                 rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
@@ -107,8 +107,8 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
         for (SummonerInfoJPA summonerJpa : summInfoJpas) {
             Integer id = summonerJpa.getId();
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
-            List<RankInfoDTO> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
-            for (RankInfoDTO rankDto : rankInfoDtos) {
+            List<RankInfo> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
+            for (RankInfo rankDto : rankInfoDtos) {
                 RankInfoJPA rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
@@ -126,7 +126,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     public void updateAllSummoners() {
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
         for (SummonerInfoJPA jpa : list) {
-            SummonerDTO dto = riotManager.getAccountInfoBySummonerName(jpa.getGameName());
+            Summoner dto = riotManager.getAccountInfoBySummonerName(jpa.getGameName());
             jpa.setSummonerLevel(dto.getSummonerLevel());
             jpa.setSummonerIconId(dto.getProfileIconId());
             summonerRepository.updateSummonerLvlAndIcon(jpa.getId(), jpa.getSummonerLevel(), jpa.getSummonerIconId());
@@ -244,6 +244,18 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             }
         }
         return participant;
+    }
+
+    @Override
+    public Integer getSummonerIdByPuuid(String puuid) {
+        return summonerRepository.getSummonerIdByPuuid(puuid);
+    }
+
+    @Override
+    public List<Summoner> getAllSummoners() {
+        List<Summoner> out = new ArrayList<>();
+        summonerRepository.findAll().forEach(jpa -> out.add(LeagueAppUtility.generateSummoner(jpa)));
+        return out;
     }
 
 }

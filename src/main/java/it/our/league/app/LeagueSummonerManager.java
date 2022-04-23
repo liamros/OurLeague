@@ -5,13 +5,13 @@ import java.util.List;
 
 import it.our.league.app.controller.dto.ShowCaseDetailDTO;
 import it.our.league.riot.dto.Match;
-import it.our.league.riot.dto.SummonerDTO;
+import it.our.league.riot.dto.Summoner;
 
 public interface LeagueSummonerManager {
 
     public String ping();
 
-    public SummonerDTO insertSummoner(String summonerName);
+    public Summoner insertSummoner(String summonerName);
 
     public String getGameNameByPuuid(String puuid);
 
@@ -28,5 +28,9 @@ public interface LeagueSummonerManager {
     public void updateShowCaseDetails();
 
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException;
+
+    public Integer getSummonerIdByPuuid(String puuid);
+
+    public List<Summoner> getAllSummoners();
 
 }

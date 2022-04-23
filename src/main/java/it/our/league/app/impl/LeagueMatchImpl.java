@@ -3,7 +3,6 @@ package it.our.league.app.impl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -13,11 +12,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueMatchManager;
+import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
-import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
-import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
 import it.our.league.app.mongodb.repository.MatchRepository;
 import it.our.league.app.thread.MatchHistoryRunnable;
 import it.our.league.riot.RiotManagerInterface;
@@ -38,7 +36,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private ApplicationContext applicationContext;
 
     @Autowired
-    private SummonerInfoRepository summonerInfoRepository;
+    private LeagueSummonerManager leagueSummonerImpl;
 
     @Autowired
     private RelSummonerMatchRepository relSummonerMatchRepository;
@@ -57,20 +55,19 @@ public class LeagueMatchImpl implements LeagueMatchManager {
      */
     @Override
     @Transactional
-    public int updateMatchHistory(int summInfoId) {
+    public int updateMatchHistory(String puuid) {
 
         List<String> matchIds = null;
-        Optional<SummonerInfoJPA> optional = summonerInfoRepository.findById(summInfoId);
-        if (!optional.isPresent())
+        Integer summInfoId = leagueSummonerImpl.getSummonerIdByPuuid(puuid);
+        if (summInfoId == null)
             return 0;
-        SummonerInfoJPA summoner = optional.get();
         int count = 0;
         while (matchIds == null || !matchIds.isEmpty()) {
-            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(summInfoId);
+            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(puuid);
             /**
              * countMatches is the index from which starts the list of matchIds that Riot sends
              */
-            matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, defaultTimestamp,
+            matchIds = riotManager.getMatchIdsByPuuid(puuid, "ranked", 100, defaultTimestamp,
                     countMatches);
             Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
             /**

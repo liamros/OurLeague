@@ -14,18 +14,18 @@ import it.our.league.common.constants.RankedQueueType;
 import it.our.league.common.constants.RankedTierType;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
-import it.our.league.riot.dto.RankInfoDTO;
-import it.our.league.riot.dto.SummonerDTO;
+import it.our.league.riot.dto.RankInfo;
+import it.our.league.riot.dto.Summoner;
 
 public final class LeagueAppUtility {
     private LeagueAppUtility() {
     }
 
-    public static SummonerInfoJPA generateSummonerInfoJpa(SummonerDTO dto) {
+    public static SummonerInfoJPA generateSummonerInfoJpa(Summoner dto) {
         return generateSummonerInfoJpa(dto, null);
     }
 
-    public static SummonerInfoJPA generateSummonerInfoJpa(SummonerDTO dto, Integer id) {
+    public static SummonerInfoJPA generateSummonerInfoJpa(Summoner dto, Integer id) {
         SummonerInfoJPA jpa = new SummonerInfoJPA();
         jpa.setGameName(dto.getName());
         jpa.setSummonerIconId(dto.getProfileIconId());
@@ -37,7 +37,18 @@ public final class LeagueAppUtility {
         return jpa;
     }
 
-    public static RankInfoJPA generateRankedInfoJpa(RankInfoDTO dto, Integer summonerInfoId) {
+    public static Summoner generateSummoner(SummonerInfoJPA jpa) {
+        Summoner dto = new Summoner();
+        dto.setId(jpa.getEncryptedSummonerId());
+        dto.setAccountId(jpa.getAccountId());
+        dto.setName(jpa.getGameName());
+        dto.setProfileIconId(jpa.getSummonerIconId());
+        dto.setPuuid(jpa.getPuuid());
+        dto.setSummonerLevel(jpa.getSummonerLevel());
+        return dto;
+    }
+
+    public static RankInfoJPA generateRankedInfoJpa(RankInfo dto, Integer summonerInfoId) {
         Integer queueTypeId;
         try {
             queueTypeId = RankedQueueType.valueOf(dto.getQueueType()).id();

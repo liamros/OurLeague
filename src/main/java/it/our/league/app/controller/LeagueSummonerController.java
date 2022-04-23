@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.ShowCaseDetailDTO;
-import it.our.league.app.impl.LeagueSummonerImpl;
 import it.our.league.riot.dto.Match;
-import it.our.league.riot.dto.SummonerDTO;
+import it.our.league.riot.dto.Summoner;
 
 @RestController
 // CrossOrigin only for development purposes
@@ -26,66 +25,78 @@ import it.our.league.riot.dto.SummonerDTO;
 public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Autowired
-    private LeagueSummonerManager leagueMatchImpl;
+    private LeagueSummonerManager leagueSummonerImpl;
 
     @Override
     @GetMapping("/ping")
     public String ping() {
-        return leagueMatchImpl.ping();
+        return leagueSummonerImpl.ping();
     }
 
     @Override
     @PutMapping("/insertSummoner")
-    public SummonerDTO insertSummoner(@RequestBody String summonerName) {
-        return leagueMatchImpl.insertSummoner(summonerName);
+    public Summoner insertSummoner(@RequestBody String summonerName) {
+        return leagueSummonerImpl.insertSummoner(summonerName);
     }
 
     @Override
     @GetMapping("/getGameName")
     public String getGameNameByPuuid(@RequestParam String puuid) {
-        return leagueMatchImpl.getGameNameByPuuid(puuid);
+        return leagueSummonerImpl.getGameNameByPuuid(puuid);
     }
 
     @Override
     @GetMapping("/getWinRate")
     public List<Float> getWinRateBySummInfoId(@RequestParam Integer summInfoId) {
-        return leagueMatchImpl.getWinRateBySummInfoId(summInfoId);
+        return leagueSummonerImpl.getWinRateBySummInfoId(summInfoId);
     }
 
     @Override
     @GetMapping("/getMatches")
     public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
-        return leagueMatchImpl.getMatchesByPuuid(puuid, queueType, count);
+        return leagueSummonerImpl.getMatchesByPuuid(puuid, queueType, count);
     }
 
     @Override
     @GetMapping("/updateAllRanks")
     public void updateAllRanks() {
-        leagueMatchImpl.updateAllRanks();
+        leagueSummonerImpl.updateAllRanks();
     }
     
     @Override
     @GetMapping("/updateAllSummoners")
     public void updateAllSummoners() {
-        leagueMatchImpl.updateAllSummoners();
+        leagueSummonerImpl.updateAllSummoners();
     }
 
     @Override
     @GetMapping("/getShowCaseDetails")
     public List<ShowCaseDetailDTO> getShowCaseDetails() {
-        return leagueMatchImpl.getShowCaseDetails();
+        return leagueSummonerImpl.getShowCaseDetails();
     }
 
     @Override
     @GetMapping("/updateShowCaseDetails")
     public void updateShowCaseDetails() {
-        leagueMatchImpl.updateShowCaseDetails();
+        leagueSummonerImpl.updateShowCaseDetails();
     }
 
     @Override
     @GetMapping(value = "/getProfileIcon", produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getProfileIconImage(@RequestParam String profileIconNumber) throws IOException {
-        return leagueMatchImpl.getProfileIconImage(profileIconNumber);
+        return leagueSummonerImpl.getProfileIconImage(profileIconNumber);
+    }
+
+    @Override
+    @GetMapping("/getSummonerIdByPuuid")
+    public Integer getSummonerIdByPuuid(String puuid) {
+        return leagueSummonerImpl.getSummonerIdByPuuid(puuid);
+    }
+
+    @Override
+    @GetMapping("/getAllSummoners")
+    public List<Summoner> getAllSummoners() {
+        return leagueSummonerImpl.getAllSummoners();
     }
 
 

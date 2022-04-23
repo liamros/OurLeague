@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.our.league.app.LeagueMatchManager;
-import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
-import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
+import it.our.league.app.LeagueSummonerManager;
+import it.our.league.riot.dto.Summoner;
 
 public class MatchHistoryRunnable implements Runnable {
 
@@ -14,11 +14,8 @@ public class MatchHistoryRunnable implements Runnable {
 
     private static final long RIOT_LIMIT_TIMEOUT = 120000;
 
-    /**
-     * Revisit this import, does not feel clean
-     */
     @Autowired
-    private SummonerInfoRepository summonerInfoRepository;
+    private LeagueSummonerManager leagueSummonerManager;
 
     @Autowired
     private LeagueMatchManager leagueMatchImpl;
@@ -26,10 +23,10 @@ public class MatchHistoryRunnable implements Runnable {
     @Override
     public void run() {
 
-        Iterable<SummonerInfoJPA> summoners = summonerInfoRepository.findAll();
+        Iterable<Summoner> summoners = leagueSummonerManager.getAllSummoners();
         int count = 0;
-        for (SummonerInfoJPA summoner : summoners) {
-            count += leagueMatchImpl.updateMatchHistory(summoner.getId());
+        for (Summoner summoner : summoners) {
+            count += leagueMatchImpl.updateMatchHistory(summoner.getPuuid());
         }
         LOGGER.info("INFO: Found {} matches", count);
         while (true) {

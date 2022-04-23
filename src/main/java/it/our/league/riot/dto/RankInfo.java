@@ -1,6 +1,6 @@
 package it.our.league.riot.dto;
 
-public class RankInfoDTO {
+public class RankInfo {
 
     private String leagueId;
     private String queueType;

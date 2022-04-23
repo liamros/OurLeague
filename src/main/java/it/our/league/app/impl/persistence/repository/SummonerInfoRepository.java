@@ -21,6 +21,9 @@ public interface SummonerInfoRepository extends CrudRepository<SummonerInfoJPA, 
     public void updateSummonerLvlAndIcon(Integer summInfoId, Integer summonerLevel, Integer summonerIconId);
     
     @Query(value = "SELECT puuid FROM summoner_info", nativeQuery = true)
-    public List<String> getAllPuiid();
+    public List<String> getAllPuuid();
+
+    @Query(value = "SELECT id FROM summoner_info WHERE puuid = ?", nativeQuery = true)
+    public Integer getSummonerIdByPuuid(String puuid);
 
 }

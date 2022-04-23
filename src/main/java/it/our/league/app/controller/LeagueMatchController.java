@@ -19,8 +19,8 @@ public class LeagueMatchController implements LeagueMatchManager {
 
     @Override
     @PostMapping("/updateMatchHistory")
-    public int updateMatchHistory(@RequestBody int summInfoId) {
-        return leagueMatchImpl.updateMatchHistory(summInfoId);
+    public int updateMatchHistory(@RequestBody String puuid) {
+        return leagueMatchImpl.updateMatchHistory(puuid);
     }
 
     @PostMapping("/completeMatchData")

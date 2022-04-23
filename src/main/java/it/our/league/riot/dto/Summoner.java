@@ -1,6 +1,6 @@
 package it.our.league.riot.dto;
 
-public class SummonerDTO {
+public class Summoner {
 
     private String id;
     private String accountId;

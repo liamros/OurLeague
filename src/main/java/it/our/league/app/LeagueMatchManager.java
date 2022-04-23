@@ -4,7 +4,7 @@ import it.our.league.riot.dto.Match;
 
 public interface LeagueMatchManager {
     
-    public int updateMatchHistory(int summInfoId);
+    public int updateMatchHistory(String puuid);
 
     public int completeMatchData(String matchId);
 

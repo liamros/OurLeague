@@ -144,7 +144,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Override
     public String asyncronousMatchHistoryUpdate() {
-
+        // TODO find another way to handle this
         synchronized(t) {
             if (t != null && t.isAlive())
                 return "KO";

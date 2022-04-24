@@ -1,5 +1,6 @@
 package it.our.league.app.impl;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +27,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueMatchImpl.class);
 
     /**
-     * beginning of season 12
+     * beginning of season 12 in seconds
      */
     private final long defaultTimestamp = 1641524400;
 
@@ -62,12 +63,14 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         if (summInfoId == null)
             return 0;
         int count = 0;
+        Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summInfoId);
+        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000;
         do {
-            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(puuid);
+            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(puuid, new Timestamp(fromTime*1000));
             /**
              * countMatches is the index from which starts the list of matchIds that Riot sends
              */
-            matchIds = riotManager.getMatchIdsByPuuid(puuid, "ranked", 100, defaultTimestamp,
+            matchIds = riotManager.getMatchIdsByPuuid(puuid, "ranked", 100, fromTime,
                     countMatches);
             Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
             /**
@@ -81,8 +84,11 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             for (String matchId : matchIds)
                 if (!existingMatchIds.contains(matchId))
                     filteredMatchIds.add(matchId);
+            
             matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
+            LOGGER.info("INFO : Persisted {} new matches", filteredMatchIds.size());
             relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summInfoId, matchIds));
+            LOGGER.info("INFO : Persisted {} new summoner-match relations", matchIds.size());
             count+=matchIds.size();
         } while (matchIds.size() == 100);
         /**

@@ -12,7 +12,7 @@ public interface RiotManagerInterface {
 
     public List<RankInfo> getRankInfoByEncryptedSummonerId(String encryptedSummonerId);
 
-    public List<String> getMatchIdsByPuuid(String puuid, String queueType, Integer count, Long startTime, Integer startIndex);
+    public List<String> getMatchIdsByPuuid(String puuid, String queueType, Integer count, Long startTimeInSeconds, Integer startIndex);
 
     public Match getMatchById(String matchId);
 

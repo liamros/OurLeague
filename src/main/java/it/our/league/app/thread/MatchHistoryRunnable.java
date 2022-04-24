@@ -42,9 +42,11 @@ public class MatchHistoryRunnable implements Runnable {
         Iterable<Summoner> summoners = leagueSummonerImpl.getAllSummoners();
         int count = 0;
         for (Summoner summoner : summoners) {
-            count += leagueMatchImpl.updateMatchHistory(summoner.getPuuid());
+            int games = leagueMatchImpl.updateMatchHistory(summoner.getPuuid());
+            LOGGER.info("INFO: Found {} new matches for {}", games, summoner.getName());
+            count += games;
         }
-        LOGGER.info("INFO: Found {} matches", count);
+        LOGGER.info("INFO: Found {} total new matches", count);
         while (true) {
             try {
                 leagueMatchImpl.populateMatchInfo();

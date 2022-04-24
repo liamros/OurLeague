@@ -64,14 +64,14 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             return 0;
         int count = 0;
         Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summInfoId);
-        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000;
+        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000+1;
         do {
-            Integer countMatches = relSummonerMatchRepository.getNumberOfMatches(puuid, new Timestamp(fromTime*1000));
+            Integer pendingMatches = relSummonerMatchRepository.getNumberOfPendingMatches(puuid);
             /**
              * countMatches is the index from which starts the list of matchIds that Riot sends
              */
             matchIds = riotManager.getMatchIdsByPuuid(puuid, "ranked", 100, fromTime,
-                    countMatches);
+                    pendingMatches);
             Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
             /**
              * filter matchIds by removing already existing records on DB, otherwise they'd

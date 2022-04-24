@@ -11,7 +11,7 @@
 	<artifactId>league</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>clowngg</name>
+	<name>ourleague</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>

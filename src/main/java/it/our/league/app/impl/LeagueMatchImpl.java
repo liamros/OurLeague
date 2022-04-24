@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,8 @@ import it.our.league.riot.dto.Match;
 public class LeagueMatchImpl implements LeagueMatchManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueMatchImpl.class);
+
+    private static Thread t = new Thread();
 
     /**
      * beginning of season 12 in seconds
@@ -64,7 +67,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             return 0;
         int count = 0;
         Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summInfoId);
-        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000+1;
+        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000+60;
         do {
             Integer pendingMatches = relSummonerMatchRepository.getNumberOfPendingMatches(puuid);
             /**
@@ -142,10 +145,16 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Override
     public String asyncronousMatchHistoryUpdate() {
-        Runnable matchHistoryRunnable = new MatchHistoryRunnable();
-        applicationContext.getAutowireCapableBeanFactory().autowireBean(matchHistoryRunnable);
-        Thread thread = new Thread(matchHistoryRunnable);
-        thread.start();
+
+        synchronized(t) {
+            if (t != null && t.isAlive())
+                return "KO";
+            
+            Runnable matchHistoryRunnable = new MatchHistoryRunnable();
+            applicationContext.getAutowireCapableBeanFactory().autowireBean(matchHistoryRunnable);
+            t = new Thread(matchHistoryRunnable);
+            t.start();
+        }
         return "OK";
     }
     

@@ -21,7 +21,6 @@ import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.common.constants.ShowCaseType;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
-import it.our.league.riot.dto.Summoner;
 
 public class LeagueAppImpl implements LeagueAppManager {
 
@@ -91,20 +90,20 @@ public class LeagueAppImpl implements LeagueAppManager {
     private ShowCaseDetailJPA generateLowerKda() {
 
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        List<Summoner> summoners = leagueSummonerImpl.getAllSummoners();
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         Participant participant = getParticipantWithLowerKda(summoners);
 
         showCaseJpa.setStatName(ShowCaseType.WORST_KDA.statName());
-        for (Summoner summoner : summoners) {
+        for (AppSummonerDTO summoner : summoners) {
             if (participant.getPuuid().equals(summoner.getPuuid()))
-                showCaseJpa.setSummInfoId(summoner.getAppId());
+                showCaseJpa.setSummInfoId(summoner.getSummInfoId());
         }
         showCaseJpa.setValue(Float.valueOf(String.valueOf(participant.getChallenges().getKda())));
         showCaseJpa.setDescription("Lowest KDA");
         return showCaseJpa;
     }
 
-    private Participant getParticipantWithLowerKda(List<Summoner> summoners) {
+    private Participant getParticipantWithLowerKda(List<AppSummonerDTO> summoners) {
 
         List<Match> matches = new ArrayList<>();
         Double lowerKda = (double) showCaseDetailRepository.findByStatName(ShowCaseType.WORST_KDA.statName())
@@ -112,7 +111,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         Participant participant = null;
 
         for (Match matchDTO : matches) {
-            for (Summoner summoner : summoners) {
+            for (AppSummonerDTO summoner : summoners) {
                 if (lowerKda == null || LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
                         .getChallenges().getKda() < lowerKda)
                     lowerKda = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()

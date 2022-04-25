@@ -41,7 +41,7 @@ public final class LeagueAppUtility {
 
     public static Summoner generateSummoner(SummonerInfoJPA jpa) {
         Summoner dto = new Summoner();
-        dto.setAppId(jpa.getId());
+
         dto.setEncryptedSummonerId(jpa.getEncryptedSummonerId());
         dto.setAccountId(jpa.getAccountId());
         dto.setName(jpa.getGameName());

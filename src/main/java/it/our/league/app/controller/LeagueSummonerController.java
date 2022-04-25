@@ -71,7 +71,7 @@ public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Override
     @GetMapping("/getAllSummoners")
-    public List<Summoner> getAllSummoners() {
+    public List<AppSummonerDTO> getAllSummoners() {
         return leagueSummonerImpl.getAllSummoners();
     }
 

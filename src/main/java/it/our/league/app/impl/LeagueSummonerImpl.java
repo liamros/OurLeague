@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueSummonerManager;
@@ -148,9 +149,10 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     }
 
     @Override
-    public List<Summoner> getAllSummoners() {
-        List<Summoner> out = new ArrayList<>();
-        summonerRepository.findAll().forEach(jpa -> out.add(LeagueAppUtility.generateSummoner(jpa)));
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+    public List<AppSummonerDTO> getAllSummoners() {
+        List<AppSummonerDTO> out = new ArrayList<>();
+        summonerRepository.findAll().forEach(jpa -> out.add(LeagueAppUtility.generateAppSummonerDto(jpa, jpa.getRankInfo())));
         return out;
     }
 
@@ -165,6 +167,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     }
 
     @Override
+    @Transactional(propagation=Propagation.REQUIRED, readOnly=true)
     public AppSummonerDTO getLowestWinrateSummoner() {
         RankInfoJPA rank = rankRepository.getLowerWinRate();
         SummonerInfoJPA summoner = summonerRepository.findById(rank.getSummInfoId()).get();

@@ -25,7 +25,7 @@ public interface LeagueSummonerManager {
 
     public Integer getSummonerIdByPuuid(String puuid);
 
-    public List<Summoner> getAllSummoners();
+    public List<AppSummonerDTO> getAllSummoners();
 
     public AppSummonerDTO getLowestWinrateSummoner();
 

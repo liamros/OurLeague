@@ -1,12 +1,14 @@
 package it.our.league.app.thread;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
-import it.our.league.riot.dto.Summoner;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 
 /**
  * Runnable which executes updates on Summoners and Matches, 
@@ -37,10 +39,10 @@ public class DataRefreshRunnable implements Runnable {
 
         leagueSummonerImpl.updateAllSummoners();
         LOGGER.info("INFO: Updated all summoner information");
-        Iterable<Summoner> summoners = leagueSummonerImpl.getAllSummoners();
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         int count = 0;
-        for (Summoner summoner : summoners) {
-            int games = leagueMatchImpl.updateMatchHistory(summoner.getPuuid());
+        for (AppSummonerDTO summoner : summoners) {
+            int games = leagueMatchImpl.updateMatchHistory(summoner);
             LOGGER.info("INFO: Found {} new matches for {}", games, summoner.getName());
             count += games;
         }

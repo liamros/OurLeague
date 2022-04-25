@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueMatchManager;
-import it.our.league.app.LeagueSummonerManager;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
@@ -33,8 +33,6 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private RiotManagerInterface riotManager;
 
     @Autowired
-    private LeagueSummonerManager leagueSummonerImpl;
-    @Autowired
     private RelSummonerMatchRepository relSummonerMatchRepository;
     @Autowired
     private MatchInfoRepository matchInfoRepository;
@@ -49,21 +47,18 @@ public class LeagueMatchImpl implements LeagueMatchManager {
      */
     @Override
     @Transactional
-    public int updateMatchHistory(String puuid) {
+    public int updateMatchHistory(AppSummonerDTO summoner) {
 
         List<String> matchIds = null;
-        Integer summInfoId = leagueSummonerImpl.getSummonerIdByPuuid(puuid);
-        if (summInfoId == null)
-            return 0;
         int count = 0;
-        Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summInfoId);
+        Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summoner.getSummInfoId());
         Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000+60;
         do {
-            Integer pendingMatches = relSummonerMatchRepository.getNumberOfPendingMatches(puuid);
+            Integer pendingMatches = relSummonerMatchRepository.getNumberOfPendingMatches(summoner.getPuuid());
             /**
              * countMatches is the index from which starts the list of matchIds that Riot sends
              */
-            matchIds = riotManager.getMatchIdsByPuuid(puuid, "ranked", 100, fromTime,
+            matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, fromTime,
                     pendingMatches);
             Iterable<MatchInfoJPA> jpas = matchInfoRepository.findAllById(matchIds);
             /**
@@ -80,7 +75,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             
             matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
             LOGGER.info("INFO : Persisted {} new matches", filteredMatchIds.size());
-            relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summInfoId, matchIds));
+            relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summoner.getSummInfoId(), matchIds));
             LOGGER.info("INFO : Persisted {} new summoner-match relations", matchIds.size());
             count+=matchIds.size();
         } while (matchIds.size() == 100);

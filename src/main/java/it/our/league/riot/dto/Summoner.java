@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Summoner {
 
-    private Integer appId;
     @JsonProperty("id")
     private String encryptedSummonerId;
     private String accountId;
@@ -13,14 +12,6 @@ public class Summoner {
     private Integer profileIconId;
     private Long revisionDate;
     private Integer summonerLevel;
-    
-    public Integer getAppId() {
-        return appId;
-    }
-
-    public void setAppId(Integer appId) {
-        this.appId = appId;
-    }
     
     public String getEncryptedSummonerId() {
     return encryptedSummonerId;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueMatchManager;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
 
 @RestController
@@ -22,8 +23,8 @@ public class LeagueMatchController implements LeagueMatchManager {
 
     @Override
     @PostMapping("/updateMatchHistory")
-    public int updateMatchHistory(@RequestBody String puuid) {
-        return leagueMatchImpl.updateMatchHistory(puuid);
+    public int updateMatchHistory(@RequestBody AppSummonerDTO summoner) {
+        return leagueMatchImpl.updateMatchHistory(summoner);
     }
 
     @PostMapping("/completeMatchData")

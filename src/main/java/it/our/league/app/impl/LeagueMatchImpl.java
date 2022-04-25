@@ -146,5 +146,10 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         }
         return matches;
     }
+
+    @Override
+    public List<Match> getAllMatchesByPuuid(String puuid) {
+        return matchRepository.findMatchesByPuuid(puuid);
+    }
     
 }

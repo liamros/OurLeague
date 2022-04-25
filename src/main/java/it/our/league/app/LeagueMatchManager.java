@@ -16,6 +16,9 @@ public interface LeagueMatchManager {
     // provisory
     public int populateMatchInfo();
 
+    @Deprecated
     public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count);
+
+    public List<Match> getAllMatchesByPuuid(String puuid);
 
 }

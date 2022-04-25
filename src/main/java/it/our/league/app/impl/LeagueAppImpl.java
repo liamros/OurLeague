@@ -1,5 +1,6 @@
 package it.our.league.app.impl;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
 import it.our.league.app.LeagueAppManager;
+import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
@@ -33,6 +35,8 @@ public class LeagueAppImpl implements LeagueAppManager {
     @Autowired
     private LeagueSummonerManager leagueSummonerImpl;
     @Autowired
+    private LeagueMatchManager leagueMatchImpl;
+    @Autowired
     private ShowCaseDetailRepository showCaseDetailRepository;
 
     @Override
@@ -53,7 +57,7 @@ public class LeagueAppImpl implements LeagueAppManager {
     public void updateShowCaseDetails() {
 
         List<ShowCaseDetailJPA> listShowCaseUpdated = new ArrayList<>();
-        listShowCaseUpdated.addAll(Arrays.asList(generateLowerWinRate(), generateLowerKda()));
+        listShowCaseUpdated.addAll(Arrays.asList(getHighestKDAShowcase(), getHighestWinrateShowcase(), getHighestRankShowcase()));
 
         showCaseDetailRepository.saveAll(listShowCaseUpdated);
         LOGGER.info("INFO: Persisted {}", listShowCaseUpdated);
@@ -87,6 +91,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         return showCaseJpa;
     }
 
+    @Deprecated
     private ShowCaseDetailJPA generateLowerKda() {
 
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
@@ -103,6 +108,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         return showCaseJpa;
     }
 
+    @Deprecated
     private Participant getParticipantWithLowerKda(List<AppSummonerDTO> summoners) {
 
         List<Match> matches = new ArrayList<>();
@@ -135,6 +141,68 @@ public class LeagueAppImpl implements LeagueAppManager {
             t.start();
         }
         return "OK";
+    }
+
+
+    private ShowCaseDetailJPA getHighestKDAShowcase() {
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        AppSummonerDTO finalSummoner = null;
+        Float higherKDA = Float.MIN_VALUE;
+        for (AppSummonerDTO summoner : summoners) {
+            List<Match> matches = leagueMatchImpl.getAllMatchesByPuuid(summoner.getPuuid());
+            Float currentKDA = LeagueAppUtility.getAverageKDA(matches, summoner.getPuuid());
+            if (higherKDA < currentKDA) {
+                finalSummoner = summoner;
+                higherKDA = currentKDA;
+            }
+        }
+        ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
+        jpa.setStatName(ShowCaseType.BEST_KDA.statName());
+        jpa.setSummInfoId(finalSummoner.getSummInfoId());
+        jpa.setDescription(String.format("%.1f", higherKDA));
+        return jpa;
+    }
+
+    private ShowCaseDetailJPA getHighestWinrateShowcase() {
+
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        Float highestWinrate = Float.MIN_VALUE;
+        AppSummonerDTO finalSummoner = null;
+        for (AppSummonerDTO summoner : summoners) {
+            Float rankHighestWinrate = Float.MIN_VALUE;
+            for (AppRankInfoDTO rank : summoner.getRanks())
+                rankHighestWinrate = Math.max(rankHighestWinrate, rank.getWinrate());
+            if (highestWinrate < rankHighestWinrate) {
+                highestWinrate = rankHighestWinrate;
+                finalSummoner = summoner;
+            }
+        }
+        ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
+        jpa.setStatName(ShowCaseType.BEST_WR.statName());
+        jpa.setSummInfoId(finalSummoner.getSummInfoId());
+        jpa.setDescription(MessageFormat.format("{0}%", String.format("%.1f", highestWinrate)));
+        return jpa;
+    }
+
+    private ShowCaseDetailJPA getHighestRankShowcase() {
+
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        AppRankInfoDTO highestRank = null;
+        for (AppSummonerDTO summoner : summoners) {
+            if (highestRank == null)
+                highestRank = LeagueAppUtility.getHighestRankFromDto(summoner.getRanks());
+            else {
+                List<AppRankInfoDTO> ranks = new ArrayList<>();
+                ranks.addAll(summoner.getRanks());
+                ranks.add(highestRank);
+                highestRank = LeagueAppUtility.getHighestRankFromDto(ranks);
+            }
+        }
+        ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
+        jpa.setStatName(ShowCaseType.HIGHEST_RANK.statName());
+        jpa.setSummInfoId(highestRank.getSummInfoId());
+        jpa.setDescription(MessageFormat.format("{0} {1} {2}LP", highestRank.getTier(), highestRank.getDivision(), highestRank.getLp()));
+        return jpa;
     }
     
 }

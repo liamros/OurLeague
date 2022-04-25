@@ -49,5 +49,12 @@ public class LeagueMatchController implements LeagueMatchManager {
     public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
         return leagueMatchImpl.getMatchesByPuuid(puuid, queueType, count);
     }
+
+    @Override
+    // TODO add security
+    @GetMapping("/getAllMatchesByPuuid")
+    public List<Match> getAllMatchesByPuuid(@RequestParam String puuid) {
+        return leagueMatchImpl.getAllMatchesByPuuid(puuid);
+    }
     
 }

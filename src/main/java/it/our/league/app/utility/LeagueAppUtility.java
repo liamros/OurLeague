@@ -219,4 +219,19 @@ public final class LeagueAppUtility {
             list.add(generateRelSummonerMatchJpa(summInfoId, matchId));
         return list;
     }
+
+    public static Float getAverageKDA(List<Match> matches, String puuid) {
+
+        Integer totalKills = 0;
+        Integer totalDeaths = 0;
+        Integer totalAssists = 0;
+        for (Match match : matches) {
+            Participant partecipant = getParticipantByMatch(match, puuid);
+            totalKills += partecipant.getKills();
+            totalDeaths += partecipant.getDeaths();
+            totalAssists += partecipant.getAssists();
+        }
+        Float totalKDA = totalDeaths != 0 ? ((float) totalKills+ (float) totalAssists)/(float) totalDeaths : 0;
+        return totalKDA;
+    }
 }

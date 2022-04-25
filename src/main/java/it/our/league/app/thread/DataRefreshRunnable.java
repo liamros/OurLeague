@@ -9,7 +9,7 @@ import it.our.league.app.LeagueSummonerManager;
 import it.our.league.riot.dto.Summoner;
 
 /**
- * MatchHistoryRunnable is a Runnable which executes updates on Summoners and Matches, 
+ * Runnable which executes updates on Summoners and Matches, 
  * using APIs from {@link LeagueSummonerManager} and {@link LeagueMatchManager}.</p>
  * It executes the following operations in order :
  * <ol>
@@ -21,16 +21,14 @@ import it.our.league.riot.dto.Summoner;
  * reached such point, it then carries on with its operations
  * @author Liam Rossi
  */
-public class MatchHistoryRunnable implements Runnable {
+public class DataRefreshRunnable implements Runnable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MatchHistoryRunnable.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataRefreshRunnable.class);
 
     @Autowired
     private Long riotRateLimit;
-
     @Autowired
     private LeagueSummonerManager leagueSummonerImpl;
-
     @Autowired
     private LeagueMatchManager leagueMatchImpl;
 

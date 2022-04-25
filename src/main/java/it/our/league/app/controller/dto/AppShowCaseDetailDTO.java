@@ -1,6 +1,6 @@
 package it.our.league.app.controller.dto;
 
-public class ShowCaseDetailDTO {
+public class AppShowCaseDetailDTO {
     
     private String statName;
     private String summonerName;

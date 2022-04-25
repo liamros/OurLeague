@@ -1,10 +1,13 @@
 package it.our.league.app.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueMatchManager;
@@ -41,9 +44,9 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    @GetMapping("/asyncronousMatchHistoryUpdate")
-    public String asyncronousMatchHistoryUpdate() {
-        return leagueMatchImpl.asyncronousMatchHistoryUpdate();
+    @GetMapping("/getMatches")
+    public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
+        return leagueMatchImpl.getMatchesByPuuid(puuid, queueType, count);
     }
     
 }

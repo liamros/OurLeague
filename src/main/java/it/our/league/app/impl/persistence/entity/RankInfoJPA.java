@@ -114,10 +114,6 @@ public class RankInfoJPA {
         this.summoner = summoner;
     }
 
-    public Float getWinrate() {
-        return (((float)this.wins/((float)(this.wins+this.losses)))*100);
-    }
-
     @Override
     public String toString() {
         return "RankInfoJPA [division=" + division + ", losses=" + losses + ", lp=" + lp + ", queueTypeId="

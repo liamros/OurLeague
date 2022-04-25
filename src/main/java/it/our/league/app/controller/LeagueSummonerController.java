@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueSummonerManager;
-import it.our.league.app.controller.dto.ShowCaseDetailDTO;
-import it.our.league.riot.dto.Match;
+import it.our.league.app.controller.dto.AppRankInfoDTO;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Summoner;
 
 @RestController
@@ -46,18 +46,6 @@ public class LeagueSummonerController implements LeagueSummonerManager {
     }
 
     @Override
-    @GetMapping("/getWinRate")
-    public List<Float> getWinRateBySummInfoId(@RequestParam Integer summInfoId) {
-        return leagueSummonerImpl.getWinRateBySummInfoId(summInfoId);
-    }
-
-    @Override
-    @GetMapping("/getMatches")
-    public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
-        return leagueSummonerImpl.getMatchesByPuuid(puuid, queueType, count);
-    }
-
-    @Override
     @GetMapping("/updateAllRanks")
     public void updateAllRanks() {
         leagueSummonerImpl.updateAllRanks();
@@ -67,18 +55,6 @@ public class LeagueSummonerController implements LeagueSummonerManager {
     @GetMapping("/updateAllSummoners")
     public void updateAllSummoners() {
         leagueSummonerImpl.updateAllSummoners();
-    }
-
-    @Override
-    @GetMapping("/getShowCaseDetails")
-    public List<ShowCaseDetailDTO> getShowCaseDetails() {
-        return leagueSummonerImpl.getShowCaseDetails();
-    }
-
-    @Override
-    @GetMapping("/updateShowCaseDetails")
-    public void updateShowCaseDetails() {
-        leagueSummonerImpl.updateShowCaseDetails();
     }
 
     @Override
@@ -97,6 +73,18 @@ public class LeagueSummonerController implements LeagueSummonerManager {
     @GetMapping("/getAllSummoners")
     public List<Summoner> getAllSummoners() {
         return leagueSummonerImpl.getAllSummoners();
+    }
+
+    @Override
+    @GetMapping("/getRanksByPuuid")
+    public List<AppRankInfoDTO> getRanksByPuuid(@RequestParam String puuid) {
+        return leagueSummonerImpl.getRanksByPuuid(puuid);
+    }
+
+    @Override
+    @GetMapping("/getLowestWinrateSummoner")
+    public AppSummonerDTO getLowestWinrateSummoner() {
+        return leagueSummonerImpl.getLowestWinrateSummoner();
     }
 
 

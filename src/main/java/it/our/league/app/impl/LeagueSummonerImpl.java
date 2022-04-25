@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -14,18 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueSummonerManager;
-import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppRankInfoDTO;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.RankInfoJPA;
-import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.app.impl.persistence.repository.RankInfoRepository;
-import it.our.league.app.impl.persistence.repository.ShowCaseDetailRepository;
 import it.our.league.app.impl.persistence.repository.SummonerInfoRepository;
-import it.our.league.common.constants.ShowCaseType;
+import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.riot.IDdragon;
 import it.our.league.riot.RiotManagerInterface;
-import it.our.league.riot.dto.Match;
-import it.our.league.riot.dto.Participant;
 import it.our.league.riot.dto.RankInfo;
 import it.our.league.riot.dto.Summoner;
 import net.coobird.thumbnailator.Thumbnails;
@@ -42,8 +38,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     private SummonerInfoRepository summonerRepository;
     @Autowired
     private RankInfoRepository rankRepository;
-    @Autowired
-    private ShowCaseDetailRepository showCaseDetailRepository;
+    
 
     @Override
     public String ping() {
@@ -56,14 +51,14 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
         Summoner summonerDto = null;
         try {
             summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
-            List<RankInfo> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getId());
+            List<RankInfo> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getEncryptedSummonerId());
             SummonerInfoJPA summonerJpa = LeagueAppUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             LOGGER.info("INFO: Persisted {}", summonerJpa);
             List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfo rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
-                rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankedInfoDto, summonerJpa.getId());
+                rankJpa = LeagueAppUtility.generateRankInfoJpa(rankedInfoDto, summonerJpa.getId());
                 if (rankJpa == null)
                     continue;
                 rankJpas.add(rankJpa);
@@ -84,16 +79,6 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     }
 
     @Override
-    public List<Float> getWinRateBySummInfoId(Integer summInfoId) {
-        List<Float> list = new ArrayList<Float>();
-        List<RankInfoJPA> jpas = rankRepository.findBySummInfoId(summInfoId);
-        for (RankInfoJPA rankInfoJPA : jpas) {
-            list.add(rankInfoJPA.getWinrate());
-        }
-        return list;
-    }
-
-    @Override
     @Transactional
     public void updateAllRanks() {
         Iterable<SummonerInfoJPA> list = summonerRepository.findAll();
@@ -109,7 +94,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             String encryptedSummonerId = summonerJpa.getEncryptedSummonerId();
             List<RankInfo> rankInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(encryptedSummonerId);
             for (RankInfo rankDto : rankInfoDtos) {
-                RankInfoJPA rankJpa = LeagueAppUtility.generateRankedInfoJpa(rankDto, id);
+                RankInfoJPA rankJpa = LeagueAppUtility.generateRankInfoJpa(rankDto, id);
                 if (rankJpa == null)
                     continue;
                 jpas.add(rankJpa);
@@ -136,30 +121,6 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     }
 
     @Override
-    public List<ShowCaseDetailDTO> getShowCaseDetails() {
-
-        Iterable<ShowCaseDetailJPA> list = showCaseDetailRepository.findAll();
-        List<ShowCaseDetailDTO> dtos = new ArrayList<>();
-        for (ShowCaseDetailJPA showCaseDetailJpa : list) {
-            List<RankInfoJPA> ranks = rankRepository.findBySummInfoId(showCaseDetailJpa.getSummInfoId());
-            // provisory
-            RankInfoJPA highestRank = LeagueAppUtility.getHighestRank(ranks);
-            dtos.add(LeagueAppUtility.generateShowCaseDetailDTO(showCaseDetailJpa, highestRank));
-        }
-        return dtos;
-    }
-
-    @Override
-    public void updateShowCaseDetails() {
-
-        List<ShowCaseDetailJPA> listShowCaseUpdated = new ArrayList<>();
-        listShowCaseUpdated.addAll(Arrays.asList(generateLowerWinRate(), generateLowerKda()));
-
-        showCaseDetailRepository.saveAll(listShowCaseUpdated);
-        LOGGER.info("INFO: Persisted {}", listShowCaseUpdated);
-    }
-
-    @Override
     public byte[] getProfileIconImage(String profileIconNumber) throws IOException {
         byte[] byteArray;
         try {
@@ -182,71 +143,6 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
     }
 
     @Override
-    @Transactional
-    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count) {
-
-        List<String> matchesIds = new ArrayList<>();
-        List<Match> matches = new ArrayList<>();
-        try {
-            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count, null, null);
-            for (String matchId : matchesIds) {
-                matches.add(riotManager.getMatchById(matchId));
-            }
-
-        } catch (Exception e) {
-            LOGGER.error("ERROR: Error while performing getMatchesBySummInfoId", e);
-            throw new RuntimeException();
-        }
-        return matches;
-    }
-
-    private ShowCaseDetailJPA generateLowerWinRate() {
-
-        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        RankInfoJPA rankJpa = rankRepository.getLowerWinRate();
-        showCaseJpa.setStatName(ShowCaseType.WORST_WR.statName());
-        showCaseJpa.setSummInfoId(rankJpa.getSummInfoId());
-        showCaseJpa.setValue(rankJpa.getWinrate());
-        showCaseJpa.setDescription("Lowest WinRate");
-        return showCaseJpa;
-    }
-
-    private ShowCaseDetailJPA generateLowerKda() {
-
-        ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
-        Iterable<SummonerInfoJPA> summoners = summonerRepository.findAll();
-        Participant participant = getParticipantWithLowerKda(summoners);
-
-        showCaseJpa.setStatName(ShowCaseType.WORST_KDA.statName());
-        for (SummonerInfoJPA summoner : summoners) {
-            if (participant.getPuuid().equals(summoner.getPuuid()))
-                showCaseJpa.setSummInfoId(summoner.getId());
-        }
-        showCaseJpa.setValue(Float.valueOf(String.valueOf(participant.getChallenges().getKda())));
-        showCaseJpa.setDescription("Lowest KDA");
-        return showCaseJpa;
-    }
-
-    private Participant getParticipantWithLowerKda(Iterable<SummonerInfoJPA> summoners) {
-
-        List<Match> matches = new ArrayList<>();
-        Double lowerKda = (double) showCaseDetailRepository.findByStatName(ShowCaseType.WORST_KDA.statName())
-                .getValue();
-        Participant participant = null;
-
-        for (Match matchDTO : matches) {
-            for (SummonerInfoJPA summoner : summoners) {
-                if (lowerKda == null || LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
-                        .getChallenges().getKda() < lowerKda)
-                    lowerKda = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()
-                            .getKda();
-                participant = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid());
-            }
-        }
-        return participant;
-    }
-
-    @Override
     public Integer getSummonerIdByPuuid(String puuid) {
         return summonerRepository.getSummonerIdByPuuid(puuid);
     }
@@ -256,6 +152,24 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
         List<Summoner> out = new ArrayList<>();
         summonerRepository.findAll().forEach(jpa -> out.add(LeagueAppUtility.generateSummoner(jpa)));
         return out;
+    }
+
+    @Override
+    public List<AppRankInfoDTO> getRanksByPuuid(String puuid) {
+        Integer summInfoId = summonerRepository.getSummonerIdByPuuid(puuid);
+        List<AppRankInfoDTO> response = new ArrayList<>();
+        rankRepository.findBySummInfoId(summInfoId).forEach(jpa -> {
+            response.add(LeagueAppUtility.generateAppRankInfoDto(jpa));
+        });;
+        return response;
+    }
+
+    @Override
+    public AppSummonerDTO getLowestWinrateSummoner() {
+        RankInfoJPA rank = rankRepository.getLowerWinRate();
+        SummonerInfoJPA summoner = summonerRepository.findById(rank.getSummInfoId()).get();
+        AppSummonerDTO dto = LeagueAppUtility.generateAppSummonerDto(summoner, summoner.getRankInfo());
+        return dto;
     }
 
 }

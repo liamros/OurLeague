@@ -1,5 +1,5 @@
 export const getShowCaseDetails = () => {
-    const data = fetch('http://localhost:8080/summoner/getShowCaseDetails', { mode: 'cors' })
+    const data = fetch('http://localhost:8080/app/getShowCaseDetails', { mode: 'cors' })
         .then(res => res.json())
         .then((data) => {
             return data

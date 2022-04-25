@@ -1,5 +1,7 @@
 package it.our.league.app;
 
+import java.util.List;
+
 import it.our.league.riot.dto.Match;
 
 public interface LeagueMatchManager {
@@ -10,9 +12,9 @@ public interface LeagueMatchManager {
 
     public Match getMatchData(String matchId);
 
-    public String asyncronousMatchHistoryUpdate();
-
     // provisory
     public int populateMatchInfo();
+
+    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count);
 
 }

@@ -1,8 +1,12 @@
 package it.our.league.riot.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Summoner {
 
-    private String id;
+    private Integer appId;
+    @JsonProperty("id")
+    private String encryptedSummonerId;
     private String accountId;
     private String puuid;
     private String name;
@@ -10,12 +14,20 @@ public class Summoner {
     private Long revisionDate;
     private Integer summonerLevel;
     
-    public String getId() {
-    return id;
+    public Integer getAppId() {
+        return appId;
+    }
+
+    public void setAppId(Integer appId) {
+        this.appId = appId;
     }
     
-    public void setId(String id) {
-    this.id = id;
+    public String getEncryptedSummonerId() {
+    return encryptedSummonerId;
+    }
+    
+    public void setEncryptedSummonerId(String id) {
+    this.encryptedSummonerId = id;
     }
     
     public String getAccountId() {

@@ -1,10 +1,12 @@
-package it.our.league.app.impl;
+package it.our.league.app.utility;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.our.league.app.controller.dto.ShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppRankInfoDTO;
+import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.entity.RankInfoJPA;
 import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
@@ -31,7 +33,7 @@ public final class LeagueAppUtility {
         jpa.setSummonerIconId(dto.getProfileIconId());
         jpa.setSummonerLevel(dto.getSummonerLevel());
         jpa.setId(id);
-        jpa.setEncryptedSummonerId(dto.getId());
+        jpa.setEncryptedSummonerId(dto.getEncryptedSummonerId());
         jpa.setPuuid(dto.getPuuid());
         jpa.setAccountId(dto.getAccountId());
         return jpa;
@@ -39,7 +41,8 @@ public final class LeagueAppUtility {
 
     public static Summoner generateSummoner(SummonerInfoJPA jpa) {
         Summoner dto = new Summoner();
-        dto.setId(jpa.getEncryptedSummonerId());
+        dto.setAppId(jpa.getId());
+        dto.setEncryptedSummonerId(jpa.getEncryptedSummonerId());
         dto.setAccountId(jpa.getAccountId());
         dto.setName(jpa.getGameName());
         dto.setProfileIconId(jpa.getSummonerIconId());
@@ -48,7 +51,27 @@ public final class LeagueAppUtility {
         return dto;
     }
 
-    public static RankInfoJPA generateRankedInfoJpa(RankInfo dto, Integer summonerInfoId) {
+    public static AppSummonerDTO generateAppSummonerDto(SummonerInfoJPA jpa) {
+        return generateAppSummonerDto(jpa, null);
+    }
+
+    public static AppSummonerDTO generateAppSummonerDto(SummonerInfoJPA jpa, List<RankInfoJPA> ranks) {
+        AppSummonerDTO dto = new AppSummonerDTO();
+        dto.setSummInfoId(jpa.getId());
+        dto.setEncryptedSummonerId(jpa.getEncryptedSummonerId());
+        dto.setAccountId(jpa.getAccountId());
+        dto.setName(jpa.getGameName());
+        dto.setProfileIconId(jpa.getSummonerIconId());
+        dto.setPuuid(jpa.getPuuid());
+        dto.setSummonerLevel(jpa.getSummonerLevel());
+        if (ranks == null)
+            return dto;
+        for (RankInfoJPA rank : ranks)
+            dto.addRank(generateAppRankInfoDto(rank));
+        return dto;
+    }
+
+    public static RankInfoJPA generateRankInfoJpa(RankInfo dto, Integer summonerInfoId) {
         Integer queueTypeId;
         try {
             queueTypeId = RankedQueueType.valueOf(dto.getQueueType()).id();
@@ -66,8 +89,20 @@ public final class LeagueAppUtility {
         return jpa;
     }
 
-    public static ShowCaseDetailDTO generateShowCaseDetailDTO(ShowCaseDetailJPA jpa, RankInfoJPA rank) {
-        ShowCaseDetailDTO dto = new ShowCaseDetailDTO();
+    public static AppRankInfoDTO generateAppRankInfoDto(RankInfoJPA jpa) {
+        AppRankInfoDTO dto = new AppRankInfoDTO();
+        dto.setSummInfoId(jpa.getSummInfoId());
+        dto.setQueueTypeId(jpa.getQueueTypeId());
+        dto.setTier(jpa.getTier());
+        dto.setDivision(jpa.getDivision());
+        dto.setWins(jpa.getWins());
+        dto.setLosses(jpa.getLosses());
+        dto.setLp(jpa.getLp());
+        return dto;
+    }
+
+    public static AppShowCaseDetailDTO generateAppShowCaseDetailDTO(ShowCaseDetailJPA jpa, AppRankInfoDTO rank) {
+        AppShowCaseDetailDTO dto = new AppShowCaseDetailDTO();
         dto.setStatName(jpa.getStatName());
         dto.setSummonerName(jpa.getSummoner().getGameName());
         dto.setValue(jpa.getValue());
@@ -118,6 +153,27 @@ public final class LeagueAppUtility {
                 }
             } else
                 rank = rankInfoJPA;
+        }
+        return rank;
+    }
+
+    public static AppRankInfoDTO getHighestRankFromDto(List<AppRankInfoDTO> list) {
+        AppRankInfoDTO rank = null;
+        for (AppRankInfoDTO rankInfo : list) {
+            if (rank != null) {
+                int nextTierOrdinal = RankedTierType.valueOf(rankInfo.getTier()).ordinal();
+                int currTierOrdinal = RankedTierType.valueOf(rank.getTier()).ordinal();
+                if (nextTierOrdinal > currTierOrdinal)
+                    rank = rankInfo;
+                else if (nextTierOrdinal == currTierOrdinal) {
+                    int nextDivOrdinal = RankedTierType.valueOf(rankInfo.getDivision()).ordinal();
+                    int curreDivOrdinal = RankedTierType.valueOf(rank.getDivision()).ordinal();
+                    if (nextDivOrdinal > curreDivOrdinal
+                            || nextDivOrdinal == curreDivOrdinal && rankInfo.getLp() > rank.getLp())
+                        rank = rankInfo;
+                }
+            } else
+                rank = rankInfo;
         }
         return rank;
     }

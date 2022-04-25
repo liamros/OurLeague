@@ -9,7 +9,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueMatchManager;
@@ -18,15 +17,13 @@ import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
 import it.our.league.app.mongodb.repository.MatchRepository;
-import it.our.league.app.thread.MatchHistoryRunnable;
+import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.Match;
 
 public class LeagueMatchImpl implements LeagueMatchManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueMatchImpl.class);
-
-    private static Thread t = new Thread();
 
     /**
      * beginning of season 12 in seconds
@@ -36,17 +33,11 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private RiotManagerInterface riotManager;
 
     @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     private LeagueSummonerManager leagueSummonerImpl;
-
     @Autowired
     private RelSummonerMatchRepository relSummonerMatchRepository;
-
     @Autowired
     private MatchInfoRepository matchInfoRepository;
-
     @Autowired
     private MatchRepository matchRepository;
 
@@ -143,18 +134,22 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     }
 
     @Override
-    public String asyncronousMatchHistoryUpdate() {
-        // TODO find another way to handle this
-        synchronized(t) {
-            if (t != null && t.isAlive())
-                return "KO";
-            
-            Runnable matchHistoryRunnable = new MatchHistoryRunnable();
-            applicationContext.getAutowireCapableBeanFactory().autowireBean(matchHistoryRunnable);
-            t = new Thread(matchHistoryRunnable);
-            t.start();
+    @Transactional
+    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count) {
+
+        List<String> matchesIds = new ArrayList<>();
+        List<Match> matches = new ArrayList<>();
+        try {
+            matchesIds = riotManager.getMatchIdsByPuuid(puuid, queueType, count, null, null);
+            for (String matchId : matchesIds) {
+                matches.add(riotManager.getMatchById(matchId));
+            }
+
+        } catch (Exception e) {
+            LOGGER.error("ERROR: Error while performing getMatchesBySummInfoId", e);
+            throw new RuntimeException();
         }
-        return "OK";
+        return matches;
     }
     
 }

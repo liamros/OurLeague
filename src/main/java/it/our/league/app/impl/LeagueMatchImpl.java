@@ -42,7 +42,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
      /**
      * Fetches from Riot APIs matchIds which don't exist on the DB.
      * It persists them, whith no additional data, for their enrichment look at {@link #completeMatchData}
-     * @param puuid Riot's puuid assigned to Summoner
+     * @param summoner app's summoner DTO
      * @return number of matches found
      */
     @Override

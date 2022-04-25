@@ -48,13 +48,14 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
 
     @Override
     @Transactional
-    public Summoner insertSummoner(String summonerName) {
-        Summoner summonerDto = null;
+    public AppSummonerDTO insertSummoner(String summonerName) {
+        AppSummonerDTO response = null;
         try {
-            summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
+            Summoner summonerDto = riotManager.getAccountInfoBySummonerName(summonerName);
             List<RankInfo> rankedInfoDtos = riotManager.getRankInfoByEncryptedSummonerId(summonerDto.getEncryptedSummonerId());
             SummonerInfoJPA summonerJpa = LeagueAppUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
+            response = LeagueAppUtility.generateAppSummonerDto(summonerJpa);
             LOGGER.info("INFO: Persisted {}", summonerJpa);
             List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfo rankedInfoDto : rankedInfoDtos) {
@@ -63,6 +64,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
                 if (rankJpa == null)
                     continue;
                 rankJpas.add(rankJpa);
+                response.addRank(LeagueAppUtility.generateAppRankInfoDto(rankJpa));
                 LOGGER.info("INFO: Entity to persist {}", rankJpa);
             }
             rankRepository.saveAll(rankJpas);
@@ -70,7 +72,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             LOGGER.error("ERROR: Error while performing insertSummoner", e);
             throw new RuntimeException();
         }
-        return summonerDto;
+        return response;
     }
 
     @Override

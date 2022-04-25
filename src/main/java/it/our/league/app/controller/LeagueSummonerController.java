@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
-import it.our.league.riot.dto.Summoner;
 
 @RestController
 // CrossOrigin only for development purposes
@@ -35,7 +34,7 @@ public class LeagueSummonerController implements LeagueSummonerManager {
 
     @Override
     @PutMapping("/insertSummoner")
-    public Summoner insertSummoner(@RequestBody String summonerName) {
+    public AppSummonerDTO insertSummoner(@RequestBody String summonerName) {
         return leagueSummonerImpl.insertSummoner(summonerName);
     }
 

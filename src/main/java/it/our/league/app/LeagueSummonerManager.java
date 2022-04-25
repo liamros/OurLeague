@@ -5,13 +5,12 @@ import java.util.List;
 
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
-import it.our.league.riot.dto.Summoner;
 
 public interface LeagueSummonerManager {
 
     public String ping();
 
-    public Summoner insertSummoner(String summonerName);
+    public AppSummonerDTO insertSummoner(String summonerName);
 
     public String getGameNameByPuuid(String puuid);
 

@@ -20,7 +20,7 @@ import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
-import it.our.league.app.mongodb.repository.MatchRepository;
+import it.our.league.app.mongodb.repository.MongoMatchRepository;
 import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.Match;
@@ -42,7 +42,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Autowired
     private MatchInfoRepository matchInfoRepository;
     @Autowired
-    private MatchRepository matchRepository;
+    private MongoMatchRepository matchRepository;
 
      /**
      * Fetches from Riot APIs matchIds which don't exist on the DB.

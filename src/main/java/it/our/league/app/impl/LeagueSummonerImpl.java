@@ -56,7 +56,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             SummonerInfoJPA summonerJpa = LeagueAppUtility.generateSummonerInfoJpa(summonerDto);
             summonerJpa = summonerRepository.save(summonerJpa);
             response = LeagueAppUtility.generateAppSummonerDto(summonerJpa);
-            LOGGER.info("INFO: Persisted {}", summonerJpa);
+            LOGGER.info("Persisted {}", summonerJpa);
             List<RankInfoJPA> rankJpas = new ArrayList<>();
             for (RankInfo rankedInfoDto : rankedInfoDtos) {
                 RankInfoJPA rankJpa;
@@ -65,11 +65,11 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
                     continue;
                 rankJpas.add(rankJpa);
                 response.addRank(LeagueAppUtility.generateAppRankInfoDto(rankJpa));
-                LOGGER.info("INFO: Entity to persist {}", rankJpa);
+                LOGGER.info("Entity to persist {}", rankJpa);
             }
             rankRepository.saveAll(rankJpas);
         } catch (Exception e) {
-            LOGGER.error("ERROR: Error while performing insertSummoner", e);
+            LOGGER.error("Error while performing insertSummoner", e);
             throw new RuntimeException();
         }
         return response;
@@ -101,12 +101,12 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
                 if (rankJpa == null)
                     continue;
                 jpas.add(rankJpa);
-                LOGGER.info("INFO: Entity to persist {}", rankJpa);
+                LOGGER.info("Entity to persist {}", rankJpa);
             }
 
         }
         rankRepository.saveAll(jpas);
-        LOGGER.info("INFO: Persisted rankInfoJpas");
+        LOGGER.info("Persisted rankInfoJpas");
     }
 
     @Override
@@ -118,7 +118,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             jpa.setSummonerLevel(dto.getSummonerLevel());
             jpa.setSummonerIconId(dto.getProfileIconId());
             summonerRepository.updateSummonerLvlAndIcon(jpa.getId(), jpa.getSummonerLevel(), jpa.getSummonerIconId());
-            LOGGER.info("INFO: Updated SummonerInfo {}", jpa);
+            LOGGER.info("Updated SummonerInfo {}", jpa);
         }
         updateAllRanks(list);
     }

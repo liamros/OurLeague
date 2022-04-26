@@ -65,7 +65,7 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
                 try {
                     o = ((Advised) o).getTargetSource().getTarget();
                 } catch (Exception e) {
-                    LOGGER.error("ERROR: Error while getting target from CGLIB-generated subclass", e);
+                    LOGGER.error("Error while getting target from CGLIB-generated subclass", e);
                     throw new RuntimeException();
                 }
             }
@@ -76,11 +76,11 @@ public class RestAdapterProcessor implements BeanPostProcessor, ApplicationConte
                     if (field.getType().equals(raInterf))
                         field.set(o, proxy);
                 } catch (IllegalArgumentException | IllegalAccessException e) {
-                    LOGGER.error("ERROR: Error during restAdapter assignment", e);
+                    LOGGER.error("Error during restAdapter assignment", e);
                     throw new RuntimeException();
                 }
             }
-            LOGGER.info("INFO: Inizialized RestAdapter {} for {}", aBeanName, s);
+            LOGGER.info("Inizialized RestAdapter {} for {}", aBeanName, s);
         }
         return proxy;
 

@@ -91,7 +91,7 @@ public class RestAdapter implements InvocationHandler, InitializingBean {
                     LOGGER.info("KEKW");
             }
         } catch (Exception e) {
-            LOGGER.error("ERROR: Error occured while performing http call", e);
+            LOGGER.error("Error occured while performing http call", e);
             throw e;
         }
 
@@ -176,7 +176,7 @@ public class RestAdapter implements InvocationHandler, InitializingBean {
             response.close();
             throw new Exception(errMsg);
         }
-        LOGGER.info("INFO: Http call performed to {} with response code {}", request.getURI().toString(),
+        LOGGER.info("Http call performed to {} with response code {}", request.getURI().toString(),
                 response.getStatusLine().getStatusCode());
         HttpEntity entity = response.getEntity();
         Object dto;

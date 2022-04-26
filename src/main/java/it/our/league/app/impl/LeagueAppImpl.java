@@ -60,7 +60,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         listShowCaseUpdated.addAll(Arrays.asList(getHighestKDAShowcase(), getHighestWinrateShowcase(), getHighestRankShowcase()));
 
         showCaseDetailRepository.saveAll(listShowCaseUpdated);
-        LOGGER.info("INFO: Persisted {}", listShowCaseUpdated);
+        LOGGER.info("Persisted {}", listShowCaseUpdated);
     }
 
     @Override

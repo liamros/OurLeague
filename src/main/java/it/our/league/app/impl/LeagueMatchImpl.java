@@ -79,9 +79,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
                     filteredMatchIds.add(matchId);
             
             matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
-            LOGGER.info("INFO : Persisted {} new matches", filteredMatchIds.size());
+            LOGGER.info("Persisted {} new matches", filteredMatchIds.size());
             relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summoner.getSummInfoId(), matchIds));
-            LOGGER.info("INFO : Persisted {} new summoner-match relations", matchIds.size());
+            LOGGER.info("Persisted {} new summoner-match relations", matchIds.size());
             count+=matchIds.size();
         } while (matchIds.size() == 100);
         /**
@@ -105,13 +105,13 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             Match match = riotManager.getMatchById(matchId);
             MatchInfoJPA jpa = LeagueAppUtility.generateMatchInfoJpa(match);
             matchInfoRepository.save(jpa);
-            LOGGER.info("INFO : Persisted match {} to DB", matchId);
+            LOGGER.info("Persisted match {} to DB", matchId);
             int updatedRecords = populateRelSummonerMatchInfo(match);
-            LOGGER.info("INFO : Updated {} summoner-match rel by {}", updatedRecords, matchId);
+            LOGGER.info("Updated {} summoner-match rel by {}", updatedRecords, matchId);
             matchRepository.save(match);
-            LOGGER.info("INFO : Persisted match {} to MongoDB", matchId);
+            LOGGER.info("Persisted match {} to MongoDB", matchId);
         } catch (Exception e) {
-            LOGGER.error("ERROR : Error occured while performing operations with {}", matchId, e);
+            LOGGER.error("Error occured while performing operations with {}", matchId, e);
             if (e.getCause().getMessage().contains("Http request failed"))
                 throw e;
             return 0;
@@ -149,7 +149,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             }
 
         } catch (Exception e) {
-            LOGGER.error("ERROR: Error while performing getMatchesBySummInfoId", e);
+            LOGGER.error("Error while performing getMatchesBySummInfoId", e);
             throw new RuntimeException();
         }
         return matches;

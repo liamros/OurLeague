@@ -1,6 +1,7 @@
 package it.our.league.app.impl.persistence.repository;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -38,4 +39,20 @@ public interface RelSummonerMatchRepository extends CrudRepository<RelSummonerMa
     value= "SELECT count(m.match_id) FROM summoner_info s, match_info m, rel_summoner_match rel WHERE s.id = rel.summ_info_id AND m.match_id = rel.match_id AND m.patch IS NULL AND s.puuid = ?",
     nativeQuery = true)
     public Integer getNumberOfPendingMatches(String puuid);
+
+    public List<RelSummonerMatchJPA> findByMatchId(String matchId);
+
+    @Query(
+    value = "SELECT * FROM rel_summoner_match WHERE match_id = ? AND win IS NULL",
+    nativeQuery = true
+    )
+    public List<RelSummonerMatchJPA> findUncompleteByMatchId(String matchId);
+
+    @Query(
+    value = "SELECT * FROM rel_summoner_match WHERE win IS NULL",
+    nativeQuery = true
+    )
+    public List<RelSummonerMatchJPA> findAllUncomplete();
+
+    
 }

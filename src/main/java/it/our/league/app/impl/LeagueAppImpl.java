@@ -75,7 +75,7 @@ public class LeagueAppImpl implements LeagueAppManager {
 
 
 
-    private ShowCaseDetailJPA generateLowerWinRate() {
+    public ShowCaseDetailJPA generateLowerWinRate() {
 
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
         AppSummonerDTO summoner = leagueSummonerImpl.getLowestWinrateSummoner();
@@ -92,7 +92,7 @@ public class LeagueAppImpl implements LeagueAppManager {
     }
 
     @Deprecated
-    private ShowCaseDetailJPA generateLowerKda() {
+    public ShowCaseDetailJPA generateLowerKda() {
 
         ShowCaseDetailJPA showCaseJpa = new ShowCaseDetailJPA();
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();

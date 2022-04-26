@@ -2,24 +2,29 @@ package it.our.league.app.impl;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
+import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.repository.MatchInfoRepository;
 import it.our.league.app.impl.persistence.repository.RelSummonerMatchRepository;
 import it.our.league.app.mongodb.repository.MatchRepository;
 import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.riot.RiotManagerInterface;
 import it.our.league.riot.dto.Match;
+import it.our.league.riot.dto.Participant;
 
 public class LeagueMatchImpl implements LeagueMatchManager {
 
@@ -94,12 +99,15 @@ public class LeagueMatchImpl implements LeagueMatchManager {
      * 
      */
     @Override
-    public int completeMatchData(String matchId) {
+    @Transactional
+    public int populateMatchData(String matchId) {
         try {
             Match match = riotManager.getMatchById(matchId);
             MatchInfoJPA jpa = LeagueAppUtility.generateMatchInfoJpa(match);
             matchInfoRepository.save(jpa);
             LOGGER.info("INFO : Persisted match {} to DB", matchId);
+            int updatedRecords = populateRelSummonerMatchInfo(match);
+            LOGGER.info("INFO : Updated {} summoner-match rel by {}", updatedRecords, matchId);
             matchRepository.save(match);
             LOGGER.info("INFO : Persisted match {} to MongoDB", matchId);
         } catch (Exception e) {
@@ -118,13 +126,13 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     }
 
     @Override
-    public int populateMatchInfo() {
+    public int populateAllMatchData() {
         List<String> matchIds = matchInfoRepository.getAllPendingMatches();
         int count = 0;
 
         for (String matchId : matchIds)
-            count += completeMatchData(matchId);
-           
+            count += populateMatchData(matchId);
+        
         return count;
     }
 
@@ -150,6 +158,54 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Override
     public List<Match> getAllMatchesByPuuid(String puuid) {
         return matchRepository.findMatchesByPuuid(puuid);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    private int populateRelSummonerMatchInfo(Match match) {
+        List<RelSummonerMatchJPA> list = relSummonerMatchRepository.findUncompleteByMatchId(match.getMetadata().getMatchId());
+        for (RelSummonerMatchJPA rsm : list) {
+            Participant p = LeagueAppUtility.getParticipantByMatch(match, rsm.getSummoner().getPuuid());
+            LeagueAppUtility.completeRelSummonerMatchJpa(rsm, p);
+        }
+        relSummonerMatchRepository.saveAll(list);
+        return list.size();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int alignRelSummonerMatches() {
+
+        List<RelSummonerMatchJPA> rsms = relSummonerMatchRepository.findAllUncomplete();
+        if(rsms.isEmpty())
+            return 0;
+        
+        Map<String, List<RelSummonerMatchJPA>> map = new HashMap<>();
+
+        for (RelSummonerMatchJPA rsm : rsms) {
+            List<RelSummonerMatchJPA> list = map.getOrDefault(rsm.getMatchId(), new ArrayList<>());
+            list.add(rsm);
+            map.putIfAbsent(rsm.getMatchId(), list);
+        }
+        int updatedRecords = 0;
+        for (Map.Entry<String, List<RelSummonerMatchJPA>> entry : map.entrySet()) {
+            List<Match> matches = matchRepository.findMatchesByMatchId(entry.getKey());
+            Match match;
+            if (matches.isEmpty()) {
+                LOGGER.error("{} not present in MongoDB", entry.getKey());
+                match = riotManager.getMatchById(entry.getKey());
+                matchRepository.insert(match);
+                LOGGER.info("Persisted match {} to MongoDB", entry.getKey());
+            } else
+                match = matches.get(0);
+            for (RelSummonerMatchJPA rsm : entry.getValue()) {
+                Participant p = LeagueAppUtility.getParticipantByMatch(match, rsm.getSummoner().getPuuid());
+                LeagueAppUtility.completeRelSummonerMatchJpa(rsm, p);
+            }
+            relSummonerMatchRepository.saveAll(entry.getValue());
+            LOGGER.info("Updated {} rel summoner-matches for {}", entry.getValue().size(), entry.getKey());
+            updatedRecords += entry.getValue().size();
+        }
+
+        return updatedRecords;
     }
     
 }

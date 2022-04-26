@@ -38,6 +38,14 @@ public class RelSummonerMatchJPA {
     @Id
     @Column(name = "MATCH_ID")
     private String matchId;
+    @Column(name = "KILLS")
+    private Integer kills;
+    @Column(name = "DEATHS")
+    private Integer deaths;
+    @Column(name = "ASSISTS")
+    private Integer assists;
+    @Column(name = "CHAMPION_NAME")
+    private String championName;
     @Column(name = "WIN")
     private Boolean win;
     @Column(name = "UPDATE_TIME")
@@ -59,6 +67,30 @@ public class RelSummonerMatchJPA {
     }
     public void setMatchId(String matchId) {
         this.matchId = matchId;
+    }
+    public Integer getKills() {
+        return kills;
+    }
+    public void setKills(Integer kills) {
+        this.kills = kills;
+    }
+    public Integer getDeaths() {
+        return deaths;
+    }
+    public void setDeaths(Integer deaths) {
+        this.deaths = deaths;
+    }
+    public Integer getAssists() {
+        return assists;
+    }
+    public void setAssists(Integer assists) {
+        this.assists = assists;
+    }
+    public String getChampionName() {
+        return championName;
+    }
+    public void setChampionName(String championName) {
+        this.championName = championName;
     }
     public Boolean getWin() {
         return win;

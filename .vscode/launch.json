@@ -15,7 +15,7 @@
             "name": "Launch OurLeagueApplication",
             "request": "launch",
             "mainClass": "it.our.league.OurLeagueApplication",
-            "projectName": "clowngg"
+            "projectName": "league"
         },
         {
             "type": "pwa-chrome",

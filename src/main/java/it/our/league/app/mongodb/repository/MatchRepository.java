@@ -12,4 +12,7 @@ public interface MatchRepository extends MongoRepository<Match, String> {
     @Query("{ 'metadata.participants' : { $all: [?0] } }")
     public List<Match> findMatchesByPuuid(String puuid);
 
+    @Query("{ 'metadata.matchId' : ?0 }")
+    public List<Match> findMatchesByMatchId(String matchId);
+
 }

@@ -14,6 +14,7 @@ import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
 
+// TODO add security
 @RestController
 @RequestMapping("match")
 public class LeagueMatchController implements LeagueMatchManager {
@@ -28,8 +29,8 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @PostMapping("/completeMatchData")
-    public int completeMatchData(@RequestBody String matchId) {
-        return leagueMatchImpl.completeMatchData(matchId);
+    public int populateMatchData(@RequestBody String matchId) {
+        return leagueMatchImpl.populateMatchData(matchId);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class LeagueMatchController implements LeagueMatchManager {
 
     @Override
     @GetMapping("/populateMatchInfo")
-    public int populateMatchInfo() {
-        return leagueMatchImpl.populateMatchInfo();
+    public int populateAllMatchData() {
+        return leagueMatchImpl.populateAllMatchData();
     }
 
     @Override
@@ -51,10 +52,15 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    // TODO add security
     @GetMapping("/getAllMatchesByPuuid")
     public List<Match> getAllMatchesByPuuid(@RequestParam String puuid) {
         return leagueMatchImpl.getAllMatchesByPuuid(puuid);
+    }
+
+    @Override
+    @GetMapping("/alignRelSummonerMatches")
+    public int alignRelSummonerMatches() {
+        return leagueMatchImpl.alignRelSummonerMatches();
     }
     
 }

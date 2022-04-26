@@ -234,4 +234,12 @@ public final class LeagueAppUtility {
         Float totalKDA = totalDeaths != 0 ? ((float) totalKills+ (float) totalAssists)/(float) totalDeaths : 0;
         return totalKDA;
     }
+
+    public static void completeRelSummonerMatchJpa(RelSummonerMatchJPA rsm, Participant p) {
+        rsm.setChampionName(p.getChampionName());
+        rsm.setKills(p.getKills());
+        rsm.setDeaths(p.getDeaths());
+        rsm.setAssists(p.getAssists());
+        rsm.setWin(p.getWin());
+    }
 }

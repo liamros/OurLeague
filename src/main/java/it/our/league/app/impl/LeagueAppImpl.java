@@ -28,7 +28,7 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueAppImpl.class);
 
-    private static Thread t = new Thread();
+    private Thread t;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -129,17 +129,15 @@ public class LeagueAppImpl implements LeagueAppManager {
     }
 
     @Override
-    public String asyncronousDataRefresh() {
-        // TODO find another way to handle this
-        synchronized(t) {
-            if (t != null && t.isAlive())
-                return "KO";
-            
-            Runnable dataRefreshRunnable = new DataRefreshRunnable();
-            applicationContext.getAutowireCapableBeanFactory().autowireBean(dataRefreshRunnable);
-            t = new Thread(dataRefreshRunnable);
-            t.start();
-        }
+    public synchronized String asyncronousDataRefresh() {
+        // TODO find another way to handle this (implement a threadHandler)
+        if (t != null && t.isAlive())
+            return "KO";
+
+        Runnable dataRefreshRunnable = new DataRefreshRunnable();
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(dataRefreshRunnable);
+        t = new Thread(dataRefreshRunnable);
+        t.start();
         return "OK";
     }
 

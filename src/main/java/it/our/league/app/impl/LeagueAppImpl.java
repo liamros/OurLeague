@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -233,33 +235,30 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     private ShowCaseRankingJPA getHighestKillShowcase(List<AppSummonerDTO> summoners) {
 
-        AppSummonerDTO finalSummoner = null;
-        AppParticipantInfoDTO highestKills = null;
+        Queue<AppParticipantInfoDTO> maxHeap = new PriorityQueue<>((a, b) -> {
+            if (a.getKills() == b.getKills()) {
+                if (a.getKills() == b.getKills()) {
+                    float bKda = LeagueAppUtility.calculateKDA(b.getKills(), b.getDeaths(), b.getAssists());
+                    float aKda = LeagueAppUtility.calculateKDA(a.getKills(), a.getDeaths(), a.getAssists());
+                    if (bKda > aKda)
+                        return 1;
+                    return -1;
+                }
+            }
+            return b.getKills()-a.getKills();
+        });
 
         for (AppSummonerDTO summoner : summoners) {
             AppParticipantInfoDTO p = leagueMatchImpl.getHighestKillParticipantInfo(summoner.getPuuid());
-            if (highestKills == null || highestKills.getKills() < p.getKills()) {
-                highestKills = p;
-                finalSummoner = summoner;
-                continue;
-            }
-            if (highestKills.getKills() == p.getKills()) {
-                float pKda = LeagueAppUtility.calculateKDA(p.getKills(), p.getDeaths(), p.getAssists());
-                float hKda = LeagueAppUtility.calculateKDA(highestKills.getKills(), highestKills.getDeaths(),
-                        highestKills.getAssists());
-                if (pKda > hKda) {
-                    highestKills = p;
-                    finalSummoner = summoner;
-                    continue;
-                }
-            }
+            maxHeap.add(p);
         }
+        AppParticipantInfoDTO p = maxHeap.poll();
         ShowCaseRankingJPA jpa = new ShowCaseRankingJPA();
         jpa.setStatName(ShowCaseType.HIGHEST_KILLS.statName());
-        jpa.setSummInfoId(finalSummoner.getSummInfoId());
-        jpa.setValue((float) highestKills.getKills());
+        jpa.setSummInfoId(p.getSummInfoId());
+        jpa.setValue((float) p.getKills());
         jpa.setDescription(
-                MessageFormat.format("{0} Kills with {1}", highestKills.getKills(), highestKills.getChampionName()));
+                MessageFormat.format("{0} Kills with {1}", p.getKills(), p.getChampionName()));
         return jpa;
     }
     

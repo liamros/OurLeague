@@ -2,13 +2,13 @@ package it.our.league.app;
 
 import java.util.List;
 
-import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 
 public interface LeagueAppManager {
     
-    public List<AppShowCaseDetailDTO> getShowCaseDetails();
+    public List<AppShowCaseRankingDTO> getShowCaseRankings();
 
-    public void updateShowCaseDetails();
+    public void updateShowCaseRankings();
 
     public List<Float> getWinRateByPuuid(String puuid);
 

@@ -44,9 +44,7 @@ const ShowCaseDetail = (props) => {
 
                                     <Typography style={styles.typographyTitle}>{summonerName}</Typography>
                                     <Typography style={styles.typography}>{statName}</Typography>
-                                    {value ?
-                                        <Typography style={styles.typography}>{value}</Typography>
-                                        : <Typography style={styles.typography}>{description}</Typography>}
+                                    <Typography style={styles.typography}>{description}</Typography>
                                 </motion.div>
 
 

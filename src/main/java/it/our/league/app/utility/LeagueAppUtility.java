@@ -6,12 +6,12 @@ import java.util.List;
 
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
-import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.MatchInfoJPA;
 import it.our.league.app.impl.persistence.entity.RankInfoJPA;
 import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
-import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
+import it.our.league.app.impl.persistence.entity.ShowCaseRankingJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.LeagueQueueType;
 import it.our.league.common.constants.RankedTierType;
@@ -102,8 +102,8 @@ public final class LeagueAppUtility {
         return dto;
     }
 
-    public static AppShowCaseDetailDTO generateAppShowCaseDetailDTO(ShowCaseDetailJPA jpa, AppRankInfoDTO rank) {
-        AppShowCaseDetailDTO dto = new AppShowCaseDetailDTO();
+    public static AppShowCaseRankingDTO generateAppShowCaseDetailDTO(ShowCaseRankingJPA jpa, AppRankInfoDTO rank) {
+        AppShowCaseRankingDTO dto = new AppShowCaseRankingDTO();
         dto.setStatName(jpa.getStatName());
         dto.setSummonerName(jpa.getSummoner().getGameName());
         dto.setValue(jpa.getValue());

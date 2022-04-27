@@ -2,20 +2,28 @@ package it.our.league.app.impl.persistence.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "SHOWCASE_DETAIL")
-public class ShowCaseDetailJPA {
+@Table(name = "SHOWCASE_RANKING")
+public class ShowCaseRankingJPA {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @Column(name = "STAT_NAME")
     private String statName;
     @Column(name = "SUMM_INFO_ID")
     private Integer summInfoId;
+    @Column(name = "POSITION")
+    private Integer position;
+    @Column(name = "PREV_POSITION")
+    private Integer prevPosition;
     @Column(name = "VALUE")
     private Float value;
     @Column(name = "DESCRIPTION")
@@ -24,7 +32,13 @@ public class ShowCaseDetailJPA {
     @JoinColumn(name="SUMM_INFO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private SummonerInfoJPA summoner;
 
-
+    public Integer getId() {
+        return id;
+    }
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
     
     public String getStatName() {
         return statName;
@@ -40,6 +54,22 @@ public class ShowCaseDetailJPA {
 
     public void setSummInfoId(Integer summInfoId) {
         this.summInfoId = summInfoId;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public Integer getPrevPosition() {
+        return prevPosition;
+    }
+
+    public void setPrevPosition(Integer prevPosition) {
+        this.prevPosition = prevPosition;
     }
 
     public Float getValue() {
@@ -62,9 +92,6 @@ public class ShowCaseDetailJPA {
         return summoner;
     }
 
-    public void setSummoner(SummonerInfoJPA summoner) {
-        this.summoner = summoner;
-    }
 
     @Override
     public String toString() {

@@ -51,9 +51,7 @@ const ShowCaseItem = ({ id, showCaseDetails }) => {
 
                             <Typography style={styles.typographyTitle}>{summonerName}</Typography>
                             <Typography style={styles.typography}>{id}</Typography>
-                            {value ?
-                                <Typography style={styles.typography}>{value}</Typography>
-                                : <Typography style={styles.typography}>{description}</Typography>}
+                            <Typography style={styles.typography}>{description}</Typography>
                         </motion.div>
                         <motion.div style={styles.typography} animate>
                             <Typography style={styles.typographyTitle}>{queueType}</Typography>

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueAppManager;
-import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
+import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 
 @RestController
 // CrossOrigin only for development purposes
@@ -23,14 +23,14 @@ public class LeagueAppController implements LeagueAppManager {
 
     @Override
     @GetMapping("/getShowCaseDetails")
-    public List<AppShowCaseDetailDTO> getShowCaseDetails() {
-        return leagueAppImpl.getShowCaseDetails();
+    public List<AppShowCaseRankingDTO> getShowCaseRankings() {
+        return leagueAppImpl.getShowCaseRankings();
     }
 
     @Override
     @GetMapping("/updateShowCaseDetails")
-    public void updateShowCaseDetails() {
-        leagueAppImpl.updateShowCaseDetails();
+    public void updateShowCaseRankings() {
+        leagueAppImpl.updateShowCaseRankings();
     }
 
     @Override

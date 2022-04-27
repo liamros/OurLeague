@@ -2,7 +2,9 @@ package it.our.league.app.utility;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
@@ -277,5 +279,16 @@ public final class LeagueAppUtility {
         Float a = (float) assists;
         Float d = deaths == 0 ? (float) 0.5 : (float) deaths;
         return (k+a)/d;
+    }
+
+    public static Map<Integer, List<ShowCaseRankingJPA>> groupBySummId(List<ShowCaseRankingJPA> list) {
+        Map<Integer, List<ShowCaseRankingJPA>> map = new HashMap<>();
+
+        for (ShowCaseRankingJPA e : list) {
+            List<ShowCaseRankingJPA> l = map.getOrDefault(e.getSummInfoId(), new ArrayList<>());
+            l.add(e);
+            map.putIfAbsent(e.getSummInfoId(), l);
+        }
+        return map;
     }
 }

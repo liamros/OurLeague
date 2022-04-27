@@ -213,5 +213,12 @@ public class LeagueMatchImpl implements LeagueMatchManager {
                 .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch().getQueueTypeId(), puuid)));
         return out;
     }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid) {
+        RelSummonerMatchJPA rsm = relSummonerMatchRepository.findHighestKillByPuuid(puuid);
+        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch().getQueueTypeId(), puuid);
+    }
     
 }

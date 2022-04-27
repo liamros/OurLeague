@@ -63,7 +63,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         List<ShowCaseDetailJPA> listShowCaseUpdated = new ArrayList<>();
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         listShowCaseUpdated.addAll(Arrays.asList(getHighestKDAShowcase(summoners), getHighestWinrateShowcase(summoners),
-                getHighestRankShowcase(summoners)));
+            getHighestKillShowcase(summoners)));
         showCaseDetailRepository.saveAll(listShowCaseUpdated);
         LOGGER.info("Persisted {}", listShowCaseUpdated);
     }
@@ -206,6 +206,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         return jpa;
     }
 
+    @SuppressWarnings("unused")
     private ShowCaseDetailJPA getHighestRankShowcase(List<AppSummonerDTO> summoners) {
 
         AppRankInfoDTO highestRank = null;
@@ -225,6 +226,37 @@ public class LeagueAppImpl implements LeagueAppManager {
         jpa.setDescription(
                 MessageFormat.format("{0} {1} {2}LP in {3}", highestRank.getTier(), highestRank.getDivision(),
                         highestRank.getLp(), LeagueQueueType.getById(highestRank.getQueueTypeId()).description()));
+        return jpa;
+    }
+
+    private ShowCaseDetailJPA getHighestKillShowcase(List<AppSummonerDTO> summoners) {
+
+        AppSummonerDTO finalSummoner = null;
+        AppParticipantInfoDTO highestKills = null;
+
+        for (AppSummonerDTO summoner : summoners) {
+            AppParticipantInfoDTO p = leagueMatchImpl.getHighestKillParticipantInfo(summoner.getPuuid());
+            if (highestKills == null || highestKills.getKills() < p.getKills()) {
+                highestKills = p;
+                finalSummoner = summoner;
+                continue;
+            }
+            if (highestKills.getKills() == p.getKills()) {
+                float pKda = LeagueAppUtility.calculateKDA(p.getKills(), p.getDeaths(), p.getAssists());
+                float hKda = LeagueAppUtility.calculateKDA(highestKills.getKills(), highestKills.getDeaths(),
+                        highestKills.getAssists());
+                if (pKda > hKda) {
+                    highestKills = p;
+                    finalSummoner = summoner;
+                    continue;
+                }
+            }
+        }
+        ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
+        jpa.setStatName(ShowCaseType.HIGHEST_KILLS.statName());
+        jpa.setSummInfoId(finalSummoner.getSummInfoId());
+        jpa.setDescription(
+                MessageFormat.format("{0} Kills with {1}", highestKills.getKills(), highestKills.getChampionName()));
         return jpa;
     }
     

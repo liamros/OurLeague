@@ -271,4 +271,11 @@ public final class LeagueAppUtility {
         rsm.setAssists(p.getAssists());
         rsm.setWin(p.getWin());
     }
+
+    public static Float calculateKDA(Integer kills, Integer deaths, Integer assists) {
+        Float k = (float) kills;
+        Float a = (float) assists;
+        Float d = deaths == 0 ? (float) 0.5 : (float) deaths;
+        return (k+a)/d;
+    }
 }

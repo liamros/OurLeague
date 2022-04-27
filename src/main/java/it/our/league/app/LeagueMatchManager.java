@@ -28,4 +28,6 @@ public interface LeagueMatchManager {
 
     public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(String puuid);
 
+    public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid);
+
 }

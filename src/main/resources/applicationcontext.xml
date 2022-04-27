@@ -104,10 +104,11 @@
       <!-- MONGODB CONFIG -->
       <mongo:mongo-client id="mongoClient" connection-string="mongodb+srv://${mongodb.user}:${mongodb.password}@${mongodb.host}/${mongodb.db}"/>
       <mongo:db-factory id="mongoDbFactory" dbname="${mongodb.db}" mongo-client-ref="mongoClient" />
-      <!-- <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> 
+      <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> 
             <constructor-arg ref="mongoDbFactory"/> 
-      </bean> -->
+      </bean>
       <mongo:repositories base-package="it.our.league.app.mongodb.repository"/>
       <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+      <bean id="mongoMatchDAO" class="it.our.league.app.mongodb.MongoMatchDAO"/>
 
 </beans>

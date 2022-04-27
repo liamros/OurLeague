@@ -1,7 +1,6 @@
 package it.our.league.app.impl.persistence.entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,8 +47,6 @@ public class RelSummonerMatchJPA {
     private String championName;
     @Column(name = "WIN")
     private Boolean win;
-    @Column(name = "UPDATE_TIME")
-    private Timestamp updateTime;
     @ManyToOne
     @JoinColumn(name="SUMM_INFO_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private SummonerInfoJPA summoner;
@@ -98,12 +95,6 @@ public class RelSummonerMatchJPA {
     public void setWin(Boolean win) {
         this.win = win;
     }
-    public Timestamp getUpdateTime() {
-        return updateTime;
-    }
-    public void setUpdateTime(Timestamp updateTime) {
-        this.updateTime = updateTime;
-    }
     public SummonerInfoJPA getSummoner() {
         return summoner;
     }
@@ -112,8 +103,7 @@ public class RelSummonerMatchJPA {
     }
     @Override
     public String toString() {
-        return "RelSummonerMatchJPA [matchId=" + matchId + ", summInfoId=" + summInfoId + ", updateTime=" + updateTime
-                + ", win=" + win + "]";
+        return "RelSummonerMatchJPA [matchId=" + matchId + ", summInfoId=" + summInfoId + ", win=" + win + "]";
     }
 
 }

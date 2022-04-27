@@ -2,8 +2,10 @@ package it.our.league.app;
 
 import java.util.List;
 
+import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
+import it.our.league.riot.dto.Participant;
 
 public interface LeagueMatchManager {
     
@@ -16,11 +18,14 @@ public interface LeagueMatchManager {
     // provisory
     public int populateAllMatchData();
 
-    @Deprecated
-    public List<Match> getMatchesByPuuid(String puuid, String queueType, Integer count);
-
     public List<Match> getAllMatchesByPuuid(String puuid);
 
     public int alignRelSummonerMatches();
+
+    public List<Participant> getAllMatchStatisticsByPuuid(String puuid);
+
+    public AppParticipantInfoDTO getParticipantInfo(String matchId, String puuid);
+
+    public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(String puuid);
 
 }

@@ -3,7 +3,9 @@ package it.our.league.app.impl;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import it.our.league.app.LeagueAppManager;
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
+import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
@@ -20,6 +23,7 @@ import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
 import it.our.league.app.impl.persistence.repository.ShowCaseDetailRepository;
 import it.our.league.app.thread.DataRefreshRunnable;
 import it.our.league.app.utility.LeagueAppUtility;
+import it.our.league.common.constants.LeagueQueueType;
 import it.our.league.common.constants.ShowCaseType;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
@@ -57,8 +61,9 @@ public class LeagueAppImpl implements LeagueAppManager {
     public void updateShowCaseDetails() {
 
         List<ShowCaseDetailJPA> listShowCaseUpdated = new ArrayList<>();
-        listShowCaseUpdated.addAll(Arrays.asList(getHighestKDAShowcase(), getHighestWinrateShowcase(), getHighestRankShowcase()));
-
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        listShowCaseUpdated.addAll(Arrays.asList(getHighestKDAShowcase(summoners), getHighestWinrateShowcase(summoners),
+                getHighestRankShowcase(summoners)));
         showCaseDetailRepository.saveAll(listShowCaseUpdated);
         LOGGER.info("Persisted {}", listShowCaseUpdated);
     }
@@ -142,49 +147,67 @@ public class LeagueAppImpl implements LeagueAppManager {
     }
 
 
-    private ShowCaseDetailJPA getHighestKDAShowcase() {
-        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+    private ShowCaseDetailJPA getHighestKDAShowcase(List<AppSummonerDTO> summoners) {
+
         AppSummonerDTO finalSummoner = null;
         Float higherKDA = Float.MIN_VALUE;
+        Integer queueTypeId = null;
         for (AppSummonerDTO summoner : summoners) {
-            List<Match> matches = leagueMatchImpl.getAllMatchesByPuuid(summoner.getPuuid());
-            Float currentKDA = LeagueAppUtility.getAverageKDA(matches, summoner.getPuuid());
-            if (higherKDA < currentKDA) {
-                finalSummoner = summoner;
-                higherKDA = currentKDA;
+            List<AppParticipantInfoDTO> participantInfos = leagueMatchImpl
+                    .getAllParticipantInfoByPuuid(summoner.getPuuid());
+            Map<Integer, List<AppParticipantInfoDTO>> participantInfoPerQueue = new HashMap<>();
+            for (AppParticipantInfoDTO p : participantInfos) {
+                if (!p.getQueueTypeId().equals(LeagueQueueType.RANKED_SOLO_5x5.id())
+                        && !p.getQueueTypeId().equals(LeagueQueueType.RANKED_FLEX_SR.id()))
+                    continue;
+                List<AppParticipantInfoDTO> l = participantInfoPerQueue.getOrDefault(p.getQueueTypeId(),
+                        new ArrayList<>());
+                l.add(p);
+                participantInfoPerQueue.putIfAbsent(p.getQueueTypeId(), l);
+            }
+            for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : participantInfoPerQueue.entrySet()) {
+                Float currentKDA = LeagueAppUtility.getAverageKDA(entry.getValue());
+                if (higherKDA < currentKDA) {
+                    finalSummoner = summoner;
+                    higherKDA = currentKDA;
+                    queueTypeId = entry.getKey();
+                }
             }
         }
         ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
         jpa.setStatName(ShowCaseType.BEST_KDA.statName());
         jpa.setSummInfoId(finalSummoner.getSummInfoId());
-        jpa.setDescription(String.format("%.1f", higherKDA));
+        jpa.setDescription(MessageFormat.format(String.format("%.1f in {0}", higherKDA),
+                LeagueQueueType.getById(queueTypeId).description()));
         return jpa;
     }
 
-    private ShowCaseDetailJPA getHighestWinrateShowcase() {
+    private ShowCaseDetailJPA getHighestWinrateShowcase(List<AppSummonerDTO> summoners) {
 
-        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         Float highestWinrate = Float.MIN_VALUE;
         AppSummonerDTO finalSummoner = null;
+        Integer queueTypeId = null;
         for (AppSummonerDTO summoner : summoners) {
             Float rankHighestWinrate = Float.MIN_VALUE;
-            for (AppRankInfoDTO rank : summoner.getRanks())
+            for (AppRankInfoDTO rank : summoner.getRanks()) {
                 rankHighestWinrate = Math.max(rankHighestWinrate, rank.getWinrate());
-            if (highestWinrate < rankHighestWinrate) {
-                highestWinrate = rankHighestWinrate;
-                finalSummoner = summoner;
+                if (highestWinrate < rankHighestWinrate) {
+                    highestWinrate = rankHighestWinrate;
+                    finalSummoner = summoner;
+                    queueTypeId = rank.getQueueTypeId();
+                }
             }
         }
         ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
         jpa.setStatName(ShowCaseType.BEST_WR.statName());
         jpa.setSummInfoId(finalSummoner.getSummInfoId());
-        jpa.setDescription(MessageFormat.format("{0}%", String.format("%.1f", highestWinrate)));
+        jpa.setDescription(MessageFormat.format("{0}% in {1}", String.format("%.1f", highestWinrate),
+                LeagueQueueType.getById(queueTypeId).description()));
         return jpa;
     }
 
-    private ShowCaseDetailJPA getHighestRankShowcase() {
+    private ShowCaseDetailJPA getHighestRankShowcase(List<AppSummonerDTO> summoners) {
 
-        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         AppRankInfoDTO highestRank = null;
         for (AppSummonerDTO summoner : summoners) {
             if (highestRank == null)
@@ -199,7 +222,9 @@ public class LeagueAppImpl implements LeagueAppManager {
         ShowCaseDetailJPA jpa = new ShowCaseDetailJPA();
         jpa.setStatName(ShowCaseType.HIGHEST_RANK.statName());
         jpa.setSummInfoId(highestRank.getSummInfoId());
-        jpa.setDescription(MessageFormat.format("{0} {1} {2}LP", highestRank.getTier(), highestRank.getDivision(), highestRank.getLp()));
+        jpa.setDescription(
+                MessageFormat.format("{0} {1} {2}LP in {3}", highestRank.getTier(), highestRank.getDivision(),
+                        highestRank.getLp(), LeagueQueueType.getById(highestRank.getQueueTypeId()).description()));
         return jpa;
     }
     

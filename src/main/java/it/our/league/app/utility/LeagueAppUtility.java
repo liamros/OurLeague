@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseDetailDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
@@ -12,7 +13,7 @@ import it.our.league.app.impl.persistence.entity.RankInfoJPA;
 import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.entity.ShowCaseDetailJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
-import it.our.league.common.constants.RankedQueueType;
+import it.our.league.common.constants.LeagueQueueType;
 import it.our.league.common.constants.RankedTierType;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
@@ -74,7 +75,7 @@ public final class LeagueAppUtility {
     public static RankInfoJPA generateRankInfoJpa(RankInfo dto, Integer summonerInfoId) {
         Integer queueTypeId;
         try {
-            queueTypeId = RankedQueueType.valueOf(dto.getQueueType()).id();
+            queueTypeId = LeagueQueueType.valueOf(dto.getQueueType()).id();
         } catch (IllegalArgumentException e) {
             return null;
         }
@@ -115,7 +116,7 @@ public final class LeagueAppUtility {
             dto.setLosses(0);
         } else {
 
-            dto.setQueueType(RankedQueueType.getById(rank.getQueueTypeId()).name());
+            dto.setQueueType(LeagueQueueType.getById(rank.getQueueTypeId()).name());
             dto.setTier(rank.getTier());
             dto.setDivision(rank.getDivision());
             dto.setLp(rank.getLp());
@@ -220,6 +221,34 @@ public final class LeagueAppUtility {
         return list;
     }
 
+    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA jpa, Integer queueTypeId, String puuid) {
+        AppParticipantInfoDTO dto = new AppParticipantInfoDTO();
+
+        dto.setSummInfoId(jpa.getSummInfoId());
+        dto.setPuuid(puuid);
+        dto.setChampionName(jpa.getChampionName());
+        dto.setQueueTypeId(queueTypeId);
+        dto.setKills(jpa.getKills());
+        dto.setDeaths(jpa.getDeaths());
+        dto.setAssists(jpa.getAssists());
+        dto.setMatchId(jpa.getMatchId());
+        dto.setWin(jpa.getWin());
+        return dto;
+    }
+    public static Float getAverageKDA(List<AppParticipantInfoDTO> participantInfos) {
+
+        Integer totalKills = 0;
+        Integer totalDeaths = 0;
+        Integer totalAssists = 0;
+        for (AppParticipantInfoDTO participantInfo : participantInfos) {
+            totalKills += participantInfo.getKills();
+            totalDeaths += participantInfo.getDeaths();
+            totalAssists += participantInfo.getAssists();
+        }
+        Float totalKDA = totalDeaths != 0 ? ((float) totalKills + (float) totalAssists)/(float) totalDeaths : 0;
+        return totalKDA;
+    }
+
     public static Float getAverageKDA(List<Match> matches, String puuid) {
 
         Integer totalKills = 0;
@@ -231,7 +260,7 @@ public final class LeagueAppUtility {
             totalDeaths += partecipant.getDeaths();
             totalAssists += partecipant.getAssists();
         }
-        Float totalKDA = totalDeaths != 0 ? ((float) totalKills+ (float) totalAssists)/(float) totalDeaths : 0;
+        Float totalKDA = totalDeaths != 0 ? ((float) totalKills + (float) totalAssists)/(float) totalDeaths : 0;
         return totalKDA;
     }
 

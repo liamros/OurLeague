@@ -54,5 +54,19 @@ public interface RelSummonerMatchRepository extends CrudRepository<RelSummonerMa
     )
     public List<RelSummonerMatchJPA> findAllUncomplete();
 
+    @Query(
+    value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND rsm.match_id = ? AND si.puuid = ?",
+    nativeQuery = true
+    )
+    public RelSummonerMatchJPA findByMatchIdAndPuuid(String matchId, String puuid);
+
+    @Query(
+    value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND si.puuid = ?",
+    nativeQuery = true
+    )
+    public List<RelSummonerMatchJPA> findByPuuid(String puuid);
+
+    
+
     
 }

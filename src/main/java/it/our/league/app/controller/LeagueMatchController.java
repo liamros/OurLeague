@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueMatchManager;
+import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
+import it.our.league.riot.dto.Participant;
 
 // TODO add security
 @RestController
@@ -46,12 +48,6 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    @GetMapping("/getMatches")
-    public List<Match> getMatchesByPuuid(@RequestParam String puuid, String queueType, Integer count) {
-        return leagueMatchImpl.getMatchesByPuuid(puuid, queueType, count);
-    }
-
-    @Override
     @GetMapping("/getAllMatchesByPuuid")
     public List<Match> getAllMatchesByPuuid(@RequestParam String puuid) {
         return leagueMatchImpl.getAllMatchesByPuuid(puuid);
@@ -61,6 +57,24 @@ public class LeagueMatchController implements LeagueMatchManager {
     @GetMapping("/alignRelSummonerMatches")
     public int alignRelSummonerMatches() {
         return leagueMatchImpl.alignRelSummonerMatches();
+    }
+
+    @Override
+    @GetMapping("/getAllMatchStatisticsByPuuid")
+    public List<Participant> getAllMatchStatisticsByPuuid(@RequestParam String puuid) {
+        return leagueMatchImpl.getAllMatchStatisticsByPuuid(puuid);
+    }
+
+    @Override
+    @GetMapping("/getParticipantInfo")
+    public AppParticipantInfoDTO getParticipantInfo(@RequestParam String matchId, String puuid) {
+        return leagueMatchImpl.getParticipantInfo(matchId, puuid);
+    }
+
+    @Override
+    @GetMapping("/getAllParticipantInfoByPuuid")
+    public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(@RequestParam String puuid) {
+        return leagueMatchImpl.getAllParticipantInfoByPuuid(puuid);
     }
     
 }

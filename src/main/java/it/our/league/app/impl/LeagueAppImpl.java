@@ -64,6 +64,7 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     @Transactional
+    // TODO update prevPosition of a rankingList only when at least one of its value changes
     public void updateShowCaseRankings() {
 
         List<ShowCaseRankingJPA> listShowCaseUpdated = new ArrayList<>();

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 
 
-const ShowCaseDetail = (props) => {
+const ShowCaseRanking = (props) => {
 
 
     const [stats, setStats] = React.useState(props.stats)
@@ -91,4 +91,4 @@ const styles = {
     }
 }
 
-export default ShowCaseDetail
+export default ShowCaseRanking

@@ -4,9 +4,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 
-const ShowCaseItem = ({ id, showCaseDetails }) => {
+const ShowCaseItem = ({ id, showCaseRankings }) => {
 
-    const stats = showCaseDetails[id]
+    const stats = showCaseRankings[id]
 
 
 
@@ -127,7 +127,7 @@ const styles = {
 
 function mapStateToProps(state) {
     return {
-        showCaseDetails: state.showCaseDetails,
+        showCaseRankings: state.showCaseRankings,
     }
 }
 

@@ -2,16 +2,16 @@ import { LinearProgress } from "@mui/material";
 import { AnimatePresence } from "framer-motion";
 import React from 'react';
 import { connect } from "react-redux";
-import { fetchShowCaseDetails } from "../../actions";
+import { fetchShowCaseRankings } from "../../actions";
 import ShowCaseItem from "./ShowCaseItem";
 import ShowCaseList from "./ShowCaseList";
 
-const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) => {
+const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }) => {
 
     
 
     React.useEffect(() => {
-        fetchShowCaseDetails()
+        fetchShowCaseRankings()
     }, [])
 
     let statName = null
@@ -22,9 +22,9 @@ const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) 
     console.log(statName)
     return (
         <>
-            {!isFetching && showCaseDetails ? (
+            {!isFetching && showCaseRankings ? (
                 <>
-                    <ShowCaseList selectedId={statName} showCaseDetails={showCaseDetails} />
+                    <ShowCaseList selectedId={statName} showCaseRankings={showCaseRankings} />
                     <AnimatePresence>
                         {statName && <ShowCaseItem id={statName} key="item" />}
                     </AnimatePresence>
@@ -37,14 +37,14 @@ const ShowCase = ({ match, showCaseDetails, isFetching, fetchShowCaseDetails }) 
 
 function mapStateToProps(state) {
     return {
-        showCaseDetails: state.showCaseDetails,
+        showCaseRankings: state.showCaseRankings,
         isFetching: state.isFetching,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchShowCaseDetails: () => dispatch(fetchShowCaseDetails())
+        fetchShowCaseRankings: () => dispatch(fetchShowCaseRankings())
     }
 }
 

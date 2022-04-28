@@ -46,17 +46,20 @@ public class LeagueAppImpl implements LeagueAppManager {
     private ShowCaseRankingRepository showCaseRankingRepository;
 
     @Override
-    public List<AppShowCaseRankingDTO> getShowCaseRankings() {
+    public Map<String, List<AppShowCaseRankingDTO>> getShowCaseRankings() {
 
-        Iterable<ShowCaseRankingJPA> list = showCaseRankingRepository.findAll();
-        List<AppShowCaseRankingDTO> dtos = new ArrayList<>();
-        for (ShowCaseRankingJPA showCaseDetailJpa : list) {
-            List<AppRankInfoDTO> ranks = leagueSummonerImpl.getRanksByPuuid(showCaseDetailJpa.getSummoner().getPuuid());
+        Iterable<ShowCaseRankingJPA> scrs = showCaseRankingRepository.findAll();
+        Map<String, List<AppShowCaseRankingDTO>> response = new HashMap<>();
+
+        for (ShowCaseRankingJPA showCaseRanking : scrs) {
+            List<AppShowCaseRankingDTO> l = response.getOrDefault(showCaseRanking.getStatName(), new ArrayList<>());
+            List<AppRankInfoDTO> ranks = leagueSummonerImpl.getRanksByPuuid(showCaseRanking.getSummoner().getPuuid());
             // provisory
             AppRankInfoDTO highestRank = LeagueAppUtility.getHighestRankFromDto(ranks);
-            dtos.add(LeagueAppUtility.generateAppShowCaseDetailDTO(showCaseDetailJpa, highestRank));
+            l.add(LeagueAppUtility.generateAppShowCaseDetailDTO(showCaseRanking, highestRank));
+            response.putIfAbsent(showCaseRanking.getStatName(), l);
         }
-        return dtos;
+        return response;
     }
 
     @Override

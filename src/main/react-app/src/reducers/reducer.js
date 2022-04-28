@@ -1,10 +1,10 @@
 
 const initialState = {
-    showCaseDetails : null,
+    showCaseRankings : null,
     isFetching : false
 }
 
-const showCaseDetails = (state = initialState, action) => {
+const showCaseRankings = (state = initialState, action) => {
     switch (action.type) {
         case 'INIT_SHOWCASE':
             return {
@@ -33,7 +33,7 @@ const showCaseDetails = (state = initialState, action) => {
 
             return {
                 ...state,
-                showCaseDetails: obj,
+                showCaseRankings: obj,
                 isFetching: false
             }
         default:
@@ -55,4 +55,4 @@ const getSummonerIcon = (profileIconNum) => {
     return img
 }
 
-export default showCaseDetails
+export default showCaseRankings

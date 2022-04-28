@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import * as React from 'react';
-import ShowCaseDetail from "./ShowCaseDetail";
+import ShowCaseRanking from "./ShowCaseRanking";
 
-const ShowCaseList = ({ selectedId, showCaseDetails }) => {
+const ShowCaseList = ({ selectedId, showCaseRankings }) => {
 
 
 
@@ -19,7 +19,7 @@ const ShowCaseList = ({ selectedId, showCaseDetails }) => {
 
     var rows = []
     let i = 0
-    for (let [statName, stats] of Object.entries(showCaseDetails)) {
+    for (let [statName, stats] of Object.entries(showCaseRankings)) {
         rows.push(
             <motion.div
                 key={i}
@@ -30,7 +30,7 @@ const ShowCaseList = ({ selectedId, showCaseDetails }) => {
                 variants={variants}
 
             >
-                <ShowCaseDetail key={i} name={statName} stats={stats} isSelected={statName === selectedId} />
+                <ShowCaseRanking key={i} name={statName} stats={stats} isSelected={statName === selectedId} />
             </motion.div>
         )
         i++

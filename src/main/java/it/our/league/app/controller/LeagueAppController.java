@@ -1,6 +1,7 @@
 package it.our.league.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,13 +23,13 @@ public class LeagueAppController implements LeagueAppManager {
     private LeagueAppManager leagueAppImpl;
 
     @Override
-    @GetMapping("/getShowCaseDetails")
-    public List<AppShowCaseRankingDTO> getShowCaseRankings() {
+    @GetMapping("/getShowCaseRankings")
+    public Map<String, List<AppShowCaseRankingDTO>> getShowCaseRankings() {
         return leagueAppImpl.getShowCaseRankings();
     }
 
     @Override
-    @GetMapping("/updateShowCaseDetails")
+    @GetMapping("/updateShowCaseRankings")
     public void updateShowCaseRankings() {
         leagueAppImpl.updateShowCaseRankings();
     }

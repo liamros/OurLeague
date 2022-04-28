@@ -34,6 +34,7 @@ const ShowCaseRanking = (props) => {
                                 style={styles.card}
                                 className="showcaseDetail"
                             >
+                                <Typography style={styles.typographyTitle}>{statName}</Typography>
                                 <motion.div layoutId={`card-content-${statName}`}>
                                     <CardMedia
                                         component="img"
@@ -42,8 +43,9 @@ const ShowCaseRanking = (props) => {
 
                                     />
 
-                                    <Typography style={styles.typographyTitle}>{summonerName}</Typography>
-                                    <Typography style={styles.typography}>{statName}</Typography>
+                                    
+                                    
+                                    <Typography fontWeight={"bold"} style={styles.typography}>{summonerName}</Typography>
                                     <Typography style={styles.typography}>{description}</Typography>
                                 </motion.div>
 
@@ -67,7 +69,8 @@ const styles = {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.0vw",
+        fontSize: "1.1vw",
+        marginTop: "3%",
     },
     card: {
         width: '100%',
@@ -80,7 +83,7 @@ const styles = {
         borderRadius: "50%",
         width: "20%",
         margin: "auto",
-        marginTop: "5%",
+        marginTop: "4%",
         border: "2px solid rgb(208, 168, 92)"
     },
     container: {

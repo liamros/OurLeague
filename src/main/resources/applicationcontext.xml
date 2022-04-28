@@ -102,7 +102,7 @@
       </bean>
 
       <!-- MONGODB CONFIG -->
-      <mongo:mongo-client id="mongoClient" connection-string="mongodb+srv://${mongodb.user}:${mongodb.password}@${mongodb.host}/${mongodb.db}"/>
+      <mongo:mongo-client id="mongoClient" connection-string="mongodb+srv://${mongodb.user}:${mongodb.password}@${mongodb.host}/${mongodb.db}?retryWrites=true&amp;w=majority"/>
       <mongo:db-factory id="mongoDbFactory" dbname="${mongodb.db}" mongo-client-ref="mongoClient" />
       <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate"> 
             <constructor-arg ref="mongoDbFactory"/> 

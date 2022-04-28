@@ -3,6 +3,8 @@ import { motion } from "framer-motion";
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
+import MaterialRankingTable from "../ranking/MaterialRankingTable";
+import RankingTable from "../ranking/RankingTable";
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
 
@@ -54,6 +56,30 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                             <Typography style={styles.typography}>{description}</Typography>
                         </motion.div>
                         <motion.div style={styles.typography} animate>
+                        <Typography style={styles.typographyTitle}>{queueType}</Typography>
+                            <CardMedia
+                                component="img"
+                                image={require(`../../img/rank/emblem_${tier}.png`)}
+                                style={styles.cardMediaRank}
+                            />
+                            
+                            {
+                                rank.division && rank.lp ?
+                                    (<>
+                                        <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP</Typography>
+                                    </>) : 
+                                    (<>
+                                        <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
+                                    </>)
+                            }
+                            {/* <MaterialRankingTable rankings={showCaseRankings[id]}/> */}
+                            <table id='rankings'>
+                                <tbody>
+                                    <RankingTable rankings={showCaseRankings[id]} />
+                                </tbody>
+                            </table>
+                        </motion.div>
+                        {/* <motion.div style={styles.typography} animate>
                             <Typography style={styles.typographyTitle}>{queueType}</Typography>
                             <CardMedia
                                 component="img"
@@ -72,7 +98,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                                         <Typography style={styles.typography}>0 LP</Typography>
                                     </>)
                             }
-                        </motion.div>
+                        </motion.div> */}
 
 
                     </Card>
@@ -112,7 +138,7 @@ const styles = {
         border: "2px solid rgb(208, 168, 92)"
     },
     cardMediaRank: {
-        width: "20%",
+        width: "15%",
         margin: "auto",
 
     },

@@ -69,3 +69,28 @@
   max-width: 700px;
   width: 90vw;
 }
+
+
+
+#rankings {
+  text-align: center;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  border: 3px solid rgb(208, 168, 92);
+  width: 80%;
+  margin: auto;
+}
+
+#rankings td, #rankings th {
+  border: 1px solid rgb(208, 168, 92);
+  padding: 8px;
+}
+
+/* #rankings tr:nth-child(even){background-color: lightblue;} */
+
+
+#rankings th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}

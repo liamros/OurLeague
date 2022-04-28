@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueAppManager;
+import it.our.league.app.controller.dto.AppLineChartDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 
 @RestController
@@ -44,6 +45,12 @@ public class LeagueAppController implements LeagueAppManager {
     @GetMapping("/asyncronousDataRefresh")
     public String asyncronousDataRefresh() {
         return leagueAppImpl.asyncronousDataRefresh();
+    }
+
+    @Override
+    @GetMapping("/getWinrateAllLineCharts")
+    public List<AppLineChartDTO> getWinrateAllLineCharts() {
+        return leagueAppImpl.getWinrateAllLineCharts();
     }
     
 }

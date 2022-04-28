@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.our.league.app.LeagueAppManager;
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
+import it.our.league.app.controller.dto.AppLineChartDTO;
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
@@ -313,6 +314,32 @@ public class LeagueAppImpl implements LeagueAppManager {
             results.add(jpa);
         }
         return results;
+    }
+
+    @Override
+    // TODO divide by queueId
+    public List<AppLineChartDTO> getWinrateAllLineCharts() {
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        List<AppLineChartDTO> response = new ArrayList<>();
+        for (AppSummonerDTO summoner : summoners) {
+            List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
+            AppLineChartDTO lineChart = new AppLineChartDTO();
+            lineChart.setId(summoner.getName());
+            int count = 0;
+            int wins = 0;
+            for (AppParticipantInfoDTO match : matches) {
+                count++;
+                if (match.getWin())
+                    wins++;
+                if (count%5 == 0)
+                    lineChart.addData(String.valueOf(count), ((float)wins*100/(float)count));
+            }
+            if (count < 5 && count > 0)
+                lineChart.addData(String.valueOf(count), ((float)wins*100/(float)count));
+            if (!lineChart.getData().isEmpty())
+                response.add(lineChart);
+        }
+        return response;
     }
 
 }

@@ -30,7 +30,7 @@ const ShowCaseList = ({ selectedId, showCaseRankings }) => {
                 variants={variants}
 
             >
-                <ShowCaseRanking key={i} name={statName} stats={stats} isSelected={statName === selectedId} />
+                <ShowCaseRanking key={i} name={statName} stats={stats[0]} isSelected={statName === selectedId} />
             </motion.div>
         )
         i++

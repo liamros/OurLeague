@@ -6,6 +6,8 @@ public class AppShowCaseRankingDTO {
     private String summonerName;
     private Float value;
     private String description;
+    private Integer position;
+    private Integer prevPosition;
     private Integer profileIconNum;
     
     // provisory
@@ -39,6 +41,18 @@ public class AppShowCaseRankingDTO {
     }
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Integer getPosition() {
+        return position;
+    }
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+    public Integer getPrevPosition() {
+        return prevPosition;
+    }
+    public void setPrevPosition(Integer prevPosition) {
+        this.prevPosition = prevPosition;
     }
     public Integer getProfileIconNum() {
         return profileIconNum;

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
 
-    const stats = showCaseRankings[id]
+    const stats = showCaseRankings[id][0]
 
 
 

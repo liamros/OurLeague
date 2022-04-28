@@ -14,22 +14,44 @@ const showCaseRankings = (state = initialState, action) => {
         case 'INIT_SHOWCASE_SUCCESS':
 
             const obj = {}
-            action.payload.map((element) => {
-                obj[element.statName] = {
-                    summonerName: element.summonerName,
-                    value: element.value,
-                    description: element.description,
-                    profileIcon: element.profileIcon,
-                    rank: {
-                        queueType: element.queueType,
-                        tier: element.tier,
-                        division: element.division,
-                        lp: element.lp,
-                        wins: element.wins,
-                        losses: element.losses
+            const map = new Map(Object.entries(action.payload))
+
+            map.forEach((value, key) => {
+                obj[key] = value.map((element) => {
+                    return {
+                        summonerName: element.summonerName,
+                        value: element.value,
+                        description: element.description,
+                        position: element.position,
+                        prevPosition: element.prevPosition,
+                        profileIcon: element.profileIcon,
+                        rank: {
+                            queueType: element.queueType,
+                            tier: element.tier,
+                            division: element.division,
+                            lp: element.lp,
+                            wins: element.wins,
+                            losses: element.losses
+                        }
                     }
-                }
+                })
             })
+            // action.payload.map((element) => {
+            //     obj[element.statName] = {
+            //         summonerName: element.summonerName,
+            //         value: element.value,
+            //         description: element.description,
+            //         profileIcon: element.profileIcon,
+            //         rank: {
+            //             queueType: element.queueType,
+            //             tier: element.tier,
+            //             division: element.division,
+            //             lp: element.lp,
+            //             wins: element.wins,
+            //             losses: element.losses
+            //         }
+            //     }
+            // })
 
             return {
                 ...state,

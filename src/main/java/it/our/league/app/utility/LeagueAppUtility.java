@@ -110,6 +110,8 @@ public final class LeagueAppUtility {
         dto.setSummonerName(jpa.getSummoner().getGameName());
         dto.setValue(jpa.getValue());
         dto.setDescription(jpa.getDescription());
+        dto.setPosition(jpa.getPosition());
+        dto.setPrevPosition(jpa.getPrevPosition());
         dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
 
         if (rank == null) {

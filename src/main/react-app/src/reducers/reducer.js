@@ -36,22 +36,6 @@ const showCaseRankings = (state = initialState, action) => {
                     }
                 })
             })
-            // action.payload.map((element) => {
-            //     obj[element.statName] = {
-            //         summonerName: element.summonerName,
-            //         value: element.value,
-            //         description: element.description,
-            //         profileIcon: element.profileIcon,
-            //         rank: {
-            //             queueType: element.queueType,
-            //             tier: element.tier,
-            //             division: element.division,
-            //             lp: element.lp,
-            //             wins: element.wins,
-            //             losses: element.losses
-            //         }
-            //     }
-            // })
 
             return {
                 ...state,

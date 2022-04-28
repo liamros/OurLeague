@@ -2,8 +2,8 @@ package it.our.league.common.constants;
 
 public enum LeagueQueueType {
     UNKNOWN(0, "Unknown"),
-    RANKED_SOLO_5x5(420, "Ranked Solo"),
-    RANKED_FLEX_SR(440, "Ranked Flex"),
+    RANKED_SOLO_5x5(420, "Solo/Duo"),
+    RANKED_FLEX_SR(440, "Flex"),
     CLASH(700, "Clash");
 
     private final Integer id;

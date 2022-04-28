@@ -53,10 +53,10 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
 
                             <Typography style={styles.typographyTitle}>{summonerName}</Typography>
                             <Typography style={styles.typography}>{id}</Typography>
-                            <Typography style={styles.typography}>{description}</Typography>
+                            {/* <Typography style={styles.typography}>{description}</Typography> */}
                         </motion.div>
                         <motion.div style={styles.typography} animate>
-                        <Typography style={styles.typographyTitle}>{queueType}</Typography>
+                        {/* <Typography style={styles.typographyTitle}>{queueType}</Typography> */}
                             <CardMedia
                                 component="img"
                                 image={require(`../../img/rank/emblem_${tier}.png`)}
@@ -66,7 +66,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                             {
                                 rank.division && rank.lp ?
                                     (<>
-                                        <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP</Typography>
+                                        <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
                                     </>) : 
                                     (<>
                                         <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>

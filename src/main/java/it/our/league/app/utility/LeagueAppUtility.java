@@ -115,13 +115,13 @@ public final class LeagueAppUtility {
         dto.setProfileIconNum(jpa.getSummoner().getSummonerIconId());
 
         if (rank == null) {
-            dto.setTier("UNRANKED");
+            dto.setTier("Unranked");
             dto.setWins(0);
             dto.setLosses(0);
         } else {
 
-            dto.setQueueType(LeagueQueueType.getById(rank.getQueueTypeId()).name());
-            dto.setTier(rank.getTier());
+            dto.setQueueType(LeagueQueueType.getById(rank.getQueueTypeId()).description());
+            dto.setTier(RankedTierType.valueOf(rank.getTier()).description());
             dto.setDivision(rank.getDivision());
             dto.setLp(rank.getLp());
             dto.setWins(rank.getWins());

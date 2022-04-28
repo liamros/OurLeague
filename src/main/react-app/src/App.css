@@ -79,6 +79,7 @@
   border: 3px solid rgb(208, 168, 92);
   width: 80%;
   margin: auto;
+  margin-bottom: 5%;
 }
 
 #rankings td, #rankings th {

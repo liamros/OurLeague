@@ -182,7 +182,7 @@ public class LeagueAppImpl implements LeagueAppManager {
                     Map<String, Object> m = new HashMap<>();
                     m.put("value", kda);
                     m.put("summInfoId", summoner.getSummInfoId());
-                    String desc = MessageFormat.format(String.format("%.1f in {0}", kda),
+                    String desc = MessageFormat.format(String.format("%.2f in {0}", kda),
                             LeagueQueueType.getById(entry.getKey()).description());
                     m.put("description", desc);
                     map = m;
@@ -210,7 +210,7 @@ public class LeagueAppImpl implements LeagueAppManager {
                 Map<String, Object> m = new HashMap<>();
                 m.put("summInfoId", rank.getSummInfoId());
                 m.put("value", rank.getWinrate());
-                String desc = MessageFormat.format("{0}% in {1}", String.format("%.1f", rank.getWinrate()),
+                String desc = MessageFormat.format("{0}% in {1}", String.format("%.2f", rank.getWinrate()),
                         LeagueQueueType.getById(rank.getQueueTypeId()).description());
                 m.put("description", desc);
                 if (highestRank == null) {
@@ -278,7 +278,7 @@ public class LeagueAppImpl implements LeagueAppManager {
             m.put("deaths", p.getDeaths());
             m.put("assists", p.getAssists());
             m.put("value", (float) p.getKills());
-            String desc = MessageFormat.format("{0} Kills with {1}", p.getKills(), p.getChampionName());
+            String desc = MessageFormat.format("{0} with {1}", p.getKills(), p.getChampionName());
             m.put("description", desc);
             maxHeap.offer(m);
         }

@@ -1,30 +1,46 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Hidden } from "@mui/material";
+import { LayoutGroup, motion } from "framer-motion";
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
+import LineChart from './components/charts/LineChart';
 import ResponsiveAppBar from './components/header/ResponsiveAppBar';
 import ShowCase from './components/showcase/ShowCase';
-import { AnimateSharedLayout } from "framer-motion";
-import LineChart from './components/charts/LineChart';
-import { Container } from '@nivo/core';
 
 function App() {
+  const variants = {
+    visible: {
+        opacity: 1,
+        transition: {
+            delay: 2.0,
+            duration: 1,
+        },
+    },
+    hidden: { opacity: 0 },
+}
   return (
     <div className="App">
-      <AnimateSharedLayout type="crossfade">
+      <LayoutGroup type="crossfade">
         <Router>
           <header>
             <ResponsiveAppBar />
             <Route path={["/:statName", "/"]} render={(props) => <ShowCase {...props} />} />
           </header>
 
+          <motion.div
+            style={{ height: "50vh", marginTop: "3%", padding: "0% 11.5%" }}
+            className={"container"}
+            initial="hidden"
+            animate="visible"
+            variants={variants}
+            >
+          <LineChart />
+        </motion.div>
 
 
-        </Router>
-      </AnimateSharedLayout>
-      <div style={{ height: "50vh", marginTop: "3%", padding: "0% 11.5%" }} className={"container"}>
-        <LineChart />
-      </div>
 
-    </div>
+      </Router>
+    </LayoutGroup>
+    </div >
   );
 }
 

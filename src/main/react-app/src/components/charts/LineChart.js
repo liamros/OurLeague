@@ -45,7 +45,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
     }
 
     return (
-        chart && <div style={{ height: "100%", border: "3px solid rgb(208, 168, 92)", borderRadius: "3px" }}>
+        chart && <div style={{ height: "100%", border: "3px solid rgb(208, 168, 92)", borderRadius: "3px", background: "rgb(6, 28, 37)" }}>
             {
 
                     (<ResponsiveLine

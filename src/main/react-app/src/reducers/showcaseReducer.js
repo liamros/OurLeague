@@ -1,6 +1,5 @@
 const initialState = {
     showCaseRankings: null,
-    wrLineChart: null,
     isFetching: false
 }
 

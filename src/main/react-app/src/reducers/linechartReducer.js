@@ -1,7 +1,6 @@
 const initialState = {
-    showCaseRankings: null,
     wrLineChart: null,
-    // isFetching: false
+    isFetched: false
 }
 
 export const winrateLineChart = (state = initialState, action) => {
@@ -9,13 +8,13 @@ export const winrateLineChart = (state = initialState, action) => {
         case 'INIT_WR_LINECHART':
             return {
                 ...state,
-                // isFetching: true
+                isFetched: false
             }
         case 'INIT_WR_LINECHART_SUCCESS':
             return {
                 ...state,
                 wrLineChart: action.payload,
-                // isFetching: false
+                isFetched: true
             }
         default:
             return state

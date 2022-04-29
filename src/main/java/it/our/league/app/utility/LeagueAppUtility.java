@@ -225,18 +225,21 @@ public final class LeagueAppUtility {
         return list;
     }
 
-    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA jpa, Integer queueTypeId, String puuid) {
+    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA jpa, MatchInfoJPA matchJpa, String puuid) {
         AppParticipantInfoDTO dto = new AppParticipantInfoDTO();
 
         dto.setSummInfoId(jpa.getSummInfoId());
         dto.setPuuid(puuid);
         dto.setChampionName(jpa.getChampionName());
-        dto.setQueueTypeId(queueTypeId);
+        dto.setQueueTypeId(matchJpa.getQueueTypeId());
         dto.setKills(jpa.getKills());
         dto.setDeaths(jpa.getDeaths());
         dto.setAssists(jpa.getAssists());
         dto.setMatchId(jpa.getMatchId());
         dto.setWin(jpa.getWin());
+        dto.setCreationTime(matchJpa.getGameCreationTime());
+        dto.setStartTime(matchJpa.getGameStartTime());
+        dto.setEndTime(matchJpa.getGameEndTime());
         return dto;
     }
     public static Float getAverageKDA(List<AppParticipantInfoDTO> participantInfos) {

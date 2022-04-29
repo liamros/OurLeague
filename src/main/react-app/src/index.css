@@ -10,6 +10,8 @@ body {
   display: flex;
   flex-flow: column;
   background-color: #F5F5F5;
+  background: rgb(6,28,37);
+  background: linear-gradient(0deg, rgba(6,28,37,1) 0%, rgba(255,255,255,1) 80%);
 }
 
 code {
@@ -21,6 +23,7 @@ html {
   margin: 0px;
   /* height: 100%; */
   width: 100%;
+  background: rgb(6,28,37);
 }
 
 @font-face {

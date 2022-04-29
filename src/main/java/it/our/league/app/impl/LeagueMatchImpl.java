@@ -202,7 +202,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public AppParticipantInfoDTO getParticipantInfo(String matchId, String puuid) {
         RelSummonerMatchJPA rsm = relSummonerMatchRepository.findByMatchIdAndPuuid(matchId, puuid);
-        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch().getQueueTypeId(), puuid);
+        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), puuid);
     }
 
     @Override
@@ -210,7 +210,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(String puuid) {
         List<AppParticipantInfoDTO> out = new ArrayList<>();
         relSummonerMatchRepository.findByPuuid(puuid)
-                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch().getQueueTypeId(), puuid)));
+                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), puuid)));
         return out;
     }
 
@@ -218,7 +218,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid) {
         RelSummonerMatchJPA rsm = relSummonerMatchRepository.findHighestKillByPuuid(puuid);
-        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch().getQueueTypeId(), puuid);
+        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), puuid);
     }
     
 }

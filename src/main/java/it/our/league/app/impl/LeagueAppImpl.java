@@ -2,6 +2,7 @@ package it.our.league.app.impl;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +66,8 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     @Transactional
-    // TODO update prevPosition of a rankingList only when at least one of its value changes
+    // TODO update prevPosition of a rankingList only when at least one of its value
+    // changes
     public void updateShowCaseRankings() {
 
         List<ShowCaseRankingJPA> listShowCaseUpdated = new ArrayList<>();
@@ -318,26 +320,43 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     // TODO divide by queueId
-    public List<AppLineChartDTO> getWinrateAllLineCharts() {
+    public List<AppLineChartDTO> getWinratePerMinuteChart() {
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
         List<AppLineChartDTO> response = new ArrayList<>();
         for (AppSummonerDTO summoner : summoners) {
             List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
             AppLineChartDTO lineChart = new AppLineChartDTO();
             lineChart.setId(summoner.getName());
-            int count = 0;
-            int wins = 0;
+            Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = new HashMap<>();
+            for (int i = 15; i <= 50; i+=5) 
+                matchesPerMinute.put(i, new ArrayList<>());
             for (AppParticipantInfoDTO match : matches) {
-                count++;
-                if (match.getWin())
-                    wins++;
-                if (count%15 == 0)
-                    lineChart.addData(String.valueOf(count), (wins*100/count));
+                Long endTime = match.getEndTime().getTime();
+                Long startTime = match.getStartTime().getTime();
+                Integer timeSlice = ((int) (endTime - startTime)) / 1000 / 60 / 5 * 5;
+                if (timeSlice < 15)
+                    continue;
+                if (timeSlice > 50)
+                    timeSlice =  50;
+                List<AppParticipantInfoDTO> l = matchesPerMinute.get(timeSlice);
+                l.add(match);
             }
-            // if (count < 5 && count > 0)
-            //     lineChart.addData(String.valueOf(count), (wins*100/count));
-            if (!lineChart.getData().isEmpty())
+            for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : matchesPerMinute.entrySet()) {
+                if (entry.getValue().isEmpty()) {
+                    lineChart.addData(String.valueOf(entry.getKey()), (float) 0);
+                }
+                Integer wins = 0;
+                for (AppParticipantInfoDTO p : entry.getValue())
+                    if (p.getWin())
+                        wins++;
+                lineChart.addData(String.valueOf(entry.getKey()), (float) wins / (float) entry.getValue().size());
+            }
+            if (!lineChart.getData().isEmpty()) {
+                Collections.sort(lineChart.getData(), (a, b) -> {
+                    return Integer.parseInt(a.getX()) - Integer.parseInt(b.getX());
+                });
                 response.add(lineChart);
+            }
         }
         return response;
     }

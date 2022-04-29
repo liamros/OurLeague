@@ -1,5 +1,7 @@
 package it.our.league.app.controller.dto;
 
+import java.sql.Timestamp;
+
 public class AppParticipantInfoDTO {
     
     private Integer summInfoId;
@@ -11,6 +13,9 @@ public class AppParticipantInfoDTO {
     private Integer assists;
     private String championName;
     private Boolean win;
+    private Timestamp creationTime;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
 
     public Integer getSummInfoId() {
@@ -66,7 +71,25 @@ public class AppParticipantInfoDTO {
     }
     public void setWin(Boolean win) {
         this.win = win;
-    }  
+    } 
+    public Timestamp getCreationTime() {
+        return creationTime;
+    }
+    public void setCreationTime(Timestamp creationTime) {
+        this.creationTime = creationTime;
+    }
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+    public void setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+    }
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+    public void setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+    }
 
 
 }

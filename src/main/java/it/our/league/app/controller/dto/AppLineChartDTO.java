@@ -12,12 +12,11 @@ public class AppLineChartDTO {
         this.data = new ArrayList<>();
     }
 
-    @SuppressWarnings("unused")
-    private class Datum {
+    public class Datum {
         private String x;
-        private Integer y;
+        private Float y;
 
-        public Datum(String x, Integer y) {
+        public Datum(String x, Float y) {
             this.x = x;
             this.y = y;
         }
@@ -27,10 +26,10 @@ public class AppLineChartDTO {
         public void setX(String x) {
             this.x = x;
         }
-        public Integer getY() {
+        public Float getY() {
             return y;
         }
-        public void setY(Integer y) {
+        public void setY(Float y) {
             this.y = y;
         }
     }
@@ -47,7 +46,7 @@ public class AppLineChartDTO {
         return this.data;
     }
 
-    public void addData(String x, Integer y) {
+    public void addData(String x, Float y) {
         this.data.add(new Datum(x, y));
     }
 }

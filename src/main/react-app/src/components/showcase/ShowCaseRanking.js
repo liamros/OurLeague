@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const ShowCaseRanking = (props) => {
 
 
-    const [stats, setStats] = React.useState(props.stats)
+    const [stats] = React.useState(props.stats)
 
 
 
@@ -34,9 +34,8 @@ const ShowCaseRanking = (props) => {
                                 style={styles.card}
                                 className="showcaseDetail"
                             >
-                                
-                                <motion.div layoutId={`card-content-${statName}`}>
                                 <Typography style={styles.typographyTitle}>{statName}</Typography>
+                                <motion.div layoutId={`card-content-${statName}`}>
                                     <CardMedia
                                         component="img"
                                         image={profileIcon}
@@ -70,7 +69,7 @@ const styles = {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.0vw",
+        fontSize: "1.1vw",
         marginTop: "3%",
     },
     card: {

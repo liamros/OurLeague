@@ -331,11 +331,11 @@ public class LeagueAppImpl implements LeagueAppManager {
                 count++;
                 if (match.getWin())
                     wins++;
-                if (count%5 == 0)
-                    lineChart.addData(String.valueOf(count), ((float)wins*100/(float)count));
+                if (count%15 == 0)
+                    lineChart.addData(String.valueOf(count), (wins*100/count));
             }
-            if (count < 5 && count > 0)
-                lineChart.addData(String.valueOf(count), ((float)wins*100/(float)count));
+            // if (count < 5 && count > 0)
+            //     lineChart.addData(String.valueOf(count), (wins*100/count));
             if (!lineChart.getData().isEmpty())
                 response.add(lineChart);
         }

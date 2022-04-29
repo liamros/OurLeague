@@ -1,4 +1,4 @@
-import { getShowCaseRankings, getSummonerIcon } from './api'
+import { getShowCaseRankings, getSummonerIcon, getWrLineChart } from './api'
 
 export const initShowCase = () => ({
     type: 'INIT_SHOWCASE',
@@ -29,5 +29,22 @@ export function fetchShowCaseRankings() {
                 })
 
             })
+    }
+}
+
+export const initWrLineChart = () => ({
+    type: 'INIT_WR_LINECHART',
+})
+
+export const initWrLineChartSuccess = (wrLineChart) => ({
+    type: 'INIT_WR_LINECHART_SUCCESS',
+    payload: wrLineChart,
+})
+
+export function fetchWrLineChart() {
+    return (dispatch) => {
+        dispatch(initWrLineChart())
+        getWrLineChart()
+            .then((response) => dispatch(initWrLineChartSuccess(response)))
     }
 }

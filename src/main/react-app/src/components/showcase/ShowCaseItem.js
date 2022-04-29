@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
-import MaterialRankingTable from "../ranking/MaterialRankingTable";
 import RankingTable from "../ranking/RankingTable";
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
@@ -11,17 +10,14 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
     const stats = showCaseRankings[id][0]
 
 
-
-    var description = stats.description
     var summonerName = stats.summonerName
-    var value = stats.value
     var profileIcon = stats.profileIcon
 
     const rank = stats.rank
     var tier = rank.tier.toLowerCase()
     var queueType = "HAS NOT BEEN PLACED"
     if (rank.queueType)
-        queueType = rank.queueType.replaceAll("_", " ").replaceAll("5x5", "").replaceAll("SR", "")
+        queueType = rank.queueType
 
     return (
         <>
@@ -53,10 +49,8 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
 
                             <Typography style={styles.typographyTitle}>{summonerName}</Typography>
                             <Typography style={styles.typography}>{id}</Typography>
-                            {/* <Typography style={styles.typography}>{description}</Typography> */}
                         </motion.div>
                         <motion.div style={styles.typography} animate>
-                        {/* <Typography style={styles.typographyTitle}>{queueType}</Typography> */}
                             <CardMedia
                                 component="img"
                                 image={require(`../../img/rank/emblem_${tier}.png`)}
@@ -72,35 +66,12 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                                         <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
                                     </>)
                             }
-                            {/* <MaterialRankingTable rankings={showCaseRankings[id]}/> */}
                             <table id='rankings'>
                                 <tbody>
                                     <RankingTable rankings={showCaseRankings[id]} />
                                 </tbody>
                             </table>
                         </motion.div>
-                        {/* <motion.div style={styles.typography} animate>
-                            <Typography style={styles.typographyTitle}>{queueType}</Typography>
-                            <CardMedia
-                                component="img"
-                                image={require(`../../img/rank/emblem_${tier}.png`)}
-                                style={styles.cardMediaRank}
-                            />
-                            <Typography style={styles.typography}>{rank.tier}</Typography>
-                            {
-                                rank.division && rank.lp ?
-                                    (<>
-                                        <Typography style={styles.typography}>{rank.division}</Typography>
-                                        <Typography style={styles.typography}>{rank.lp} LP</Typography>
-                                    </>) : 
-                                    (<>
-                                        <Typography style={styles.typography}>-</Typography>
-                                        <Typography style={styles.typography}>0 LP</Typography>
-                                    </>)
-                            }
-                        </motion.div> */}
-
-
                     </Card>
                 </motion.div>
 
@@ -153,7 +124,7 @@ const styles = {
 
 function mapStateToProps(state) {
     return {
-        showCaseRankings: state.showCaseRankings,
+        showCaseRankings: state.showCaseRankings.showCaseRankings,
     }
 }
 

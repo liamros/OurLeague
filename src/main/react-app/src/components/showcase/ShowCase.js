@@ -37,7 +37,7 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
 
 function mapStateToProps(state) {
     return {
-        showCaseRankings: state.showCaseRankings,
+        showCaseRankings: state.showCaseRankings.showCaseRankings,
         isFetching: state.isFetching,
     }
 }

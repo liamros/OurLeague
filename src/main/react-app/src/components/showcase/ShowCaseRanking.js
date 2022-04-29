@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const ShowCaseRanking = (props) => {
 
 
-    const [stats, setStats] = React.useState(props.stats)
+    const [stats] = React.useState(props.stats)
 
 
 

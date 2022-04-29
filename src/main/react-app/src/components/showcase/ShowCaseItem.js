@@ -44,14 +44,14 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         style={styles.card}
                         className="content-container"
                     >
-                        <motion.div layoutId={`card-content-${id}`}>
+                        <motion.div layoutId={`card-content-${id}`} animate>
                             <Typography style={styles.typographyTitle}>{id}</Typography>
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
                                 style={styles.cardMediaProfile}
                             />
-
+                            
                             <Typography fontWeight={"bold"} style={styles.typography}>{summonerName}</Typography>
                             {/* <Typography style={styles.typography}>{id}</Typography> */}
                             {/* <Typography style={styles.typography}>{description}</Typography> */}
@@ -122,7 +122,7 @@ const styles = {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.1vw",
+        fontSize: "1.0vw",
     },
     card: {
         width: '100%',

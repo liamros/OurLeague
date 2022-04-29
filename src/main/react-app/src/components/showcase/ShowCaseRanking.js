@@ -34,8 +34,9 @@ const ShowCaseRanking = (props) => {
                                 style={styles.card}
                                 className="showcaseDetail"
                             >
-                                <Typography style={styles.typographyTitle}>{statName}</Typography>
+                                
                                 <motion.div layoutId={`card-content-${statName}`}>
+                                <Typography style={styles.typographyTitle}>{statName}</Typography>
                                     <CardMedia
                                         component="img"
                                         image={profileIcon}
@@ -69,7 +70,7 @@ const styles = {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.1vw",
+        fontSize: "1.0vw",
         marginTop: "3%",
     },
     card: {

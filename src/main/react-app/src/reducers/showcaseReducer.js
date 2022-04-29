@@ -1,10 +1,10 @@
-
 const initialState = {
-    showCaseRankings : null,
-    isFetching : false
+    showCaseRankings: null,
+    wrLineChart: null,
+    isFetching: false
 }
 
-const showCaseRankings = (state = initialState, action) => {
+export const showCaseRankings = (state = initialState, action) => {
     switch (action.type) {
         case 'INIT_SHOWCASE':
             return {
@@ -46,19 +46,3 @@ const showCaseRankings = (state = initialState, action) => {
             return state
     }
 }
-
-const getSummonerIcon = (profileIconNum) => {
-    let url = `http://localhost:8080/summoner/getProfileIcon?profileIconNumber=${profileIconNum}`
-    const img = fetch(url, { mode: 'cors' })
-        .then(response =>
-            response.blob())
-        .then(imgBlob => {
-            const img = URL.createObjectURL(imgBlob)
-            return img
-        })
-        .catch(error =>
-            console.log(error))
-    return img
-}
-
-export default showCaseRankings

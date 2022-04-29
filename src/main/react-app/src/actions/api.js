@@ -21,3 +21,12 @@ export const getSummonerIcon = (profileIconNum) => {
             console.log(error))
     return img
 }
+
+export const getWrLineChart = () => {
+    const data = fetch('http://localhost:8080/app/getWinrateAllLineCharts', { mode: 'cors' })
+        .then(res => res.json())
+        .then((data) => {
+            return data
+        }).catch(console.log)
+    return data
+}

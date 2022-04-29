@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
-import MaterialRankingTable from "../ranking/MaterialRankingTable";
 import RankingTable from "../ranking/RankingTable";
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
@@ -20,6 +19,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
     const rank = stats.rank
     var tier = rank.tier.toLowerCase()
     var queueType = "HAS NOT BEEN PLACED"
+    var rankLogo = require(`../../img/rank/emblem_${tier}.png`)
     if (rank.queueType)
         queueType = rank.queueType.replaceAll("_", " ").replaceAll("5x5", "").replaceAll("SR", "")
 
@@ -45,29 +45,30 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         className="content-container"
                     >
                         <motion.div layoutId={`card-content-${id}`}>
+                            <Typography style={styles.typographyTitle}>{id}</Typography>
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
                                 style={styles.cardMediaProfile}
                             />
 
-                            <Typography style={styles.typographyTitle}>{summonerName}</Typography>
-                            <Typography style={styles.typography}>{id}</Typography>
+                            <Typography fontWeight={"bold"} style={styles.typography}>{summonerName}</Typography>
+                            {/* <Typography style={styles.typography}>{id}</Typography> */}
                             {/* <Typography style={styles.typography}>{description}</Typography> */}
                         </motion.div>
                         <motion.div style={styles.typography} animate>
-                        {/* <Typography style={styles.typographyTitle}>{queueType}</Typography> */}
+                            {/* <Typography style={styles.typographyTitle}>{queueType}</Typography> */}
                             <CardMedia
                                 component="img"
-                                image={require(`../../img/rank/emblem_${tier}.png`)}
+                                image={rankLogo}
                                 style={styles.cardMediaRank}
                             />
-                            
+
                             {
                                 rank.division && rank.lp ?
                                     (<>
                                         <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
-                                    </>) : 
+                                    </>) :
                                     (<>
                                         <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
                                     </>)
@@ -121,7 +122,7 @@ const styles = {
         margin: "2%",
         color: "rgb(208, 168, 92)",
         fontWeight: "bold",
-        fontSize: "1.0vw",
+        fontSize: "1.1vw",
     },
     card: {
         width: '100%',
@@ -153,7 +154,7 @@ const styles = {
 
 function mapStateToProps(state) {
     return {
-        showCaseRankings: state.showCaseRankings,
+        showCaseRankings: state.showCaseRankings.showCaseRankings,
     }
 }
 

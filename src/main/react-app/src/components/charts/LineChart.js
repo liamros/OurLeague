@@ -1,14 +1,12 @@
 import { ResponsiveLine } from '@nivo/line';
 import React, { useState } from 'react';
-import { connect } from "react-redux";
-import { fetchHomeLineCharts } from '../../actions';
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const LineChart = ({ data, fetchHomeLineCharts }) => {
+const LineChart = ({ data }) => {
 
     const [chartready, setChartready] = useState(false)
     const [allpressed, setAllpressed] = useState(false)
@@ -26,12 +24,6 @@ const LineChart = ({ data, fetchHomeLineCharts }) => {
         setChart(data)
         setChartready(true)
     }
-
-
-
-    React.useEffect(() => {
-        fetchHomeLineCharts()
-    }, [])
 
     const foo = (e) => {
         var a = JSON.parse(JSON.stringify(chart))
@@ -62,13 +54,10 @@ const LineChart = ({ data, fetchHomeLineCharts }) => {
         }
 
         setChart(a)
-        console.log(
-            chart
-        );
     }
 
     return (
-        chart && <div style={{ height: "100%", /*border: "3px solid rgb(208, 168, 92)", borderRadius: "3px", background: "rgb(6, 28, 37)"*/ }}>
+        chart && 
 
 
             <ResponsiveLine
@@ -147,25 +136,11 @@ const LineChart = ({ data, fetchHomeLineCharts }) => {
                 ]}
             />
 
-        </div>
+
     )
 }
 
 
-
-
-function mapStateToProps(state) {
-    return {
-        data: state.homeLineCharts.data["Winrate"],
-        isFetching: state.isFetching,
-    }
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        fetchHomeLineCharts: () => dispatch(fetchHomeLineCharts())
-    }
-}
 
 const theme = {
     /*background: "rgb(6, 28, 37)",*/
@@ -192,8 +167,5 @@ const theme = {
     },
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(LineChart)
+export default LineChart
 

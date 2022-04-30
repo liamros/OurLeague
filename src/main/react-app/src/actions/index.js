@@ -44,9 +44,14 @@ export const initHomeLineChartSuccess = (wrLineChart) => ({
 export function fetchHomeLineCharts() {
     return (dispatch) => {
         dispatch(initHomeLineChart())
-        const obj = {}
+        var obj = {}
         getWrLineChart()
-            .then((response) => obj["Winrate"] = response)
-        dispatch(initHomeLineChartSuccess(obj))
+            .then((response) => {
+                obj["Winrate"] = response
+            })
+            .then(() => {
+                dispatch(initHomeLineChartSuccess(obj))
+            })
+        
     }
 }

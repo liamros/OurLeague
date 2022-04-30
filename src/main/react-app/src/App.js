@@ -2,6 +2,7 @@ import { Hidden } from "@mui/material";
 import { LayoutGroup, motion } from "framer-motion";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './App.css';
+import HomeLineChartContainer from "./components/charts/HomeLineChartContainer";
 import LineChart from './components/charts/LineChart';
 import ResponsiveAppBar from './components/header/ResponsiveAppBar';
 import ShowCase from './components/showcase/ShowCase';
@@ -27,13 +28,13 @@ function App() {
           </header>
 
           <motion.div
-            style={{ height: "50vh", marginTop: "3%", padding: "0% 11.5%" }}
+            style={{ height: "50vh", marginTop: "3%", }}
             className={"container"}
             initial="hidden"
             animate="visible"
             variants={variants}
             >
-          <LineChart />
+          <HomeLineChartContainer />
         </motion.div>
 
 

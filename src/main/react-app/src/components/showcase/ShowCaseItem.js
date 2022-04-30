@@ -70,11 +70,8 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                                         <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
                                     </>)
                             }
-                            <table id='rankings'>
-                                <tbody>
-                                    <RankingTable rankings={showCaseRankings[id]} />
-                                </tbody>
-                            </table>
+
+                            <RankingTable rankings={showCaseRankings[id]} />
                         </motion.div>
                     </Card>
                 </motion.div>

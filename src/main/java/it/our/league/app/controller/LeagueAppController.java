@@ -52,5 +52,11 @@ public class LeagueAppController implements LeagueAppManager {
     public List<AppLineChartDTO> getWinratePerMinuteChart() {
         return leagueAppImpl.getWinratePerMinuteChart();
     }
+
+    @Override
+    @GetMapping("/getVisionPerMinuteChart")
+    public List<AppLineChartDTO> getVisionPerMinuteChart() {
+        return leagueAppImpl.getVisionPerMinuteChart();
+    }
     
 }

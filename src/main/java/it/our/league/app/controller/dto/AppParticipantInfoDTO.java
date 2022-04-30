@@ -7,10 +7,12 @@ public class AppParticipantInfoDTO {
     private Integer summInfoId;
     private String puuid;
     private String matchId;
+    private String role;
     private Integer queueTypeId;
     private Integer kills;
     private Integer deaths;
     private Integer assists;
+    private Integer visionScore;
     private String championName;
     private Boolean win;
     private Timestamp creationTime;
@@ -89,6 +91,18 @@ public class AppParticipantInfoDTO {
     }
     public void setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public Integer getVisionScore() {
+        return visionScore;
+    }
+    public void setVisionScore(Integer visionScore) {
+        this.visionScore = visionScore;
     }
 
 

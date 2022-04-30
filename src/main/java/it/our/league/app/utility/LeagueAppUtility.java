@@ -225,21 +225,23 @@ public final class LeagueAppUtility {
         return list;
     }
 
-    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA jpa, MatchInfoJPA matchJpa, String puuid) {
+    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA rsm, MatchInfoJPA matchJpa, String puuid) {
         AppParticipantInfoDTO dto = new AppParticipantInfoDTO();
 
-        dto.setSummInfoId(jpa.getSummInfoId());
+        dto.setSummInfoId(rsm.getSummInfoId());
         dto.setPuuid(puuid);
-        dto.setChampionName(jpa.getChampionName());
+        dto.setChampionName(rsm.getChampionName());
         dto.setQueueTypeId(matchJpa.getQueueTypeId());
-        dto.setKills(jpa.getKills());
-        dto.setDeaths(jpa.getDeaths());
-        dto.setAssists(jpa.getAssists());
-        dto.setMatchId(jpa.getMatchId());
-        dto.setWin(jpa.getWin());
+        dto.setKills(rsm.getKills());
+        dto.setDeaths(rsm.getDeaths());
+        dto.setAssists(rsm.getAssists());
+        dto.setMatchId(rsm.getMatchId());
+        dto.setWin(rsm.getWin());
         dto.setCreationTime(matchJpa.getGameCreationTime());
         dto.setStartTime(matchJpa.getGameStartTime());
         dto.setEndTime(matchJpa.getGameEndTime());
+        dto.setVisionScore(rsm.getVisionScore());
+        dto.setRole(rsm.getRole());
         return dto;
     }
     public static Float getAverageKDA(List<AppParticipantInfoDTO> participantInfos) {
@@ -272,10 +274,19 @@ public final class LeagueAppUtility {
     }
 
     public static void completeRelSummonerMatchJpa(RelSummonerMatchJPA rsm, Participant p) {
+        String role = p.getIndividualPosition();
+        if (role.equals("BOTTOM"))
+            role = "CARRY";
+        else if (role.equals("MIDDLE"))
+            role = "MID";
+        else if (role.equals("UTILITY"))
+            role = "SUPPORT";
         rsm.setChampionName(p.getChampionName());
+        rsm.setRole(role);
         rsm.setKills(p.getKills());
         rsm.setDeaths(p.getDeaths());
         rsm.setAssists(p.getAssists());
+        rsm.setVisionScore(p.getVisionScore());
         rsm.setWin(p.getWin());
     }
 

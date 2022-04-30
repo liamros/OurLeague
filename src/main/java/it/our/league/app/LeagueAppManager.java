@@ -18,4 +18,6 @@ public interface LeagueAppManager {
 
     public List<AppLineChartDTO> getWinratePerMinuteChart();
 
+    public List<AppLineChartDTO> getVisionPerMinuteChart();
+
 }

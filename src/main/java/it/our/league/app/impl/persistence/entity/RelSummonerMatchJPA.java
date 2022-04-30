@@ -37,14 +37,18 @@ public class RelSummonerMatchJPA {
     @Id
     @Column(name = "MATCH_ID")
     private String matchId;
+    @Column(name = "CHAMPION_NAME")
+    private String championName;
+    @Column(name = "ROLE")
+    private String role;
     @Column(name = "KILLS")
     private Integer kills;
     @Column(name = "DEATHS")
     private Integer deaths;
     @Column(name = "ASSISTS")
     private Integer assists;
-    @Column(name = "CHAMPION_NAME")
-    private String championName;
+    @Column(name = "VISION_SCORE")
+    private Integer visionScore;
     @Column(name = "WIN")
     private Boolean win;
     @ManyToOne
@@ -100,6 +104,18 @@ public class RelSummonerMatchJPA {
     }
     public MatchInfoJPA getMatch() {
         return match;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public Integer getVisionScore() {
+        return visionScore;
+    }
+    public void setVisionScore(Integer visionScore) {
+        this.visionScore = visionScore;
     }
     @Override
     public String toString() {

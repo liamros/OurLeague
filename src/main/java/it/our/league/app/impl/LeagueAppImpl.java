@@ -327,23 +327,11 @@ public class LeagueAppImpl implements LeagueAppManager {
             List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
             AppLineChartDTO lineChart = new AppLineChartDTO();
             lineChart.setId(summoner.getName());
-            Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = new HashMap<>();
-            for (int i = 15; i <= 50; i+=5) 
-                matchesPerMinute.put(i, new ArrayList<>());
-            for (AppParticipantInfoDTO match : matches) {
-                Long endTime = match.getEndTime().getTime();
-                Long startTime = match.getStartTime().getTime();
-                Integer timeSlice = ((int) (endTime - startTime)) / 1000 / 60 / 5 * 5;
-                if (timeSlice < 15)
-                    continue;
-                if (timeSlice > 50)
-                    timeSlice =  50;
-                List<AppParticipantInfoDTO> l = matchesPerMinute.get(timeSlice);
-                l.add(match);
-            }
+            Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = initTimeMap(matches);
             for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : matchesPerMinute.entrySet()) {
                 if (entry.getValue().isEmpty()) {
                     lineChart.addData(String.valueOf(entry.getKey()), (float) 0);
+                    continue;
                 }
                 Integer wins = 0;
                 for (AppParticipantInfoDTO p : entry.getValue())
@@ -360,5 +348,57 @@ public class LeagueAppImpl implements LeagueAppManager {
         }
         return response;
     }
+
+    @Override
+    public List<AppLineChartDTO> getVisionPerMinuteChart() {
+        
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        List<AppLineChartDTO> response = new ArrayList<>();
+        for (AppSummonerDTO summoner : summoners) {
+            List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
+            AppLineChartDTO lineChart = new AppLineChartDTO();
+            lineChart.setId(summoner.getName());
+            Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = initTimeMap(matches);
+            for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : matchesPerMinute.entrySet()) {
+                if (entry.getValue().isEmpty()) {
+                    lineChart.addData(String.valueOf(entry.getKey()), (float) 0);
+                    continue;
+                }
+                Integer totVisionScore = 0;
+                for (AppParticipantInfoDTO p : entry.getValue())
+                    totVisionScore+=p.getVisionScore();
+                Float value = (float) totVisionScore / (float) entry.getValue().size();
+                lineChart.addData(String.valueOf(entry.getKey()), value);
+            }
+            if (!lineChart.getData().isEmpty()) {
+                Collections.sort(lineChart.getData(), (a, b) -> {
+                    return Integer.parseInt(a.getX()) - Integer.parseInt(b.getX());
+                });
+                response.add(lineChart);
+            }
+        }
+        return response;
+    }
+
+
+
+    private Map<Integer, List<AppParticipantInfoDTO>> initTimeMap(List<AppParticipantInfoDTO> matches) {
+        Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = new HashMap<>();
+        for (int i = 15; i <= 50; i+=5) 
+            matchesPerMinute.put(i, new ArrayList<>());
+        for (AppParticipantInfoDTO match : matches) {
+            Long endTime = match.getEndTime().getTime();
+            Long startTime = match.getStartTime().getTime();
+            Integer timeSlice = ((int) (endTime - startTime)) / 1000 / 60 / 5 * 5;
+            if (timeSlice < 15)
+                continue;
+            if (timeSlice > 50)
+                timeSlice =  50;
+            List<AppParticipantInfoDTO> l = matchesPerMinute.get(timeSlice);
+            l.add(match);
+        }
+        return matchesPerMinute;
+    }
+    
 
 }

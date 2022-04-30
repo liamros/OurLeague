@@ -48,12 +48,12 @@ export function fetchHomeLineCharts() {
         var promises = []
         promises.push(getWrLineChart()
             .then((response) => {
-                obj["Winrate"] = response
+                obj[response.name] = response
             })
         )
         promises.push(getVisionScoreLineChart()
             .then((response) => {
-                obj["VisionScore"] = response
+                obj[response.name] = response
             })
         )
         Promise.all(promises).then(() => dispatch(initHomeLineChartSuccess(obj)))

@@ -3,7 +3,7 @@ package it.our.league.app;
 import java.util.List;
 import java.util.Map;
 
-import it.our.league.app.controller.dto.AppLineChartDTO;
+import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 
 public interface LeagueAppManager {
@@ -16,8 +16,8 @@ public interface LeagueAppManager {
 
     public String asyncronousDataRefresh();
 
-    public List<AppLineChartDTO> getWinratePerMinuteChart();
+    public AppLineChartWrapperDTO getWinratePerMinuteChart();
 
-    public List<AppLineChartDTO> getVisionPerMinuteChart();
+    public AppLineChartWrapperDTO getVisionPerMinuteChart();
 
 }

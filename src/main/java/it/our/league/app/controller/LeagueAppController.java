@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import it.our.league.app.LeagueAppManager;
-import it.our.league.app.controller.dto.AppLineChartDTO;
+import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 
 @RestController
@@ -49,13 +49,13 @@ public class LeagueAppController implements LeagueAppManager {
 
     @Override
     @GetMapping("/getWinrateAllLineCharts")
-    public List<AppLineChartDTO> getWinratePerMinuteChart() {
+    public AppLineChartWrapperDTO getWinratePerMinuteChart() {
         return leagueAppImpl.getWinratePerMinuteChart();
     }
 
     @Override
     @GetMapping("/getVisionPerMinuteChart")
-    public List<AppLineChartDTO> getVisionPerMinuteChart() {
+    public AppLineChartWrapperDTO getVisionPerMinuteChart() {
         return leagueAppImpl.getVisionPerMinuteChart();
     }
     

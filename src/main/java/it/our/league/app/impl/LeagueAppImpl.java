@@ -19,6 +19,7 @@ import it.our.league.app.LeagueAppManager;
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.AppLineChartDTO;
+import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
@@ -320,9 +321,9 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     // TODO divide by queueId
-    public List<AppLineChartDTO> getWinratePerMinuteChart() {
+    public AppLineChartWrapperDTO getWinratePerMinuteChart() {
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        List<AppLineChartDTO> response = new ArrayList<>();
+        List<AppLineChartDTO> charts = new ArrayList<>();
         for (AppSummonerDTO summoner : summoners) {
             List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
             AppLineChartDTO lineChart = new AppLineChartDTO();
@@ -343,17 +344,25 @@ public class LeagueAppImpl implements LeagueAppManager {
                 Collections.sort(lineChart.getData(), (a, b) -> {
                     return Integer.parseInt(a.getX()) - Integer.parseInt(b.getX());
                 });
-                response.add(lineChart);
+                charts.add(lineChart);
             }
         }
+        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
+        response.setName("Winrate/Minute");
+        response.setxUnit("Minute");
+        response.setyUnit("Winrate");
+        response.setFormat(">-.2%");
+        response.setCharts(charts);
+        response.setMinY(0);
+        response.setMaxY(1);
         return response;
     }
 
     @Override
-    public List<AppLineChartDTO> getVisionPerMinuteChart() {
+    public AppLineChartWrapperDTO getVisionPerMinuteChart() {
         
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        List<AppLineChartDTO> response = new ArrayList<>();
+        List<AppLineChartDTO> charts = new ArrayList<>();
         for (AppSummonerDTO summoner : summoners) {
             List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
             AppLineChartDTO lineChart = new AppLineChartDTO();
@@ -374,9 +383,17 @@ public class LeagueAppImpl implements LeagueAppManager {
                 Collections.sort(lineChart.getData(), (a, b) -> {
                     return Integer.parseInt(a.getX()) - Integer.parseInt(b.getX());
                 });
-                response.add(lineChart);
+                charts.add(lineChart);
             }
         }
+        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
+        response.setName("VisionScore/Minute");
+        response.setxUnit("Minute");
+        response.setyUnit("VisionScore");
+        response.setFormat(">-.2f");
+        response.setCharts(charts);
+        response.setMinY(0);
+        response.setMaxY(140);
         return response;
     }
 

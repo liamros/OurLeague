@@ -1,21 +1,37 @@
 import { Button, ButtonGroup, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { fetchHomeLineCharts } from '../../actions';
 import LineChart from "./LineChart";
 
 const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
 
+
+    var [selected, setSelected] = useState("VisionScore/Minute")
+
     React.useEffect(() => {
         fetchHomeLineCharts()
     }, [])
+
+    const onClick = (e) => {
+        if (selected !== e.currentTarget.id)
+            setSelected(e.currentTarget.id)
+    }
 
     var map = null
     if (data)
         map = new Map(Object.entries(data))
     var jsx = []
     if (map)
-        map.forEach(((_, key) => jsx.push(<Button style={{color: "rgb(208, 168, 92)", backgroundColor: "rgba(6, 28, 37)", borderColor: "rgb(208, 168, 92)"}} key={key}>{key}</Button>)))
+        map.forEach(((_, key) => jsx.push(
+            <Button
+                id={key}
+                style={{ color: "rgb(208, 168, 92)", backgroundColor: "rgba(6, 28, 37)", borderColor: "rgb(208, 168, 92)" }}
+                key={key}
+                onClick={onClick}>
+                {key}
+            </Button>))
+        )
 
     return (
         data &&
@@ -24,7 +40,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
                 {jsx}
             </ButtonGroup>
             <Typography style={styles.typographyTitle}>Winrate/Minute</Typography>
-            <LineChart data={data["Winrate"]} />
+            <LineChart data={data[selected]} />
         </>
     )
 

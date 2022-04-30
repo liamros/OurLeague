@@ -10,23 +10,23 @@ const LineChart = ({ data }) => {
 
     const [chartready, setChartready] = useState(false)
     const [allpressed, setAllpressed] = useState(false)
-    const [chart, setChart] = useState(data)
+    var [charts, setCharts] = useState({})
 
     if (data && !chartready) {
         let allExists = false
-        data.forEach(element => {
+        data.charts.forEach(element => {
             if (element["id"] === "ALL")
                 allExists = true
             element["active"] = true
         });
         if (!allExists)
-            data.push({ id: "ALL", data: [] })
-        setChart(data)
+            data.charts.push({ id: "ALL", data: [] })
+        setCharts(data.charts)
         setChartready(true)
     }
 
     const foo = (e) => {
-        var a = JSON.parse(JSON.stringify(chart))
+        var a = JSON.parse(JSON.stringify(charts))
         if (e.id === "ALL") {
             if (!allpressed) {
                 a.forEach((elem) => {
@@ -37,11 +37,11 @@ const LineChart = ({ data }) => {
                 a = JSON.parse(JSON.stringify(data))
             }
             setAllpressed(!allpressed)
-            setChart(a)
+            setCharts(a)
             return
         }
         var idx = 0
-        while (chart[idx].id != e.id) {
+        while (charts[idx].id != e.id) {
             idx++
         }
         if (a[idx].active) {
@@ -53,15 +53,15 @@ const LineChart = ({ data }) => {
             a[idx].active = true
         }
 
-        setChart(a)
+        setCharts(a)
     }
 
     return (
-        chart && 
+        charts && 
 
 
             <ResponsiveLine
-                data={chart}
+                data={charts}
                 margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
                 theme={theme}
                 xScale={{
@@ -69,12 +69,12 @@ const LineChart = ({ data }) => {
                 }}
                 yScale={{
                     type: 'linear',
-                    min: '0',
-                    max: '1',
+                    min: data.minY,
+                    max: data.maxY,
                     // stacked: true,
                     reverse: false
                 }}
-                yFormat=">-.2%"
+                yFormat={data.format}
                 axisTop={null}
                 axisRight={null}
                 axisBottom={{
@@ -82,7 +82,7 @@ const LineChart = ({ data }) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'minutes',
+                    legend: data.xUnit,
                     legendOffset: 36,
                     legendPosition: 'middle',
                 }}
@@ -91,11 +91,11 @@ const LineChart = ({ data }) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'winrate',
+                    legend: data.yUnit,
                     legendOffset: -50,
                     textSize: '30px',
                     legendPosition: 'middle',
-                    format: '>-.0%',
+                    format: data.format,
                 }}
                 pointSize={10}
                 crosshairType="cross"

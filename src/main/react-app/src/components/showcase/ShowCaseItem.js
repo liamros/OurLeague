@@ -125,7 +125,7 @@ const styles = {
 
 function mapStateToProps(state) {
     return {
-        showCaseRankings: state.showCaseRankings.showCaseRankings,
+        showCaseRankings: state.showCaseRankings.data,
     }
 }
 

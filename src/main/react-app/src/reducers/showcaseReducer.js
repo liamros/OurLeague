@@ -1,5 +1,5 @@
 const initialState = {
-    showCaseRankings: null,
+    data: null,
     isFetching: false
 }
 
@@ -38,7 +38,7 @@ export const showCaseRankings = (state = initialState, action) => {
 
             return {
                 ...state,
-                showCaseRankings: obj,
+                data: obj,
                 isFetching: false
             }
         default:

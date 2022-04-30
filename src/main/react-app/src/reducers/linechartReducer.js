@@ -1,9 +1,9 @@
 const initialState = {
-    wrLineChart: null,
+    data: null,
     isFetched: false
 }
 
-export const winrateLineChart = (state = initialState, action) => {
+export const homeLineCharts = (state = initialState, action) => {
     switch (action.type) {
         case 'INIT_WR_LINECHART':
             return {
@@ -13,7 +13,7 @@ export const winrateLineChart = (state = initialState, action) => {
         case 'INIT_WR_LINECHART_SUCCESS':
             return {
                 ...state,
-                wrLineChart: action.payload,
+                data: action.payload,
                 isFetched: true
             }
         default:

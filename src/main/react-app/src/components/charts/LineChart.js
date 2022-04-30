@@ -8,22 +8,22 @@ import { fetchWrLineChart } from '../../actions';
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
+const LineChart = ({ data, fetchWrLineChart }) => {
 
     const [chartready, setChartready] = useState(false)
     const [allpressed, setAllpressed] = useState(false)
-    const [chart, setChart] = useState(wrLineChart)
+    const [chart, setChart] = useState(data)
 
-    if (wrLineChart && !chartready) {
+    if (data && !chartready) {
         let allExists = false
-        wrLineChart.forEach(element => {
+        data.forEach(element => {
             if (element["id"] === "ALL")
                 allExists = true
             element["active"] = true
         });
         if (!allExists)
-            wrLineChart.push({ id: "ALL", data: [] })
-        setChart(wrLineChart)
+            data.push({ id: "ALL", data: [] })
+        setChart(data)
         setChartready(true)
     }
 
@@ -42,7 +42,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
                     elem.active = false
                 })
             } else {
-                a = JSON.parse(JSON.stringify(wrLineChart))
+                a = JSON.parse(JSON.stringify(data))
             }
             setAllpressed(!allpressed)
             setChart(a)
@@ -57,7 +57,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
             a[idx].active = false
         }
         else {
-            a[idx].data = wrLineChart[idx].data
+            a[idx].data = data[idx].data
             a[idx].active = true
         }
 
@@ -74,7 +74,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
             <ResponsiveLine
                 data={chart}
                 margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-                theme={{ /*background: "rgb(6, 28, 37)",*/ textColor: "rgb(208, 168, 92)" }}
+                theme={theme}
                 xScale={{
                     type: 'point',
                 }}
@@ -95,7 +95,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
                     tickRotation: 0,
                     legend: 'minutes',
                     legendOffset: 36,
-                    legendPosition: 'middle'
+                    legendPosition: 'middle',
                 }}
                 axisLeft={{
                     orient: 'left',
@@ -103,10 +103,13 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
                     tickPadding: 5,
                     tickRotation: 0,
                     legend: 'winrate',
-                    legendOffset: -40,
-                    legendPosition: 'middle'
+                    legendOffset: -50,
+                    textSize: '30px',
+                    legendPosition: 'middle',
+                    format: '>-.0%',
                 }}
                 pointSize={10}
+                crosshairType="cross"
                 colors={{ scheme: 'category10' }}
                 pointColor={{ theme: 'background' }}
                 pointBorderWidth={2}
@@ -153,7 +156,7 @@ const LineChart = ({ wrLineChart, fetchWrLineChart }) => {
 
 function mapStateToProps(state) {
     return {
-        wrLineChart: state.winrateLineChart.wrLineChart,
+        data: state.homeLineCharts.data,
         isFetching: state.isFetching,
     }
 }
@@ -162,6 +165,31 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchWrLineChart: () => dispatch(fetchWrLineChart())
     }
+}
+
+const theme = {
+    /*background: "rgb(6, 28, 37)",*/
+    textColor: "rgb(208, 168, 92)",
+    grid: {
+        line:
+        {
+            stroke: "rgb(208, 168, 92)"
+        }
+    },
+    axis: {
+        legend: {
+            text: {
+                fontSize: 18,
+                fontWeight: 'bold'
+            }
+        }
+    },
+    tooltip: {
+        container: {
+            background: "rgba(6, 28, 37)",
+            color: "rgb(208, 168, 92)"
+        },
+    },
 }
 
 export default connect(

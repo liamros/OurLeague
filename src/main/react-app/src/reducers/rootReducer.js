@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import {showCaseRankings} from './showcaseReducer'
-import {winrateLineChart} from './linechartReducer'
+import {homeLineCharts} from './linechartReducer'
 
 export default combineReducers({
     showCaseRankings,
-    winrateLineChart
+    homeLineCharts
   });

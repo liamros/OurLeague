@@ -1,4 +1,4 @@
-import { getShowCaseRankings, getSummonerIcon, getWrLineChart } from './api'
+import { getShowCaseRankings, getSummonerIcon, getWrLineChart, getVisionScoreLineChart } from './api'
 
 export const initShowCase = () => ({
     type: 'INIT_SHOWCASE',
@@ -19,9 +19,9 @@ export function fetchShowCaseRankings() {
                 var promises = Array.from(map).map((sortedRankings) => {
                     var elem = sortedRankings[1][0]
                     return getSummonerIcon(elem.profileIconNum).then((img) => {
-                                    elem.profileIcon = img
-                                    return elem
-                                })
+                        elem.profileIcon = img
+                        return elem
+                    })
                 })
                 Promise.all(promises).then((solved) => {
                     solved.forEach(s => response[s.statName][0] = s)
@@ -45,13 +45,17 @@ export function fetchHomeLineCharts() {
     return (dispatch) => {
         dispatch(initHomeLineChart())
         var obj = {}
-        getWrLineChart()
+        var promises = []
+        promises.push(getWrLineChart()
             .then((response) => {
                 obj["Winrate"] = response
             })
-            .then(() => {
-                dispatch(initHomeLineChartSuccess(obj))
+        )
+        promises.push(getVisionScoreLineChart()
+            .then((response) => {
+                obj["VisionScore"] = response
             })
-        
+        )
+        Promise.all(promises).then(() => dispatch(initHomeLineChartSuccess(obj)))
     }
 }

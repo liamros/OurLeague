@@ -30,3 +30,13 @@ export const getWrLineChart = () => {
         }).catch(console.log)
     return data
 }
+
+
+export const getVisionScoreLineChart = () => {
+    const data = fetch('http://localhost:8080/app/getVisionPerMinuteChart', { mode: 'cors' })
+        .then(res => res.json())
+        .then((data) => {
+            return data
+        }).catch(console.log)
+    return data
+}

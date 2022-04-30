@@ -39,7 +39,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
             <ButtonGroup variant="contained" aria-label="outlined primary button group">
                 {jsx}
             </ButtonGroup>
-            <Typography style={styles.typographyTitle}>Winrate/Minute</Typography>
+            <Typography style={styles.typographyTitle}>{data[selected].name}</Typography>
             <LineChart data={data[selected]} />
         </>
     )

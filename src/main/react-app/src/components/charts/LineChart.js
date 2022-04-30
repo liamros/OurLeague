@@ -8,24 +8,20 @@ import React, { useState } from 'react';
 // you'll often use just a few of them.
 const LineChart = ({ data }) => {
 
-    const [chartready, setChartready] = useState(false)
     const [allpressed, setAllpressed] = useState(false)
-    var [charts, setCharts] = useState({})
+    const [charts, setCharts] = useState(data["charts"])
 
-    if (data && !chartready) {
+    React.useEffect(() => {
         let allExists = false
-        data.charts.forEach(element => {
-            if (element["id"] === "ALL")
-                allExists = true
+        var a = data.charts
+        a.forEach(element => {
             element["active"] = true
         });
-        if (!allExists)
-            data.charts.push({ id: "ALL", data: [] })
-        setCharts(data.charts)
-        setChartready(true)
-    }
+        // a.push({ id: "ALL", data: [] })
+        setCharts(a)
+    }, [data])
 
-    const foo = (e) => {
+    const onClick = (e) => {
         var a = JSON.parse(JSON.stringify(charts))
         if (e.id === "ALL") {
             if (!allpressed) {
@@ -34,7 +30,7 @@ const LineChart = ({ data }) => {
                     elem.active = false
                 })
             } else {
-                a = JSON.parse(JSON.stringify(data))
+                a = JSON.parse(JSON.stringify(data.charts))
             }
             setAllpressed(!allpressed)
             setCharts(a)
@@ -49,7 +45,7 @@ const LineChart = ({ data }) => {
             a[idx].active = false
         }
         else {
-            a[idx].data = data[idx].data
+            a[idx].data = data.charts[idx].data
             a[idx].active = true
         }
 
@@ -57,84 +53,84 @@ const LineChart = ({ data }) => {
     }
 
     return (
-        charts && 
+        charts &&
 
 
-            <ResponsiveLine
-                data={charts}
-                margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
-                theme={theme}
-                xScale={{
-                    type: 'point',
-                }}
-                yScale={{
-                    type: 'linear',
-                    min: data.minY,
-                    max: data.maxY,
-                    // stacked: true,
-                    reverse: false
-                }}
-                yFormat={data.format}
-                axisTop={null}
-                axisRight={null}
-                axisBottom={{
-                    orient: 'bottom',
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: data.xUnit,
-                    legendOffset: 36,
-                    legendPosition: 'middle',
-                }}
-                axisLeft={{
-                    orient: 'left',
-                    tickSize: 5,
-                    tickPadding: 5,
-                    tickRotation: 0,
-                    legend: data.yUnit,
-                    legendOffset: -50,
-                    textSize: '30px',
-                    legendPosition: 'middle',
-                    format: data.format,
-                }}
-                pointSize={10}
-                crosshairType="cross"
-                colors={{ scheme: 'category10' }}
-                pointColor={{ theme: 'background' }}
-                pointBorderWidth={2}
-                pointBorderColor={{ from: 'serieColor' }}
-                pointLabelYOffset={-12}
-                useMesh={true}
-                enableArea={true}
-                // motionConfig="wobbly"
-                legends={[
-                    {
-                        anchor: 'bottom-right',
-                        direction: 'column',
-                        justify: false,
-                        translateX: 100,
-                        translateY: 0,
-                        itemsSpacing: 0,
-                        itemDirection: 'left-to-right',
-                        itemWidth: 80,
-                        itemHeight: 20,
-                        itemOpacity: 0.75,
-                        symbolSize: 12,
-                        symbolShape: 'circle',
-                        onClick: foo,
-                        symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                        effects: [
-                            {
-                                on: 'hover',
-                                style: {
-                                    itemBackground: 'rgba(0, 0, 0, .03)',
-                                    itemOpacity: 1
-                                }
+        <ResponsiveLine
+            data={charts}
+            margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
+            theme={theme}
+            xScale={{
+                type: 'point',
+            }}
+            yScale={{
+                type: 'linear',
+                min: data.minY,
+                max: data.maxY,
+                // stacked: true,
+                reverse: false
+            }}
+            yFormat={data.format}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+                orient: 'bottom',
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: data.xUnit,
+                legendOffset: 36,
+                legendPosition: 'middle',
+            }}
+            axisLeft={{
+                orient: 'left',
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: 0,
+                legend: data.yUnit,
+                legendOffset: -50,
+                textSize: '30px',
+                legendPosition: 'middle',
+                format: data.format,
+            }}
+            pointSize={10}
+            crosshairType="cross"
+            colors={{ scheme: 'category10' }}
+            pointColor={{ theme: 'background' }}
+            pointBorderWidth={2}
+            pointBorderColor={{ from: 'serieColor' }}
+            pointLabelYOffset={-12}
+            useMesh={true}
+            enableArea={true}
+            motionConfig="gentle"
+            legends={[
+                {
+                    anchor: 'bottom-right',
+                    direction: 'column',
+                    justify: false,
+                    translateX: 100,
+                    translateY: 0,
+                    itemsSpacing: 0,
+                    itemDirection: 'left-to-right',
+                    itemWidth: 80,
+                    itemHeight: 20,
+                    itemOpacity: 0.75,
+                    symbolSize: 12,
+                    symbolShape: 'circle',
+                    onClick: onClick,
+                    symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                    effects: [
+                        {
+                            on: 'hover',
+                            style: {
+                                itemBackground: 'rgba(0, 0, 0, .03)',
+                                itemOpacity: 1
                             }
-                        ]
-                    }
-                ]}
-            />
+                        }
+                    ]
+                }
+            ]}
+        />
 
 
     )

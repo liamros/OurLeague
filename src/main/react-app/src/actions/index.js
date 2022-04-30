@@ -1,4 +1,4 @@
-import { getShowCaseRankings, getSummonerIcon, getWrLineChart, getVisionScoreLineChart } from './api'
+import { getShowCaseRankings, getSummonerIcon, getWrLineChart, getVisionScoreLineChart, getGamesPerMinuteChart } from './api'
 
 export const initShowCase = () => ({
     type: 'INIT_SHOWCASE',
@@ -48,11 +48,19 @@ export function fetchHomeLineCharts() {
         var promises = []
         promises.push(getWrLineChart()
             .then((response) => {
+                response.charts.push({ id: "ALL", data: [] })
                 obj[response.name] = response
             })
         )
         promises.push(getVisionScoreLineChart()
             .then((response) => {
+                response.charts.push({ id: "ALL", data: [] })
+                obj[response.name] = response
+            })
+        )
+        promises.push(getGamesPerMinuteChart()
+            .then((response) => {
+                response.charts.push({ id: "ALL", data: [] })
                 obj[response.name] = response
             })
         )

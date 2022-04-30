@@ -20,4 +20,6 @@ public interface LeagueAppManager {
 
     public AppLineChartWrapperDTO getVisionPerMinuteChart();
 
+    public AppLineChartWrapperDTO getGamesPerMinuteChart();
+
 }

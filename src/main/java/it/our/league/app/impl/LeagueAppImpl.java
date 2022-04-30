@@ -351,7 +351,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         response.setName("Winrate/Minute");
         response.setxUnit("Minute");
         response.setyUnit("Winrate");
-        response.setFormat(">-.2%");
+        response.setFormat(">-.0%");
         response.setCharts(charts);
         response.setMinY(0);
         response.setMaxY(1);
@@ -390,10 +390,45 @@ public class LeagueAppImpl implements LeagueAppManager {
         response.setName("VisionScore/Minute");
         response.setxUnit("Minute");
         response.setyUnit("VisionScore");
-        response.setFormat(">-.2f");
+        response.setFormat(">-.0f");
         response.setCharts(charts);
         response.setMinY(0);
         response.setMaxY(140);
+        return response;
+    }
+
+    @Override
+    public AppLineChartWrapperDTO getGamesPerMinuteChart() {
+        
+        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+        List<AppLineChartDTO> charts = new ArrayList<>();
+        int maxSize = 0;
+        for (AppSummonerDTO summoner : summoners) {
+            List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfoByPuuid(summoner.getPuuid());
+            AppLineChartDTO lineChart = new AppLineChartDTO();
+            lineChart.setId(summoner.getName());
+            Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = initTimeMap(matches);
+            for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : matchesPerMinute.entrySet()) {
+                maxSize = Math.max(maxSize, entry.getValue().size());
+                lineChart.addData(String.valueOf(entry.getKey()), (float) entry.getValue().size());
+            }
+            if (!lineChart.getData().isEmpty()) {
+                Collections.sort(lineChart.getData(), (a, b) -> {
+                    return Integer.parseInt(a.getX()) - Integer.parseInt(b.getX());
+                });
+                charts.add(lineChart);
+            }
+        }
+        if (maxSize%10 != 0)
+            maxSize+=(10-maxSize%10);
+        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
+        response.setName("Games/Minute");
+        response.setxUnit("Minute");
+        response.setyUnit("Games");
+        response.setFormat(">-.0f");
+        response.setCharts(charts);
+        response.setMinY(0);
+        response.setMaxY(maxSize);
         return response;
     }
 

@@ -32,19 +32,21 @@ export function fetchShowCaseRankings() {
     }
 }
 
-export const initWrLineChart = () => ({
-    type: 'INIT_WR_LINECHART',
+export const initHomeLineChart = () => ({
+    type: 'INIT_HOME_LINECHART',
 })
 
-export const initWrLineChartSuccess = (wrLineChart) => ({
-    type: 'INIT_WR_LINECHART_SUCCESS',
+export const initHomeLineChartSuccess = (wrLineChart) => ({
+    type: 'INIT_HOME_LINECHART_SUCCESS',
     payload: wrLineChart,
 })
 
-export function fetchWrLineChart() {
+export function fetchHomeLineCharts() {
     return (dispatch) => {
-        dispatch(initWrLineChart())
+        dispatch(initHomeLineChart())
+        const obj = {}
         getWrLineChart()
-            .then((response) => dispatch(initWrLineChartSuccess(response)))
+            .then((response) => obj["Winrate"] = response)
+        dispatch(initHomeLineChartSuccess(obj))
     }
 }

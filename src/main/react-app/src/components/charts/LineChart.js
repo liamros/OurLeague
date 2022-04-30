@@ -1,14 +1,14 @@
 import { ResponsiveLine } from '@nivo/line';
 import React, { useState } from 'react';
 import { connect } from "react-redux";
-import { fetchWrLineChart } from '../../actions';
+import { fetchHomeLineCharts } from '../../actions';
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const LineChart = ({ data, fetchWrLineChart }) => {
+const LineChart = ({ data, fetchHomeLineCharts }) => {
 
     const [chartready, setChartready] = useState(false)
     const [allpressed, setAllpressed] = useState(false)
@@ -30,7 +30,7 @@ const LineChart = ({ data, fetchWrLineChart }) => {
 
 
     React.useEffect(() => {
-        fetchWrLineChart()
+        fetchHomeLineCharts()
     }, [])
 
     const foo = (e) => {
@@ -156,14 +156,14 @@ const LineChart = ({ data, fetchWrLineChart }) => {
 
 function mapStateToProps(state) {
     return {
-        data: state.homeLineCharts.data,
+        data: state.homeLineCharts.data["Winrate"],
         isFetching: state.isFetching,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchWrLineChart: () => dispatch(fetchWrLineChart())
+        fetchHomeLineCharts: () => dispatch(fetchHomeLineCharts())
     }
 }
 

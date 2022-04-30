@@ -5,12 +5,12 @@ const initialState = {
 
 export const homeLineCharts = (state = initialState, action) => {
     switch (action.type) {
-        case 'INIT_WR_LINECHART':
+        case 'INIT_HOME_LINECHART':
             return {
                 ...state,
                 isFetched: false
             }
-        case 'INIT_WR_LINECHART_SUCCESS':
+        case 'INIT_HOME_LINECHART_SUCCESS':
             return {
                 ...state,
                 data: action.payload,

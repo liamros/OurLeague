@@ -40,28 +40,32 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         style={styles.card}
                         className="content-container"
                     >
+                        <motion.div layoutId={`card-title-${id}`}>
+                            <Typography style={styles.typographyTitle}>{id}</Typography>
+                        </motion.div>
                         <motion.div layoutId={`card-content-${id}`}>
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
                                 style={styles.cardMediaProfile}
                             />
-
-                            <Typography style={styles.typographyTitle}>{summonerName}</Typography>
-                            <Typography style={styles.typography}>{id}</Typography>
                         </motion.div>
+                        <motion.div layoutId={`card-name-${id}`}>
+                            <Typography style={styles.typographyTitle}>{summonerName}</Typography>
+                        </motion.div>
+
                         <motion.div style={styles.typography} animate>
                             <CardMedia
                                 component="img"
                                 image={require(`../../img/rank/emblem_${tier}.png`)}
                                 style={styles.cardMediaRank}
                             />
-                            
+
                             {
-                                rank.division && rank.lp ?
+                                rank.division ?
                                     (<>
                                         <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
-                                    </>) : 
+                                    </>) :
                                     (<>
                                         <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
                                     </>)
@@ -105,7 +109,7 @@ const styles = {
         borderRadius: "50%",
         width: "20%",
         margin: "auto",
-        marginTop: "5%",
+        // marginTop: "5%",
         border: "2px solid rgb(208, 168, 92)"
     },
     cardMediaRank: {

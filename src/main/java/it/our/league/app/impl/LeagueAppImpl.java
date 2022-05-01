@@ -68,17 +68,13 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     @Transactional
-    // TODO update prevPosition of a rankingList only when at least one of its value
-    // changes
     public void updateShowCaseRankings() {
-
-        List<ShowCaseRankingJPA> listShowCaseUpdated = new ArrayList<>();
+        
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        listShowCaseUpdated.addAll(getHighestKDAShowcase(summoners));
-        listShowCaseUpdated.addAll(getHighestWinrateShowcase(summoners));
-        listShowCaseUpdated.addAll(getHighestKillShowcase(summoners));
-        showCaseRankingRepository.saveAll(listShowCaseUpdated);
-        LOGGER.info("Persisted {}", listShowCaseUpdated);
+        checkAndSaveShowcaseRankings(getHighestKDAShowcase(summoners));
+        checkAndSaveShowcaseRankings(getHighestKillShowcase(summoners));
+        checkAndSaveShowcaseRankings(getHighestWinrateShowcase(summoners));
+        LOGGER.info("Showcase Rankings updated");
     }
 
     @Override
@@ -294,6 +290,7 @@ public class LeagueAppImpl implements LeagueAppManager {
     private List<ShowCaseRankingJPA> updateShowCaseRankingJpas(List<ShowCaseRankingJPA> list,
             Queue<Map<String, Object>> maxHeap, ShowCaseType showCaseType) {
 
+        showCaseRankingRepository.detachAllEntities(list);
         List<ShowCaseRankingJPA> results = new ArrayList<>();
         Map<Integer, List<ShowCaseRankingJPA>> map = LeagueAppUtility.groupBySummId(list);
         int position = 1;
@@ -451,5 +448,20 @@ public class LeagueAppImpl implements LeagueAppManager {
         return matchesPerMinute;
     }
     
+
+    private void checkAndSaveShowcaseRankings(List<ShowCaseRankingJPA> scrs) {
+        boolean positionChanged = false;
+        for (ShowCaseRankingJPA scr : scrs) {
+            if (scr.getPosition() != scr.getPrevPosition())
+                positionChanged = true;
+        }
+        if (positionChanged){
+            showCaseRankingRepository.saveAll(scrs);
+            return;
+        }
+        for (ShowCaseRankingJPA scr : scrs) {
+            showCaseRankingRepository.saveExceptPosition(scr.getId(), scr.getValue(), scr.getDescription());
+        }
+    }
 
 }

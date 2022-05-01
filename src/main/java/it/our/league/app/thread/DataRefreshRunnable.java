@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import it.our.league.app.LeagueAppManager;
 import it.our.league.app.LeagueMatchManager;
 import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.AppSummonerDTO;
@@ -38,6 +39,8 @@ public class DataRefreshRunnable implements Runnable {
     private LeagueSummonerManager leagueSummonerImpl;
     @Autowired
     private LeagueMatchManager leagueMatchImpl;
+    @Autowired
+    private LeagueAppManager leagueAppImpl;
 
     @Override
     public void run() {
@@ -66,13 +69,15 @@ public class DataRefreshRunnable implements Runnable {
             try {
                 int updatedRsms = leagueMatchImpl.alignRelSummonerMatches();
                 LOGGER.info("Updated {} rel summoner-matches", updatedRsms);
-                LOGGER.info("DataRefresh complete");
                 break;
             } catch (Exception e) {
                 if (!handleRateLimit(e))
                     throw e;
             }
         }
+        LOGGER.info("Updating Showcase Rankings...");
+        leagueAppImpl.updateShowCaseRankings();
+        LOGGER.info("DataRefresh complete");
     }
 
     private boolean handleRateLimit(Exception e) {

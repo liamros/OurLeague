@@ -52,7 +52,7 @@ No cache is implemted yet.
 - [x] Insert Summoner API
 - [x] Update All Ranks API
 - [x] Showcase data for FE API
-- [ ] Change Showcase Ranking position only on updated position
+- [x] Change Showcase Ranking position only on updated position
 - [x] ProfileIcon API with img resizing
 - [x] Add default headers configuration to RestAdapter
 - [x] Evaluate possibility of a batch which periodically updates ranks on DB
@@ -76,4 +76,4 @@ No cache is implemted yet.
 - [ ] StatsSection
 - [ ] PairStatsSection
 - [ ] MatchHistory
-- [ ] Style background
+- [x] Style background

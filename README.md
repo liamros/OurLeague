@@ -43,28 +43,37 @@ No cache is implemted yet.
 
 ## Data Structure Diagram
 
-![alt text](https://github.com/liamros/clown.gg/blob/master/src/main/resources/SQL/diagram.png?raw=true)
+![alt text](https://github.com/liamros/OurLeague.gg/blob/master/src/main/resources/SQL/diagram.png?raw=true)
 
 
 ## TODOs
-
+***Backend***
 - [x] Initial data structure
 - [x] Insert Summoner API
 - [x] Update All Ranks API
-- [ ] Showcase data for FE API
+- [x] Showcase data for FE API
+- [ ] Change Showcase Ranking position only on updated position
 - [x] ProfileIcon API with img resizing
 - [x] Add default headers configuration to RestAdapter
-- [ ] Evaluate possibility of a batch which periodically updates ranks on DB
+- [x] Evaluate possibility of a batch which periodically updates ranks on DB
 - [x] Custom DTOs for response
 - [ ] Custom Exceptions and Exception handling
 - [x] Evaluate possibility of saving 1 to 10 matches per summoner on DB or Firebase
-- [ ] UpdateMatches API
+- [x] Design and implement an asyncrounous system which finds and saves the last matches on DB and MongoDB
+- [x] UpdateMatches API
+- [x] Chart APIs
 - [ ] Batch update matches
 - [ ] MatchHistory API
+
+***Frontend***
 - [x] Initialize React
 - [x] Design homepage
-- [x] ShowCase FE
-- [x] Animate and style ShowCase FE
-- [ ] StatsSection FE
-- [ ] PairStatsSection FE
-- [ ] MatchHistory FE
+- [x] ShowCase
+- [x] Showcase Rankings
+- [x] Animate and style ShowCase
+- [x] Charts
+- [ ] Update button
+- [ ] StatsSection
+- [ ] PairStatsSection
+- [ ] MatchHistory
+- [ ] Style background

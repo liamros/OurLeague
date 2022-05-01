@@ -65,8 +65,8 @@ const LineChart = ({ data }) => {
             }}
             yScale={{
                 type: 'linear',
-                min: data.minY,
-                max: data.maxY,
+                // min: data.minY,
+                // max: data.maxY,
                 // stacked: true,
                 reverse: false
             }}

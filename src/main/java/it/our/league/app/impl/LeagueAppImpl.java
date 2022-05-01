@@ -349,7 +349,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         }
         AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
         response.setName("Winrate/Minute");
-        response.setxUnit("Minute");
+        response.setxUnit("Game Length");
         response.setyUnit("Winrate");
         response.setFormat(">-.0%");
         response.setCharts(charts);
@@ -387,8 +387,8 @@ public class LeagueAppImpl implements LeagueAppManager {
             }
         }
         AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
-        response.setName("VisionScore/Minute");
-        response.setxUnit("Minute");
+        response.setName("Vision/Minute");
+        response.setxUnit("Game Length");
         response.setyUnit("VisionScore");
         response.setFormat(">-.0f");
         response.setCharts(charts);
@@ -423,7 +423,7 @@ public class LeagueAppImpl implements LeagueAppManager {
             maxSize+=(10-maxSize%10);
         AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
         response.setName("Games/Minute");
-        response.setxUnit("Minute");
+        response.setxUnit("Game Length");
         response.setyUnit("Games");
         response.setFormat(">-.0f");
         response.setCharts(charts);

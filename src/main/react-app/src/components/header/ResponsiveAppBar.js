@@ -5,11 +5,9 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { ReactComponent as ClownIcon } from '../../img/clown.svg';
 
 const pages = ['Home'];
 
@@ -95,7 +93,11 @@ const ResponsiveAppBar = () => {
             ))} */}
           </Box>
 
-          <ClownIcon fill='white' />
+          <Button
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                Update
+          </Button>
         </Toolbar>
       </Container>
     </AppBar>

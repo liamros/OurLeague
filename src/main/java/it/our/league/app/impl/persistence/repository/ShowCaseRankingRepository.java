@@ -12,4 +12,6 @@ public interface ShowCaseRankingRepository extends CrudRepository<ShowCaseRankin
     @Query(value = "SELECT * FROM showcase_ranking WHERE stat_name = ?", nativeQuery = true)
     public List<ShowCaseRankingJPA> findByStatName(String statName);
 
+    public List<ShowCaseRankingJPA> findAllByOrderByPositionAsc();
+
 }

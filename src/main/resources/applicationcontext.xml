@@ -65,7 +65,7 @@
                   <map>
                         <entry key="getProfileIcon">
                               <bean class="it.our.league.common.RestOperation">
-                                    <property name="path" value="/cdn/12.3.1/img/profileicon/{0}.png" />
+                                    <property name="path" value="/cdn/12.8.1/img/profileicon/{0}.png" />
                                     <property name="httpMethod" value="GET" />
                               </bean>
                         </entry>

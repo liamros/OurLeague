@@ -2,6 +2,7 @@ package it.our.league.app.impl;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +52,7 @@ public class LeagueAppImpl implements LeagueAppManager {
     @Override
     public Map<String, List<AppShowCaseRankingDTO>> getShowCaseRankings() {
 
-        Iterable<ShowCaseRankingJPA> scrs = showCaseRankingRepository.findAll();
+        Iterable<ShowCaseRankingJPA> scrs = showCaseRankingRepository.findAllByOrderByPositionAsc();
         Map<String, List<AppShowCaseRankingDTO>> response = new HashMap<>();
 
         for (ShowCaseRankingJPA showCaseRanking : scrs) {
@@ -263,11 +264,10 @@ public class LeagueAppImpl implements LeagueAppManager {
             Integer aKills = (Integer) a.get("kills");
             Integer bKills = (Integer) b.get("kills");
             if (aKills == bKills) {
-                float bKda = LeagueAppUtility.calculateKDA(bKills, (Integer) b.get("deaths"),
-                        (Integer) b.get("assists"));
-                float aKda = LeagueAppUtility.calculateKDA(aKills, (Integer) a.get("deaths"),
-                        (Integer) a.get("assists"));
-                if (bKda > aKda)
+                AppRankInfoDTO aRank = (AppRankInfoDTO) a.get("highestRank");
+                AppRankInfoDTO bRank = (AppRankInfoDTO) b.get("highestRank");
+                AppRankInfoDTO highest = LeagueAppUtility.getHighestRankFromDto(Arrays.asList(aRank, bRank));
+                if (bRank.getSummInfoId() == highest.getSummInfoId())
                     return 1;
                 return -1;
             }
@@ -279,8 +279,7 @@ public class LeagueAppImpl implements LeagueAppManager {
             Map<String, Object> m = new HashMap<>();
             m.put("summInfoId", p.getSummInfoId());
             m.put("kills", p.getKills());
-            m.put("deaths", p.getDeaths());
-            m.put("assists", p.getAssists());
+            m.put("highestRank", LeagueAppUtility.getHighestRankFromDto(summoner.getRanks()));
             m.put("value", (float) p.getKills());
             String desc = MessageFormat.format("{0} with {1}", p.getKills(), p.getChampionName());
             m.put("description", desc);

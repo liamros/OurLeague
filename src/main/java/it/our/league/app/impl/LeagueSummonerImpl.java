@@ -137,7 +137,7 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
         InputStream in = new ByteArrayInputStream(byteArray);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Thumbnails.of(in)
-                .size(100, 100)
+                .size(300, 300)
                 .outputFormat("PNG")
                 .outputQuality(1)
                 .toOutputStream(outputStream);

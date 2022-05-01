@@ -7,7 +7,7 @@ import LineChart from "./LineChart";
 const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
 
 
-    var [selected, setSelected] = useState("VisionScore/Minute")
+    var [selected, setSelected] = useState("Games/Minute")
 
     React.useEffect(() => {
         fetchHomeLineCharts()

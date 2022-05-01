@@ -28,7 +28,7 @@ function App() {
           </header>
 
           <motion.div
-            style={{ height: "50vh", marginTop: "3%", }}
+            style={{ height: "50vh", marginTop: "1%", }}
             className={"container"}
             initial="hidden"
             animate="visible"

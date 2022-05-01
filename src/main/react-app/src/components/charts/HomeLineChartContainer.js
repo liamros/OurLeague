@@ -59,7 +59,7 @@ const styles = {
     },
     typographyTitle: {
         margin: "1%",
-        color: "black",
+        color: "rgba(6, 28, 37)",
         fontWeight: "bold",
         fontSize: "1.1vw",
         marginTop: "1%",
@@ -70,8 +70,8 @@ const styles = {
         borderColor: "rgb(208, 168, 92)",
     },
     selectedButton: {
-        color: "rgb(208, 168, 92)",
-        backgroundColor: "#FFFF",
+        color: "rgba(6, 28, 37)",
+        backgroundColor: "rgb(208, 168, 92)",
         borderColor: "rgb(208, 168, 92)",
     }
 }

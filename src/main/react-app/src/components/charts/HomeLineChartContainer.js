@@ -59,7 +59,7 @@ const styles = {
     },
     typographyTitle: {
         margin: "1%",
-        color: "rgba(6, 28, 37)",
+        color: "rgb(208, 168, 92)",
         fontWeight: "bold",
         fontSize: "1.1vw",
         marginTop: "1%",

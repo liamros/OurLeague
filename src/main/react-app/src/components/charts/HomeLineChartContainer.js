@@ -23,14 +23,19 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
         map = new Map(Object.entries(data))
     var jsx = []
     if (map)
-        map.forEach(((_, key) => jsx.push(
-            <Button
-                id={key}
-                style={{ color: "rgb(208, 168, 92)", backgroundColor: "rgba(6, 28, 37)", borderColor: "rgb(208, 168, 92)" }}
-                key={key}
-                onClick={onClick}>
-                {key}
-            </Button>))
+        map.forEach(((_, key) => {
+            var style = styles.button
+            if (key === selected)
+                style = styles.selectedButton
+            jsx.push(
+                <Button
+                    id={key}
+                    style={style}
+                    key={key}
+                    onClick={onClick}>
+                    {key}
+                </Button>)
+        })
         )
 
     return (
@@ -59,6 +64,16 @@ const styles = {
         fontSize: "1.1vw",
         marginTop: "1%",
     },
+    button: {
+        color: "rgb(208, 168, 92)",
+        backgroundColor: "rgba(6, 28, 37)",
+        borderColor: "rgb(208, 168, 92)",
+    },
+    selectedButton: {
+        color: "rgb(208, 168, 92)",
+        backgroundColor: "#FFFF",
+        borderColor: "rgb(208, 168, 92)",
+    }
 }
 
 

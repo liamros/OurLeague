@@ -51,6 +51,7 @@ No cache is implemted yet.
 - [ ] Request personal API key to Riot
 - [ ] Write doc documentation
 - [ ] Set dominion
+
 ***Backend***
 - [x] Initial data structure
 - [x] Insert Summoner API

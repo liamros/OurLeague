@@ -79,14 +79,14 @@ const styles = {
         display: "inline-block",
         margin: "0%",
         backgroundColor: "rgb(6, 28, 37)",
-        border: "3px solid rgb(208, 168, 92)"
+        border: "0.2vw solid rgb(208, 168, 92)"
     },
     cardMedia: {
         borderRadius: "50%",
         width: "20%",
         margin: "auto",
         // marginTop: "4%",
-        border: "2px solid rgb(208, 168, 92)"
+        border: "0.15vw solid rgb(208, 168, 92)"
     },
     container: {
         width: '100%',

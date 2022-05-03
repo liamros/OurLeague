@@ -47,6 +47,7 @@ No cache is implemted yet.
 
 
 ## TODOs
+***General***
 - [x] deploy on AWS
 - [ ] Request personal API key to Riot
 - [ ] Write doc documentation

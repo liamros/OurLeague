@@ -9,19 +9,19 @@ const RankingTable = ({ rankings }) => {
                 {rankings.map((ranking) => {
                     var mov
                     if (!ranking.prevPosition)
-                        mov = "★"
+                        mov = <td>★</td>
                     else if (ranking.position == ranking.prevPosition)
-                        mov = "="
+                        mov = <td>=</td>
                     else if (ranking.position > ranking.prevPosition)
-                        mov = "▼"
+                        mov = <td style={{color: "red"}}>▼ -{ranking.position-ranking.prevPosition}</td>
                     else
-                        mov = "▲"
+                        mov = <td style={{color: "green"}}>▲ +{ranking.prevPosition-ranking.position}</td>
                     return (
                         <tr key={ranking.summonerName}>
                             <td>{ranking.position}</td>
                             <td>{ranking.summonerName}</td>
                             <td>{ranking.description}</td>
-                            <td>{mov}</td>
+                            {mov}
                         </tr>
                     )
                 })}

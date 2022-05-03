@@ -80,7 +80,6 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         </motion.div>
                     </Card>
                 </motion.div>
-                <Link to="/" />
             </div>
             </StyledEngineProvider>
     )

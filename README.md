@@ -47,6 +47,10 @@ No cache is implemted yet.
 
 
 ## TODOs
+- [x] deploy on AWS
+- [ ] Request personal API key to Riot
+- [ ] Write doc documentation
+- [ ] Set dominion
 ***Backend***
 - [x] Initial data structure
 - [x] Insert Summoner API
@@ -64,6 +68,8 @@ No cache is implemted yet.
 - [x] Chart APIs
 - [ ] Batch update matches
 - [ ] MatchHistory API
+- [ ] Implement websocket for update
+- [ ] Reorganize main class code
 
 ***Frontend***
 - [x] Initialize React
@@ -72,8 +78,9 @@ No cache is implemted yet.
 - [x] Showcase Rankings
 - [x] Animate and style ShowCase
 - [x] Charts
-- [ ] Update button
+- [ ] Update button websocket
 - [ ] StatsSection
 - [ ] PairStatsSection
 - [ ] MatchHistory
 - [x] Style background
+- [x] Make webapp Responsive

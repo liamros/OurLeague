@@ -8,7 +8,7 @@ import ShowCaseList from "./ShowCaseList";
 
 const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }) => {
 
-    
+
 
     React.useEffect(() => {
         fetchShowCaseRankings()
@@ -24,10 +24,10 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
         <>
             {!isFetching && showCaseRankings ? (
                 <>
-                    <ShowCaseList selectedId={statName} showCaseRankings={showCaseRankings} />
-                    <AnimatePresence>
-                        {statName && <ShowCaseItem id={statName} key="item" />}
-                    </AnimatePresence>
+                        <ShowCaseList selectedId={statName} showCaseRankings={showCaseRankings} />
+                        <AnimatePresence>
+                            {statName && <ShowCaseItem id={statName} key="item" />}
+                        </AnimatePresence>
                 </>
             ) : <LinearProgress />
             }

@@ -95,3 +95,33 @@
   padding-bottom: 12px;
   text-align: center;
 }
+
+
+
+
+
+  .card-typography {
+      margin: 2%;
+      color: rgb(208, 168, 92);
+      font-size: 0.9vw;
+  }
+  .card-typography-title {
+      margin: 2%;
+      color: rgb(208, 168, 92);
+      font-weight: bold;
+      font-size: 1.1vw;
+      margin-top: 3%;
+  }
+  .card {
+      width: 100%;
+      display: inline-block;
+      margin: 0%;
+      background-color: rgb(6, 28, 37);
+      border: 0.2vw solid rgb(208, 168, 92);
+  }
+  .card-media {
+      border-radius: 50%;
+      width: 20%;
+      margin: auto;
+      border: 0.15vw solid rgb(208, 168, 92);
+  }

@@ -1,9 +1,10 @@
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { Button, ButtonGroup } from "@mui/material";
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { fetchHomeLineCharts } from '../../actions';
 import LineChart from "./LineChart";
-import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
 
@@ -40,14 +41,32 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
         })
         )
 
+    const variants = {
+        visible: {
+            opacity: 1,
+            transition: {
+                delay: 2.0,
+                duration: 1,
+            },
+        },
+        hidden: { opacity: 0 },
+    }
+
     return (
         data &&
         <StyledEngineProvider injectFirst>
-            <ButtonGroup className="typography button-group" variant="contained" aria-label="outlined primary button group">
-                {jsx}
-            </ButtonGroup>
-            <div className="typography-title">{data[selected].name}</div>
-            <LineChart data={data[selected]} />
+            <motion.div
+                className={"container chart"}
+                initial="hidden"
+                animate="visible"
+                variants={variants}
+            >
+                <ButtonGroup className="typography button-group" variant="contained" aria-label="outlined primary button group">
+                    {jsx}
+                </ButtonGroup>
+                <div className="typography-title">{data[selected].name}</div>
+                <LineChart data={data[selected]} />
+            </motion.div>
         </StyledEngineProvider>
     )
 

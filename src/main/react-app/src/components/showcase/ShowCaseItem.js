@@ -4,6 +4,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import RankingTable from "../ranking/RankingTable";
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
 
@@ -20,7 +21,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
         queueType = rank.queueType
 
     return (
-        <>
+        <StyledEngineProvider injectFirst>
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -37,37 +38,36 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                 <motion.div layoutId={`card-${id}`} className="content-container">
                     <Card
                         elevation={10}
-                        style={styles.card}
-                        className="content-container"
+                        className="content-container card"
                     >
                         <motion.div layoutId={`card-title-${id}`}>
-                            <Typography style={styles.typographyTitle}>{id}</Typography>
+                            <Typography className="card-typography-title">{id}</Typography>
                         </motion.div>
                         <motion.div layoutId={`card-content-${id}`}>
                             <CardMedia
                                 component="img"
                                 image={profileIcon}
-                                style={styles.cardMediaProfile}
+                                className="card-media"
                             />
                         </motion.div>
                         <motion.div layoutId={`card-name-${id}`}>
-                            <Typography style={styles.typographyTitle}>{summonerName}</Typography>
+                            <Typography className="card-typography-title">{summonerName}</Typography>
                         </motion.div>
 
-                        <motion.div style={styles.typography} animate>
+                        <motion.div className="card-typography" animate>
                             <CardMedia
                                 component="img"
                                 image={require(`../../img/rank/emblem_${tier}.png`)}
-                                style={styles.cardMediaRank}
+                                className="card-media-rank"
                             />
 
                             {
                                 rank.division ?
                                     (<>
-                                        <Typography style={styles.typography}>{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
+                                        <Typography className="card-typography">{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
                                     </>) :
                                     (<>
-                                        <Typography style={styles.typography}>{rank.tier} - 0 LP</Typography>
+                                        <Typography className="card-typography">{rank.tier} - 0 LP</Typography>
                                     </>)
                             }
 
@@ -77,49 +77,8 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                 </motion.div>
 
             </div>
-        </>
+            </StyledEngineProvider>
     )
-}
-
-
-
-const styles = {
-    typography: {
-        margin: "2%",
-        color: "rgb(208, 168, 92)",
-        fontSize: "0.9vw",
-    },
-    typographyTitle: {
-        margin: "2%",
-        color: "rgb(208, 168, 92)",
-        fontWeight: "bold",
-        fontSize: "1.0vw",
-    },
-    card: {
-        width: '100%',
-        display: "inline-block",
-        margin: "0%",
-        backgroundColor: "rgb(6, 28, 37)",
-        border: "3px solid rgb(208, 168, 92)"
-    },
-    cardMediaProfile: {
-        borderRadius: "50%",
-        width: "20%",
-        margin: "auto",
-        // marginTop: "5%",
-        border: "2px solid rgb(208, 168, 92)"
-    },
-    cardMediaRank: {
-        width: "15%",
-        margin: "auto",
-
-    },
-    container: {
-        width: '100%',
-        display: "inline-block",
-        margin: "0%",
-        padding: "0%"
-    }
 }
 
 

@@ -190,4 +190,17 @@
      {
        font-size: 20px;
      }
+     .typography-title
+    {
+      font-size: 20px;
+      margin: 2%;
+    }
+     .typography
+     {
+       font-size: 10px;
+     }
+     .button-group
+     {
+       margin-top: 3%;
+     }
 }

@@ -43,7 +43,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
     return (
         data &&
         <StyledEngineProvider injectFirst>
-            <ButtonGroup className="typography" variant="contained" aria-label="outlined primary button group">
+            <ButtonGroup className="typography button-group" variant="contained" aria-label="outlined primary button group">
                 {jsx}
             </ButtonGroup>
             <div className="typography-title">{data[selected].name}</div>

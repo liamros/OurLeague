@@ -1,4 +1,4 @@
-.App {
+* {
   text-align: center;
   font-family: 'Nunito';
 }
@@ -98,8 +98,17 @@
 
 
 
-
-
+.typography {
+  color: rgb(208, 168, 92);
+  font-size: 0.8vw;
+  font-family: 'Nunito';
+}
+.typography-title {
+  margin: 1.5%;
+  color: rgb(208, 168, 92);
+  font-weight: bold;
+  font-size: 1.1vw;
+}
 .card-typography {
     margin: 2%;
     color: rgb(208, 168, 92);
@@ -128,4 +137,34 @@
 .card-media-rank {
   width: 15%;
   margin: auto;
+}
+
+
+.button {
+  color: rgb(208, 168, 92);
+  background-color: rgba(6, 28, 37);
+  border-color: rgb(208, 168, 92);
+}
+.selected-button {
+  color: rgba(6, 28, 37);
+  background-color: rgb(208, 168, 92);
+  border-color: rgb(208, 168, 92);
+}
+.detail-container {
+  display: inline-block;
+  width: 29%;
+  margin: 2%;
+}
+
+
+@media all and (max-width:800px) 
+{
+    .detail-container
+    {
+        display: block; 
+        float: none; 
+        width: 70%;
+        margin: auto;
+        margin-top: 2%;
+    }
 }

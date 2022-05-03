@@ -24,7 +24,7 @@ const ShowCaseList = ({ selectedId, showCaseRankings }) => {
             <motion.div
                 key={i}
                 custom={i}
-                style={styles.detailContainer}
+                className="detail-container"
                 initial="hidden"
                 animate="visible"
                 variants={variants}
@@ -44,15 +44,6 @@ const ShowCaseList = ({ selectedId, showCaseRankings }) => {
     )
 
 
-
-}
-
-const styles = {
-    detailContainer: {
-        display: "inline-block",
-        width: '29%',
-        margin: "2%"
-    }
 
 }
 

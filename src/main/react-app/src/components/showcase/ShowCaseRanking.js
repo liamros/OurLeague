@@ -1,8 +1,8 @@
-import { Card, CardMedia, CircularProgress, Typography } from "@mui/material";
+import { Card, CardMedia, CircularProgress } from "@mui/material";
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { motion } from "framer-motion";
 import * as React from 'react';
 import { Link } from "react-router-dom";
-import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 
 
@@ -34,8 +34,8 @@ const ShowCaseRanking = (props) => {
                                 className="showcaseDetail card"
                             >
                                 <motion.div layoutId={`card-title-${statName}`}>
-                                    <Typography className="card-typography-title">{statName}</Typography>
-                                </motion.div>
+                                    <div className="card-typography-title">{statName}</div>
+                                </motion.div>   
                                 <motion.div layoutId={`card-content-${statName}`}>
                                     <CardMedia
                                         component="img"
@@ -45,9 +45,9 @@ const ShowCaseRanking = (props) => {
                                     />
                                 </motion.div>
                                 <motion.div layoutId={`card-name-${statName}`}>
-                                    <Typography fontWeight={"bold"} className="card-typography">{summonerName}</Typography>
+                                <div fontWeight={"bold"} className="card-typography">{summonerName}</div>
                                 </motion.div>
-                                <Typography className="card-typography">{description}</Typography>
+                                <div className="card-typography">{description}</div>
 
 
 

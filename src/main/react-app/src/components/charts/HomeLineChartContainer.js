@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { fetchHomeLineCharts } from '../../actions';
 import LineChart from "./LineChart";
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
 
@@ -31,6 +32,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
                 <Button
                     id={key}
                     style={style}
+                    className="typography"
                     key={key}
                     onClick={onClick}>
                     {key}
@@ -40,30 +42,18 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
 
     return (
         data &&
-        <>
-            <ButtonGroup variant="contained" aria-label="outlined primary button group">
+        <StyledEngineProvider injectFirst>
+            <ButtonGroup className="typography" variant="contained" aria-label="outlined primary button group">
                 {jsx}
             </ButtonGroup>
-            <Typography style={styles.typographyTitle}>{data[selected].name}</Typography>
+            <div className="typography-title">{data[selected].name}</div>
             <LineChart data={data[selected]} />
-        </>
+        </StyledEngineProvider>
     )
 
 }
 
 const styles = {
-    typography: {
-        margin: "2%",
-        color: "rgb(208, 168, 92)",
-        fontSize: "0.9vw",
-    },
-    typographyTitle: {
-        margin: "1%",
-        color: "rgb(208, 168, 92)",
-        fontWeight: "bold",
-        fontSize: "1.1vw",
-        marginTop: "1%",
-    },
     button: {
         color: "rgb(208, 168, 92)",
         backgroundColor: "rgba(6, 28, 37)",

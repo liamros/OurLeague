@@ -1,10 +1,10 @@
-import { Card, CardMedia, Typography } from "@mui/material";
+import { Card, CardMedia } from "@mui/material";
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { motion } from "framer-motion";
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import RankingTable from "../ranking/RankingTable";
-import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
 
@@ -41,7 +41,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         className="content-container card"
                     >
                         <motion.div layoutId={`card-title-${id}`}>
-                            <Typography className="card-typography-title">{id}</Typography>
+                            <div className="card-typography-title">{id}</div>
                         </motion.div>
                         <motion.div layoutId={`card-content-${id}`}>
                             <CardMedia
@@ -51,7 +51,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                             />
                         </motion.div>
                         <motion.div layoutId={`card-name-${id}`}>
-                            <Typography className="card-typography-title">{summonerName}</Typography>
+                            <div className="card-typography">{summonerName}</div>
                         </motion.div>
 
                         <motion.div className="card-typography" animate>
@@ -64,10 +64,10 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                             {
                                 rank.division ?
                                     (<>
-                                        <Typography className="card-typography">{rank.tier} {rank.division} {rank.lp} LP in {queueType}</Typography>
+                                        <div className="card-typography">{rank.tier} {rank.division} {rank.lp} LP in {queueType}</div>
                                     </>) :
                                     (<>
-                                        <Typography className="card-typography">{rank.tier} - 0 LP</Typography>
+                                        <div className="card-typography">{rank.tier} - 0 LP</div>
                                     </>)
                             }
 

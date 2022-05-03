@@ -163,8 +163,26 @@
     {
         display: block; 
         float: none; 
-        width: 70%;
+        width: 100%;
         margin: auto;
         margin-top: 2%;
+        /* height: 600px; */
     }
+    .card
+    {
+      /* height: 210px; */
+      display: block;
+    }
+    .card-media
+    {
+      width: 25%
+    }
+    .card-typography-title
+    {
+      font-size: 22px;
+    }
+    .card-typography
+     {
+       font-size: 20px;
+     }
 }

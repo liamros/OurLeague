@@ -34,7 +34,7 @@ const ShowCaseRanking = (props) => {
                                 className="showcaseDetail card"
                             >
                                 <motion.div layoutId={`card-title-${statName}`}>
-                                    <div className="card-typography-title">{statName}</div>
+                                    <div className="card-typography-title detail">{statName}</div>
                                 </motion.div>   
                                 <motion.div layoutId={`card-content-${statName}`}>
                                     <CardMedia

@@ -5,6 +5,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import RankingTable from "../ranking/RankingTable";
+import CloseIcon from '@mui/icons-material/Close';
 
 const ShowCaseItem = ({ id, showCaseRankings }) => {
 
@@ -31,15 +32,19 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                 className="overlay"
 
             >
-                <Link to="/" />
+                
             </motion.div>
 
             <div className="card-content-container open">
+            <Link to="/" className="anchor" />
                 <motion.div layoutId={`card-${id}`} className="content-container">
                     <Card
                         elevation={10}
                         className="content-container card"
                     >
+                        <Link to="/" style={{marginLeft:"80%", marginTop:"3%", marginBottom:"0%"}}>
+                        <CloseIcon style={{color: "rgb(208, 168, 92)",  marginTop:"3%", marginBottom:"0%"}}/>
+                        </Link>
                         <motion.div layoutId={`card-title-${id}`}>
                             <div className="card-typography-title">{id}</div>
                         </motion.div>
@@ -75,7 +80,7 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
                         </motion.div>
                     </Card>
                 </motion.div>
-
+                <Link to="/" />
             </div>
             </StyledEngineProvider>
     )

@@ -102,6 +102,7 @@ const LineChart = ({ data }) => {
             pointLabelYOffset={-12}
             useMesh={true}
             enableArea={true}
+            curve="monotoneX"
             motionConfig="gentle"
             legends={[
                 {

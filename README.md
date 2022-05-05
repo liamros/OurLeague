@@ -51,7 +51,7 @@ No cache is implemted yet.
 - [x] deploy on AWS
 - [ ] Request personal API key to Riot
 - [ ] Write doc documentation
-- [ ] Set dominion
+- [ ] Set domain
 
 ***Backend***
 - [x] Initial data structure
@@ -70,7 +70,7 @@ No cache is implemted yet.
 - [x] Chart APIs
 - [ ] Batch update matches
 - [ ] MatchHistory API
-- [ ] Implement websocket for update
+- [x] Implement websocket for update
 - [ ] Reorganize main class code
 
 ***Frontend***
@@ -80,7 +80,8 @@ No cache is implemted yet.
 - [x] Showcase Rankings
 - [x] Animate and style ShowCase
 - [x] Charts
-- [ ] Update button websocket
+- [x] Update button websocket
+- [ ] Maintain selected state between charts
 - [ ] StatsSection
 - [ ] PairStatsSection
 - [ ] MatchHistory

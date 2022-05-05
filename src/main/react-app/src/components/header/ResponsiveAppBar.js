@@ -8,6 +8,7 @@ import Menu from '@mui/material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import UpdateButton from './UpdateButton';
 
 const pages = ['Home'];
 
@@ -93,11 +94,7 @@ const ResponsiveAppBar = () => {
             ))} */}
           </Box>
 
-          <Button
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Update
-          </Button>
+          <UpdateButton/>
         </Toolbar>
       </Container>
     </AppBar>

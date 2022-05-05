@@ -1,6 +1,7 @@
 package it.our.league.app.thread;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,9 @@ import it.our.league.app.controller.dto.AppSummonerDTO;
  * 
  * @author Liam Rossi
  */
-public class DataRefreshRunnable implements Runnable {
+public class DataRefreshCallable implements Callable<Integer> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DataRefreshRunnable.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataRefreshCallable.class);
 
     @Autowired
     private Long riotRateLimit;
@@ -43,18 +44,18 @@ public class DataRefreshRunnable implements Runnable {
     private LeagueAppManager leagueAppImpl;
 
     @Override
-    public void run() {
+    public Integer call() {
 
         leagueSummonerImpl.updateAllSummoners();
         LOGGER.info("Updated all summoner information");
         List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        int count = 0;
+        int gamesFound = 0;
         for (AppSummonerDTO summoner : summoners) {
             int games = leagueMatchImpl.updateMatchHistory(summoner);
             LOGGER.info("Found {} new matches for {}", games, summoner.getName());
-            count += games;
+            gamesFound += games;
         }
-        LOGGER.info("Found {} total new matches", count);
+        LOGGER.info("Found {} total new matches", gamesFound);
         while (true) {
             try {
                 leagueMatchImpl.populateAllMatchData();
@@ -65,9 +66,10 @@ public class DataRefreshRunnable implements Runnable {
                     throw e;
             }
         }
+        int updatedRsms = 0;
         while (true) {
             try {
-                int updatedRsms = leagueMatchImpl.alignRelSummonerMatches();
+                updatedRsms += leagueMatchImpl.alignRelSummonerMatches();
                 LOGGER.info("Updated {} rel summoner-matches", updatedRsms);
                 break;
             } catch (Exception e) {
@@ -78,6 +80,8 @@ public class DataRefreshRunnable implements Runnable {
         LOGGER.info("Updating Showcase Rankings...");
         leagueAppImpl.updateShowCaseRankings();
         LOGGER.info("DataRefresh complete");
+
+        return gamesFound + updatedRsms;
     }
 
     private boolean handleRateLimit(Exception e) {

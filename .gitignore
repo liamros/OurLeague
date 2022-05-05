@@ -89,3 +89,4 @@ src/main/resources/application.properties
 
 build/
 src/main/resources/application-aws.properties
+src/main/resources/application-dev.properties

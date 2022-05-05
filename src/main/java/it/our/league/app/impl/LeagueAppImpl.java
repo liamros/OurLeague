@@ -13,7 +13,6 @@ import java.util.Queue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.our.league.app.LeagueAppManager;
@@ -27,7 +26,7 @@ import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.ShowCaseRankingJPA;
 import it.our.league.app.impl.persistence.repository.ShowCaseRankingRepository;
-import it.our.league.app.thread.DataRefreshRunnable;
+import it.our.league.app.thread.DataRefreshHandler;
 import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.common.constants.LeagueQueueType;
 import it.our.league.common.constants.ShowCaseType;
@@ -38,10 +37,8 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueAppImpl.class);
 
-    private Thread t;
-
     @Autowired
-    private ApplicationContext applicationContext;
+    private DataRefreshHandler dataRefreshHandler;
     @Autowired
     private LeagueSummonerManager leagueSummonerImpl;
     @Autowired
@@ -141,15 +138,8 @@ public class LeagueAppImpl implements LeagueAppManager {
     }
 
     @Override
-    public synchronized String asyncronousDataRefresh() {
-        // TODO find another way to handle this (implement a threadHandler)
-        if (t != null && t.isAlive())
-            return "KO";
-
-        Runnable dataRefreshRunnable = new DataRefreshRunnable();
-        applicationContext.getAutowireCapableBeanFactory().autowireBean(dataRefreshRunnable);
-        t = new Thread(dataRefreshRunnable);
-        t.start();
+    public String asyncronousDataRefresh() {
+        dataRefreshHandler.startDataRefresh();
         return "OK";
     }
 

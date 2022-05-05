@@ -14,6 +14,8 @@
       <bean class="it.our.league.app.impl.LeagueSummonerImpl" id="leagueSummonerImpl" />
       <bean class="it.our.league.app.impl.LeagueMatchImpl" id="leagueMatchImpl" />
       <bean class="it.our.league.app.impl.LeagueAppImpl" id="leagueAppImpl" />
+      
+      <bean class="it.our.league.app.thread.DataRefreshHandler" id="dataRefreshHandler"/>
 
 
       <bean class="it.our.league.common.RestAdapter" id="riotManager">

@@ -1,3 +1,5 @@
+import { ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 import { LayoutGroup, MotionConfig } from "framer-motion";
 import React from "react";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -15,6 +17,7 @@ function App() {
 
 
   return (
+    <ThemeProvider theme={theme}>
     <div className="App">
       <MotionConfig reducedMotion={animate}>
         <LayoutGroup type="crossfade">
@@ -29,7 +32,21 @@ function App() {
       </MotionConfig>
 
     </div >
+    </ThemeProvider>
   );
 }
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: 'rgb(208, 168, 92);',
+      // darker: '#053e85',
+    },
+    secondary: {
+      main: '#FFFF',
+    },
+
+  }
+});
 
 export default App;

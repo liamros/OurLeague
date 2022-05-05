@@ -4,7 +4,7 @@ import React from "react";
 import { connect } from "react-redux";
 import * as SockJS from 'sockjs-client';
 import * as Stomp from 'stompjs';
-import { fetchShowCaseRankings, fetchHomeLineCharts } from "../../actions";
+import { fetchHomeLineCharts, fetchShowCaseRankings } from "../../actions";
 
 
 const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
@@ -54,11 +54,11 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
     }
     return (
         <>
-            {updating ? <CircularProgress /> :
+            {updating ? <CircularProgress  /> :
                 <Button
                     sx={{ my: 2, color: 'white', display: 'block' }}
                     onClick={onClick}
-
+                    style={{margin: 0}}
                 >
                     Update
                 </Button>}

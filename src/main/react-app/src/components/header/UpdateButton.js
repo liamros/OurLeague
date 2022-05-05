@@ -10,10 +10,11 @@ import { fetchShowCaseRankings, fetchHomeLineCharts } from "../../actions";
 const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
 
     const [updating, setUpdating] = React.useState(false)
+    
 
     var stompClient
 
-    var wsURI
+    const [wsURI, setWsURI] = React.useState()
     /**
      * required because in dev the proxy for websocets does not work
      */
@@ -22,7 +23,7 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
         let { host } = window.location; // nb: window location contains the port, so host will be localhost:3000 in dev
         if (host === "localhost:3000")
             host = "localhost:5000"
-        wsURI = `http://${host}/ws`
+        setWsURI(`http://${host}/ws`)
     }, [])
 
     const onClick = () => {

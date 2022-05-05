@@ -7,14 +7,27 @@ import * as Stomp from 'stompjs';
 import { fetchShowCaseRankings, fetchHomeLineCharts } from "../../actions";
 
 
-const UpdateButton = ({fetchShowCaseRankings ,fetchHomeLineCharts}) => {
+const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
 
     const [updating, setUpdating] = React.useState(false)
 
     var stompClient
+
+    var wsURI
+    /**
+     * required because in dev the proxy for websocets does not work
+     */
+    React.useEffect(() => {
+        // const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        let { host } = window.location; // nb: window location contains the port, so host will be localhost:3000 in dev
+        if (host === "localhost:3000")
+            host = "localhost:5000"
+        wsURI = `http://${host}/ws`
+    }, [])
+
     const onClick = () => {
         setUpdating(true)
-        var socket = new SockJS('http://localhost:5000/ws');
+        var socket = new SockJS(wsURI);
         stompClient = Stomp.over(socket)
         stompClient.connect({}, onConnected)
     }
@@ -34,7 +47,7 @@ const UpdateButton = ({fetchShowCaseRankings ,fetchHomeLineCharts}) => {
         console.log(message)
         stompClient.disconnect()
         setUpdating(false)
-        
+
         fetchShowCaseRankings()
         fetchHomeLineCharts()
     }

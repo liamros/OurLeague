@@ -19,7 +19,6 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
         statName = match.params.statName
 
 
-    console.log(statName)
     return (
         <>
             {!isFetching && showCaseRankings ? (

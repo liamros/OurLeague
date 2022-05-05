@@ -45,8 +45,12 @@ const theme = createTheme({
     secondary: {
       main: '#FFFF',
     },
-
-  }
+  },
+  typography: {
+    fontFamily: [
+      'Nunito'
+    ],
+  },
 });
 
 export default App;

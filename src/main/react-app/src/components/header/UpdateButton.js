@@ -60,7 +60,7 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
                     onClick={onClick}
                     style={{margin: 0}}
                 >
-                    Update
+                    UPDATE
                 </Button>}
         </>
 

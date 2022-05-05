@@ -141,6 +141,7 @@ const LineChart = ({ data }) => {
 const theme = {
     /*background: "rgb(6, 28, 37)",*/
     textColor: "rgb(208, 168, 92)",
+    fontFamily: "Nunito",
     grid: {
         line:
         {

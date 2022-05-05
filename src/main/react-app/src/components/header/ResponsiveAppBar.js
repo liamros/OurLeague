@@ -93,7 +93,6 @@ const ResponsiveAppBar = () => {
               </Button>
             ))} */}
           </Box>
-
           <UpdateButton/>
         </Toolbar>
       </Container>

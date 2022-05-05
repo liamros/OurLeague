@@ -9,9 +9,11 @@ import { Link } from "react-router-dom";
 const ShowCaseRanking = (props) => {
 
 
-    const [stats] = React.useState(props.stats)
+    const [stats, setStats] = React.useState(props.stats)
 
-
+    React.useEffect(() => {
+        setStats(props.stats)
+    }, [props])
 
 
     var statName = props.name

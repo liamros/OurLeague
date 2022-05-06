@@ -422,7 +422,9 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     private Map<Integer, List<AppParticipantInfoDTO>> initTimeMap(List<AppParticipantInfoDTO> matches) {
         Map<Integer, List<AppParticipantInfoDTO>> matchesPerMinute = new HashMap<>();
-        for (int i = 15; i <= 50; i+=5) 
+        int minTime = 15;
+        int maxTime = 45;
+        for (int i = minTime; i <= maxTime; i+=5) 
             matchesPerMinute.put(i, new ArrayList<>());
         for (AppParticipantInfoDTO match : matches) {
             Long endTime = match.getEndTime().getTime();
@@ -430,8 +432,8 @@ public class LeagueAppImpl implements LeagueAppManager {
             Integer timeSlice = ((int) (endTime - startTime)) / 1000 / 60 / 5 * 5;
             if (timeSlice < 15)
                 continue;
-            if (timeSlice > 50)
-                timeSlice =  50;
+            if (timeSlice > maxTime)
+                timeSlice =  maxTime;
             List<AppParticipantInfoDTO> l = matchesPerMinute.get(timeSlice);
             l.add(match);
         }

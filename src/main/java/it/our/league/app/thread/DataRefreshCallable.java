@@ -13,7 +13,7 @@ import it.our.league.app.LeagueSummonerManager;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 
 /**
- * Runnable which executes updates on Summoners and Matches,
+ * Callable which executes updates on Summoners and Matches,
  * using APIs from {@link LeagueSummonerManager} and {@link LeagueMatchManager}.
  * </p>
  * It executes the following operations in order :

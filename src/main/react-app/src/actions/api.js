@@ -1,5 +1,5 @@
 export const getShowCaseRankings = () => {
-    const data = fetch('/app/getShowCaseRankings'/*, { mode: 'cors' }*/)
+    const data = fetch('/app/getShowCaseRankings')
         .then(res => res.json())
         .then((data) => {
             return data
@@ -10,7 +10,7 @@ export const getShowCaseRankings = () => {
 
 export const getSummonerIcon = (profileIconNum) => {
     let url = `/summoner/getProfileIcon?profileIconNumber=${profileIconNum}`
-    const img = fetch(url, /*, { mode: 'cors' }*/)
+    const img = fetch(url)
         .then(response =>
             response.blob())
         .then(imgBlob => {
@@ -23,7 +23,7 @@ export const getSummonerIcon = (profileIconNum) => {
 }
 
 export const getWrLineChart = () => {
-    const data = fetch('/app/getWinrateAllLineCharts'/*, { mode: 'cors' }*/)
+    const data = fetch('/app/getWinrateAllLineCharts')
         .then(res => res.json())
         .then((data) => {
             return data
@@ -33,7 +33,7 @@ export const getWrLineChart = () => {
 
 
 export const getVisionScoreLineChart = () => {
-    const data = fetch('/app/getVisionPerMinuteChart'/*, { mode: 'cors' }*/)
+    const data = fetch('/app/getVisionPerMinuteChart')
         .then(res => res.json())
         .then((data) => {
             return data
@@ -42,7 +42,16 @@ export const getVisionScoreLineChart = () => {
 }
 
 export const getGamesPerMinuteChart = () => {
-    const data = fetch('/app/getGamesPerMinuteChart'/*, { mode: 'cors' }*/)
+    const data = fetch('/app/getGamesPerMinuteChart')
+        .then(res => res.json())
+        .then((data) => {
+            return data
+        }).catch(console.log)
+    return data
+}
+
+export const getAllHomeCharts = () => {
+    const data = fetch('/app/getAllHomeCharts')
         .then(res => res.json())
         .then((data) => {
             return data

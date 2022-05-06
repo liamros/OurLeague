@@ -1,4 +1,4 @@
-import { getShowCaseRankings, getSummonerIcon, getWrLineChart, getVisionScoreLineChart, getGamesPerMinuteChart } from './api'
+import { getAllHomeCharts, getShowCaseRankings, getSummonerIcon } from './api'
 
 export const initShowCase = () => ({
     type: 'INIT_SHOWCASE',
@@ -45,25 +45,13 @@ export function fetchHomeLineCharts() {
     return (dispatch) => {
         dispatch(initHomeLineChart())
         var obj = {}
-        var promises = []
-        promises.push(getWrLineChart()
-            .then((response) => {
-                response.charts.push({ id: "ALL", data: [] })
-                obj[response.name] = response
+
+        var promise = getAllHomeCharts().then((response) => {
+            response.forEach((wrapper) => {
+                wrapper.charts.push({ id: "ALL", data: [] })
+                obj[wrapper.name] = wrapper
             })
-        )
-        promises.push(getVisionScoreLineChart()
-            .then((response) => {
-                response.charts.push({ id: "ALL", data: [] })
-                obj[response.name] = response
-            })
-        )
-        promises.push(getGamesPerMinuteChart()
-            .then((response) => {
-                response.charts.push({ id: "ALL", data: [] })
-                obj[response.name] = response
-            })
-        )
-        Promise.all(promises).then(() => dispatch(initHomeLineChartSuccess(obj)))
+        })
+        Promise.resolve(promise).then(() => dispatch(initHomeLineChartSuccess(obj)))
     }
 }

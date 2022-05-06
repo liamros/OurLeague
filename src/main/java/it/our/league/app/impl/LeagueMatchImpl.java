@@ -48,9 +48,11 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Autowired
     private MongoMatchRepository mongoMatchRepository;
 
-     /**
+    /**
      * Fetches from Riot APIs matchIds which don't exist on the DB.
-     * It persists them, whith no additional data, for their enrichment look at {@link #completeMatchData}
+     * It persists them, whith no additional data, for their enrichment look at
+     * {@link #completeMatchData}
+     * 
      * @param summoner app's summoner DTO
      * @return number of matches found
      */
@@ -61,11 +63,12 @@ public class LeagueMatchImpl implements LeagueMatchManager {
         List<String> matchIds = null;
         int count = 0;
         Timestamp lastEndTime = relSummonerMatchRepository.getLastMatchEndTimeBySummoner(summoner.getSummInfoId());
-        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime()/1000+60;
+        Long fromTime = lastEndTime == null ? defaultTimestamp : lastEndTime.getTime() / 1000 + 60;
         do {
             Integer pendingMatches = relSummonerMatchRepository.getNumberOfPendingMatches(summoner.getPuuid());
             /**
-             * countMatches is the index from which starts the list of matchIds that Riot sends
+             * countMatches is the index from which starts the list of matchIds that Riot
+             * sends
              */
             matchIds = riotManager.getMatchIdsByPuuid(summoner.getPuuid(), "ranked", 100, fromTime,
                     pendingMatches);
@@ -81,24 +84,28 @@ public class LeagueMatchImpl implements LeagueMatchManager {
             for (String matchId : matchIds)
                 if (!existingMatchIds.contains(matchId))
                     filteredMatchIds.add(matchId);
-            
+
             matchInfoRepository.saveAll(LeagueAppUtility.generateMatchInfoJpas(filteredMatchIds));
             LOGGER.info("Persisted {} new matches", filteredMatchIds.size());
-            relSummonerMatchRepository.saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summoner.getSummInfoId(), matchIds));
+            relSummonerMatchRepository
+                    .saveAll(LeagueAppUtility.generateRelSummonerMatchJpas(summoner.getSummInfoId(), matchIds));
             LOGGER.info("Persisted {} new summoner-match relations", matchIds.size());
-            count+=matchIds.size();
+            count += matchIds.size();
         } while (matchIds.size() == 100);
         /**
-         * while condition is matchIds.size() == 100 because if it's less, there are no more games to fetch (count = 100)
+         * while condition is matchIds.size() == 100 because if it's less, there are no
+         * more games to fetch (count = 100)
          */
 
         return count;
     }
 
     /**
-     * Fetches from DB records from MATCH_INFO that have null values, to enrich them by calling Riot APIs.
+     * Fetches from DB records from MATCH_INFO that have null values, to enrich them
+     * by calling Riot APIs.
      * It also persists the response to MongoDB
-     * @param matchId 
+     * 
+     * @param matchId
      * @return 0 if not successfull, else 1
      * 
      */
@@ -136,7 +143,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
         for (String matchId : matchIds)
             count += populateMatchData(matchId);
-        
+
         return count;
     }
 
@@ -147,7 +154,8 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Transactional(propagation = Propagation.REQUIRED)
     private int populateRelSummonerMatchInfo(Match match) {
-        List<RelSummonerMatchJPA> list = relSummonerMatchRepository.findUncompleteByMatchId(match.getMetadata().getMatchId());
+        List<RelSummonerMatchJPA> list = relSummonerMatchRepository
+                .findUncompleteByMatchId(match.getMetadata().getMatchId());
         for (RelSummonerMatchJPA rsm : list) {
             Participant p = LeagueAppUtility.getParticipantByMatch(match, rsm.getSummoner().getPuuid());
             LeagueAppUtility.completeRelSummonerMatchJpa(rsm, p);
@@ -160,9 +168,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     public int alignRelSummonerMatches() {
 
         List<RelSummonerMatchJPA> rsms = relSummonerMatchRepository.findAllUncomplete();
-        if(rsms.isEmpty())
+        if (rsms.isEmpty())
             return 0;
-        
+
         Map<String, List<RelSummonerMatchJPA>> rsmsPerMatchId = new HashMap<>();
 
         for (RelSummonerMatchJPA rsm : rsms) {
@@ -202,7 +210,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public AppParticipantInfoDTO getParticipantInfo(String matchId, String puuid) {
         RelSummonerMatchJPA rsm = relSummonerMatchRepository.findByMatchIdAndPuuid(matchId, puuid);
-        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), puuid);
+        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), rsm.getSummoner());
     }
 
     @Override
@@ -210,7 +218,7 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(String puuid) {
         List<AppParticipantInfoDTO> out = new ArrayList<>();
         relSummonerMatchRepository.findByPuuid(puuid)
-                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), puuid)));
+                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner())));
         return out;
     }
 
@@ -218,7 +226,16 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid) {
         RelSummonerMatchJPA rsm = relSummonerMatchRepository.findHighestKillByPuuid(puuid);
-        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), puuid);
+        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), rsm.getSummoner());
     }
-    
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<AppParticipantInfoDTO> getAllParticipantInfo() {
+        List<AppParticipantInfoDTO> out = new ArrayList<>();
+        relSummonerMatchRepository.findAll()
+                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner())));
+        return out;
+    }
+
 }

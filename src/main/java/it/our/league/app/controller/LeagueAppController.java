@@ -65,4 +65,10 @@ public class LeagueAppController implements LeagueAppManager {
         return leagueAppImpl.getGamesPerMinuteChart();
     }
 
+    @Override
+    @GetMapping("/getAllHomeCharts")
+    public List<AppLineChartWrapperDTO> getAllHomeCharts() {
+        return leagueAppImpl.getAllHomeCharts();
+    }
+
 }

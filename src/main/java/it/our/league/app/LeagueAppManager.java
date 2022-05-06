@@ -16,6 +16,8 @@ public interface LeagueAppManager {
 
     public String asyncronousDataRefresh();
 
+    public List<AppLineChartWrapperDTO> getAllHomeCharts(); 
+
     public AppLineChartWrapperDTO getWinratePerMinuteChart();
 
     public AppLineChartWrapperDTO getVisionPerMinuteChart();

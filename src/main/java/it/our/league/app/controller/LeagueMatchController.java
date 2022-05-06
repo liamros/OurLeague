@@ -82,5 +82,11 @@ public class LeagueMatchController implements LeagueMatchManager {
     public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid) {
         return leagueMatchImpl.getHighestKillParticipantInfo(puuid);
     }
+
+    @Override
+    @GetMapping("/getAllParticipantInfo")
+    public List<AppParticipantInfoDTO> getAllParticipantInfo() {
+        return leagueMatchImpl.getAllParticipantInfo();
+    }
     
 }

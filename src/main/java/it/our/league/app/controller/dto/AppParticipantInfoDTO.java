@@ -6,6 +6,7 @@ public class AppParticipantInfoDTO {
     
     private Integer summInfoId;
     private String puuid;
+    private String gameName;
     private String matchId;
     private String role;
     private Integer queueTypeId;
@@ -31,6 +32,12 @@ public class AppParticipantInfoDTO {
     }
     public void setPuuid(String puuid) {
         this.puuid = puuid;
+    }
+    public String getGameName() {
+        return gameName;
+    }
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
     public String getMatchId() {
         return matchId;

@@ -225,11 +225,12 @@ public final class LeagueAppUtility {
         return list;
     }
 
-    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA rsm, MatchInfoJPA matchJpa, String puuid) {
+    public static AppParticipantInfoDTO generateAppParticipantInfoDto(RelSummonerMatchJPA rsm, MatchInfoJPA matchJpa, SummonerInfoJPA summonerJpa) {
         AppParticipantInfoDTO dto = new AppParticipantInfoDTO();
 
         dto.setSummInfoId(rsm.getSummInfoId());
-        dto.setPuuid(puuid);
+        dto.setPuuid(summonerJpa.getPuuid());
+        dto.setGameName(summonerJpa.getGameName());
         dto.setChampionName(rsm.getChampionName());
         dto.setQueueTypeId(matchJpa.getQueueTypeId());
         dto.setKills(rsm.getKills());

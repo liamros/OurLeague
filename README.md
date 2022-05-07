@@ -48,7 +48,7 @@ No cache is implemted yet.
 
 ## TODOs
 ***General***
-- [x] deploy on AWS
+- [x] Deploy on AWS
 - [ ] Request personal API key to Riot
 - [ ] Write doc documentation
 - [ ] Set domain
@@ -87,3 +87,4 @@ No cache is implemted yet.
 - [ ] MatchHistory
 - [x] Style background
 - [x] Make webapp Responsive
+- [ ] Cache results

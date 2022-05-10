@@ -36,12 +36,6 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    public Match getMatchData(String matchId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     @GetMapping("/populateMatchInfo")
     public int populateAllMatchData() {
         return leagueMatchImpl.populateAllMatchData();

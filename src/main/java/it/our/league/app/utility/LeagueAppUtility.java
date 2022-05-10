@@ -18,6 +18,7 @@ import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.entity.ShowCaseRankingJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.LeagueQueueType;
+import it.our.league.common.constants.LeagueRoleType;
 import it.our.league.common.constants.LineChartType;
 import it.our.league.common.constants.RankedTierType;
 import it.our.league.riot.dto.Match;
@@ -279,12 +280,12 @@ public final class LeagueAppUtility {
 
     public static void completeRelSummonerMatchJpa(RelSummonerMatchJPA rsm, Participant p) {
         String role = p.getIndividualPosition();
-        if (role.equals("BOTTOM"))
-            role = "CARRY";
-        else if (role.equals("MIDDLE"))
-            role = "MID";
-        else if (role.equals("UTILITY"))
-            role = "SUPPORT";
+        if (role.equals(LeagueRoleType.ADC.getRiotNaming()))
+            role = LeagueRoleType.ADC.getName();
+        else if (role.equals(LeagueRoleType.MID.getRiotNaming()))
+            role = LeagueRoleType.MID.getName();
+        else if (role.equals(LeagueRoleType.SUPPORT.getRiotNaming()))
+            role = LeagueRoleType.SUPPORT.getName();
         rsm.setChampionName(p.getChampionName());
         rsm.setRole(role);
         rsm.setKills(p.getKills());

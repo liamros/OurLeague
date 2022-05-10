@@ -131,12 +131,6 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     }
 
     @Override
-    public Match getMatchData(String matchId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public int populateAllMatchData() {
         List<String> matchIds = matchInfoRepository.getAllPendingMatches();
         int count = 0;

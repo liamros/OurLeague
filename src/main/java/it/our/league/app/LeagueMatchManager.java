@@ -13,9 +13,6 @@ public interface LeagueMatchManager {
 
     public int populateMatchData(String matchId);
 
-    public Match getMatchData(String matchId);
-
-    // provisory
     public int populateAllMatchData();
 
     public List<Match> getAllMatchesByPuuid(String puuid);

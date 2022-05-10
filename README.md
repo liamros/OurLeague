@@ -17,7 +17,7 @@ Riot public APIs can be found [here](https://developer.riotgames.com/apis)
 
 ## System Design
 
-Java web application which currently runs on AWS EC2 (Elastic Beanstalk), deployed as a JAR at http://ourleague.eu-central-1.elasticbeanstalk.com/ 
+Java web application which currently runs on AWS EC2 (Elastic Beanstalk), deployed as a JAR at https://ourleaguehub.com/ 
 
 The web app relise on a MySQL database, where data fetched from Riot APIs is stored.
 This data includes Account information such as different types of IDs, ign, profile icon etc.,

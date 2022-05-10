@@ -4,8 +4,8 @@
 OurLeague is a webpage finalized to present data of League of Legends fetched from Riot public APIs. 
 It is limited to a small circle of players, thus "OurLeague".
 
-It's main features, for now, are celebrating the players with selected best stats, 
-and to offer a set of graphs rappresenting different data related to game player performance
+It's main features, for now, are celebrating the players with the selected best stats,  
+and to offer a set of charts rappresenting different data related to game player performance
 over time.
 
 In the future, there will be more graphs, stats between players, match history and more!
@@ -17,7 +17,7 @@ Riot public APIs can be found [here](https://developer.riotgames.com/apis)
 
 ## System Design
 
-Java web application which runs on "some" server. (not deployed yet, tbd)
+Java web application which currently runs on AWS EC2 (Elastic Beanstalk), deployed as a JAR at http://ourleague.eu-central-1.elasticbeanstalk.com/ 
 
 The web app relise on a MySQL database, where data fetched from Riot APIs is stored.
 This data includes Account information such as different types of IDs, ign, profile icon etc.,
@@ -35,9 +35,14 @@ On the MySQL DB are saved the IDs to reference such matches, and the relations w
 
 Frontend is in React.
 
-It utilizes motion.div library to animate the web page's features, and all the presented data is fetched from
+It utilizes [framer](https://www.framer.com/) library to animate the web page's features, and all the presented data is fetched from
 the web application.
-No cache is implemted yet.
+
+Charts are devoleped with [nivo](https://nivo.rocks/) library.
+
+[Redux](https://redux.js.org/) is also utilized, for component context.
+
+No use of cache is implemented yet.
 
 
 

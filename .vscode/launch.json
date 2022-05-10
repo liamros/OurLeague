@@ -22,7 +22,7 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:3000",
-            "webRoot": "/../src/main/react-app/src"
+            "webRoot": "/../src/main/frontend/src"
         }
     ]
 }

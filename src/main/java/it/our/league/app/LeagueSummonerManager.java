@@ -6,6 +6,9 @@ import java.util.List;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 
+/**
+ * Class which job is to manage and fetch data about accounts and summoners
+ */
 public interface LeagueSummonerManager {
 
     public String ping();

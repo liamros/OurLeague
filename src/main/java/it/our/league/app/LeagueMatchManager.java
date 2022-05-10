@@ -7,6 +7,9 @@ import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
 
+/**
+ * Class which job is to manage and fetch data about matches and games
+ */
 public interface LeagueMatchManager {
     
     public int updateMatchHistory(AppSummonerDTO summoner);

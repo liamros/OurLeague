@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.our.league.app.controller.dto.AppLineChartDTO;
+import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
@@ -16,6 +18,7 @@ import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 import it.our.league.app.impl.persistence.entity.ShowCaseRankingJPA;
 import it.our.league.app.impl.persistence.entity.SummonerInfoJPA;
 import it.our.league.common.constants.LeagueQueueType;
+import it.our.league.common.constants.LineChartType;
 import it.our.league.common.constants.RankedTierType;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
@@ -307,5 +310,17 @@ public final class LeagueAppUtility {
             map.putIfAbsent(e.getSummInfoId(), l);
         }
         return map;
+    }
+
+    public static AppLineChartWrapperDTO generateAppLineChartWrapperDTO(LineChartType type, List<AppLineChartDTO> charts, Integer minY, Integer maxY) {
+        AppLineChartWrapperDTO out = new AppLineChartWrapperDTO();
+        out.setName(type.getName());
+        out.setxUnit(type.getX());
+        out.setyUnit(type.getY());
+        out.setFormat(type.getFormat());
+        out.setCharts(charts);
+        out.setMinY(minY);
+        out.setMaxY(maxY);
+        return out;
     }
 }

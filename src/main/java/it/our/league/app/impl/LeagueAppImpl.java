@@ -29,9 +29,8 @@ import it.our.league.app.impl.persistence.repository.ShowCaseRankingRepository;
 import it.our.league.app.thread.DataRefreshHandler;
 import it.our.league.app.utility.LeagueAppUtility;
 import it.our.league.common.constants.LeagueQueueType;
+import it.our.league.common.constants.LineChartType;
 import it.our.league.common.constants.ShowCaseType;
-import it.our.league.riot.dto.Match;
-import it.our.league.riot.dto.Participant;
 
 public class LeagueAppImpl implements LeagueAppManager {
 
@@ -82,59 +81,6 @@ public class LeagueAppImpl implements LeagueAppManager {
             list.add(rank.getWinrate());
         }
         return list;
-    }
-
-    public ShowCaseRankingJPA generateLowerWinRate() {
-
-        ShowCaseRankingJPA showCaseJpa = new ShowCaseRankingJPA();
-        AppSummonerDTO summoner = leagueSummonerImpl.getLowestWinrateSummoner();
-        Float minWR = Float.MAX_VALUE;
-        if (summoner.getRanks().isEmpty())
-            minWR = null;
-        for (AppRankInfoDTO rank : summoner.getRanks())
-            minWR = Math.min(minWR, rank.getWinrate());
-        showCaseJpa.setStatName(ShowCaseType.WORST_WR.statName());
-        showCaseJpa.setSummInfoId(summoner.getSummInfoId());
-        showCaseJpa.setValue(minWR);
-        showCaseJpa.setDescription("Lowest WinRate");
-        return showCaseJpa;
-    }
-
-    @Deprecated
-    public ShowCaseRankingJPA generateLowerKda() {
-
-        ShowCaseRankingJPA showCaseJpa = new ShowCaseRankingJPA();
-        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        Participant participant = getParticipantWithLowerKda(summoners);
-
-        showCaseJpa.setStatName(ShowCaseType.WORST_KDA.statName());
-        for (AppSummonerDTO summoner : summoners) {
-            if (participant.getPuuid().equals(summoner.getPuuid()))
-                showCaseJpa.setSummInfoId(summoner.getSummInfoId());
-        }
-        showCaseJpa.setValue(Float.valueOf(String.valueOf(participant.getChallenges().getKda())));
-        showCaseJpa.setDescription("Lowest KDA");
-        return showCaseJpa;
-    }
-
-    @Deprecated
-    private Participant getParticipantWithLowerKda(List<AppSummonerDTO> summoners) {
-
-        List<Match> matches = new ArrayList<>();
-        Double lowerKda = (double) showCaseRankingRepository.findByStatName(ShowCaseType.WORST_KDA.statName())
-                .get(0).getValue();
-        Participant participant = null;
-
-        for (Match matchDTO : matches) {
-            for (AppSummonerDTO summoner : summoners) {
-                if (lowerKda == null || LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid())
-                        .getChallenges().getKda() < lowerKda)
-                    lowerKda = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid()).getChallenges()
-                            .getKda();
-                participant = LeagueAppUtility.getParticipantByMatch(matchDTO, summoner.getPuuid());
-            }
-        }
-        return participant;
     }
 
     @Override
@@ -220,30 +166,6 @@ public class LeagueAppImpl implements LeagueAppManager {
         return results;
     }
 
-    @SuppressWarnings("unused")
-    @Deprecated
-    private ShowCaseRankingJPA getHighestRankShowcase(List<AppSummonerDTO> summoners) {
-
-        AppRankInfoDTO highestRank = null;
-        for (AppSummonerDTO summoner : summoners) {
-            if (highestRank == null)
-                highestRank = LeagueAppUtility.getHighestRankFromDto(summoner.getRanks());
-            else {
-                List<AppRankInfoDTO> ranks = new ArrayList<>();
-                ranks.addAll(summoner.getRanks());
-                ranks.add(highestRank);
-                highestRank = LeagueAppUtility.getHighestRankFromDto(ranks);
-            }
-        }
-        ShowCaseRankingJPA jpa = new ShowCaseRankingJPA();
-        jpa.setStatName(ShowCaseType.HIGHEST_RANK.statName());
-        jpa.setSummInfoId(highestRank.getSummInfoId());
-        jpa.setDescription(
-                MessageFormat.format("{0} {1} {2}LP in {3}", highestRank.getTier(), highestRank.getDivision(),
-                        highestRank.getLp(), LeagueQueueType.getById(highestRank.getQueueTypeId()).description()));
-        return jpa;
-    }
-
     private List<ShowCaseRankingJPA> getHighestKillShowcase(List<AppSummonerDTO> summoners) {
 
         Queue<Map<String, Object>> maxHeap = new PriorityQueue<>((a, b) -> {
@@ -305,6 +227,21 @@ public class LeagueAppImpl implements LeagueAppManager {
         return results;
     }
 
+    private void checkAndSaveShowcaseRankings(List<ShowCaseRankingJPA> scrs) {
+        boolean positionChanged = false;
+        for (ShowCaseRankingJPA scr : scrs) {
+            if (scr.getPosition() != scr.getPrevPosition())
+                positionChanged = true;
+        }
+        if (positionChanged) {
+            showCaseRankingRepository.saveAll(scrs);
+            return;
+        }
+        for (ShowCaseRankingJPA scr : scrs) {
+            showCaseRankingRepository.saveExceptPosition(scr.getId(), scr.getValue(), scr.getDescription());
+        }
+    }
+
     // TODO divide by queueId
     private AppLineChartWrapperDTO getWinratePerMinuteChart(
             Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner) {
@@ -332,17 +269,11 @@ public class LeagueAppImpl implements LeagueAppManager {
                 charts.add(lineChart);
             }
         }
-        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
-        response.setName("Winrate/Minute");
-        response.setxUnit("Game Length");
-        response.setyUnit("Winrate");
-        response.setFormat(">-.0%");
-        response.setCharts(charts);
-        response.setMinY(0);
-        response.setMaxY(1);
+        AppLineChartWrapperDTO response = LeagueAppUtility.generateAppLineChartWrapperDTO(LineChartType.WINRATExMIN, charts, 0, 1);
         return response;
     }
 
+    // TODO divide by queueId
     private AppLineChartWrapperDTO getVisionPerMinuteChart(
             Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner) {
 
@@ -370,17 +301,11 @@ public class LeagueAppImpl implements LeagueAppManager {
                 charts.add(lineChart);
             }
         }
-        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
-        response.setName("Vision/Minute");
-        response.setxUnit("Game Length");
-        response.setyUnit("VisionScore");
-        response.setFormat(">-.0f");
-        response.setCharts(charts);
-        response.setMinY(0);
-        response.setMaxY(140);
+        AppLineChartWrapperDTO response = LeagueAppUtility.generateAppLineChartWrapperDTO(LineChartType.VISIONxMIN, charts, 0, 140);
         return response;
     }
 
+    // TODO divide by queueId
     private AppLineChartWrapperDTO getGamesPerMinuteChart(Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner) {
 
         List<AppLineChartDTO> charts = new ArrayList<>();
@@ -403,15 +328,52 @@ public class LeagueAppImpl implements LeagueAppManager {
         }
         if (maxSize % 10 != 0)
             maxSize += (10 - maxSize % 10);
-        AppLineChartWrapperDTO response = new AppLineChartWrapperDTO();
-        response.setName("Games/Minute");
-        response.setxUnit("Game Length");
-        response.setyUnit("Games");
-        response.setFormat(">-.0f");
-        response.setCharts(charts);
-        response.setMinY(0);
-        response.setMaxY(maxSize);
+        AppLineChartWrapperDTO response = LeagueAppUtility.generateAppLineChartWrapperDTO(LineChartType.GAMESxMIN, charts, 0, maxSize);
         return response;
+    }
+
+    
+
+    @Override
+    public List<AppLineChartWrapperDTO> getAllHomeCharts() {
+
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner = mapMatchesByGameName(matches);
+        List<AppLineChartWrapperDTO> out = new ArrayList<>();
+        out.add(getGamesPerMinuteChart(matchesPerSummoner));
+        out.add(getVisionPerMinuteChart(matchesPerSummoner));
+        out.add(getWinratePerMinuteChart(matchesPerSummoner));
+        return out;
+    }
+
+    @Override
+    public AppLineChartWrapperDTO getGamesPerMinuteChart() {
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        return getGamesPerMinuteChart(mapMatchesByGameName(matches));
+    }
+
+    @Override
+    public AppLineChartWrapperDTO getVisionPerMinuteChart() {
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        return getVisionPerMinuteChart(mapMatchesByGameName(matches));
+    }
+
+    @Override
+    public AppLineChartWrapperDTO getWinratePerMinuteChart() {
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        return getWinratePerMinuteChart(mapMatchesByGameName(matches));
+    }
+
+    
+    private Map<String, List<AppParticipantInfoDTO>> mapMatchesByGameName(List<AppParticipantInfoDTO> list) {
+
+        Map<String, List<AppParticipantInfoDTO>> map = new HashMap<>();
+        for (AppParticipantInfoDTO p : list) {
+            List<AppParticipantInfoDTO> l = map.getOrDefault(p.getGameName(), new ArrayList<>());
+            l.add(p);
+            map.putIfAbsent(p.getGameName(), l);
+        }
+        return map;
     }
 
     private Map<Integer, List<AppParticipantInfoDTO>> initTimeMap(List<AppParticipantInfoDTO> matches) {
@@ -433,61 +395,4 @@ public class LeagueAppImpl implements LeagueAppManager {
         }
         return matchesPerMinute;
     }
-
-    private void checkAndSaveShowcaseRankings(List<ShowCaseRankingJPA> scrs) {
-        boolean positionChanged = false;
-        for (ShowCaseRankingJPA scr : scrs) {
-            if (scr.getPosition() != scr.getPrevPosition())
-                positionChanged = true;
-        }
-        if (positionChanged) {
-            showCaseRankingRepository.saveAll(scrs);
-            return;
-        }
-        for (ShowCaseRankingJPA scr : scrs) {
-            showCaseRankingRepository.saveExceptPosition(scr.getId(), scr.getValue(), scr.getDescription());
-        }
-    }
-
-    @Override
-    public List<AppLineChartWrapperDTO> getAllHomeCharts() {
-
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
-        Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner = mapMatchesByGameName(matches);
-        List<AppLineChartWrapperDTO> out = new ArrayList<>();
-        out.add(getGamesPerMinuteChart(matchesPerSummoner));
-        out.add(getVisionPerMinuteChart(matchesPerSummoner));
-        out.add(getWinratePerMinuteChart(matchesPerSummoner));
-        return out;
-    }
-
-    @Override
-    public AppLineChartWrapperDTO getGamesPerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
-        return getGamesPerMinuteChart(mapMatchesByGameName(matches));
-    }
-
-    private Map<String, List<AppParticipantInfoDTO>> mapMatchesByGameName(List<AppParticipantInfoDTO> list) {
-
-        Map<String, List<AppParticipantInfoDTO>> map = new HashMap<>();
-        for (AppParticipantInfoDTO p : list) {
-            List<AppParticipantInfoDTO> l = map.getOrDefault(p.getGameName(), new ArrayList<>());
-            l.add(p);
-            map.putIfAbsent(p.getGameName(), l);
-        }
-        return map;
-    }
-
-    @Override
-    public AppLineChartWrapperDTO getVisionPerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
-        return getVisionPerMinuteChart(mapMatchesByGameName(matches));
-    }
-
-    @Override
-    public AppLineChartWrapperDTO getWinratePerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
-        return getWinratePerMinuteChart(mapMatchesByGameName(matches));
-    }
-
 }

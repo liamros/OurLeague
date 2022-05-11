@@ -54,9 +54,9 @@ No use of cache is implemented yet.
 ## TODOs
 ***General***
 - [x] Deploy on AWS
-- [ ] Request personal API key to Riot
+- [x] Request personal API key to Riot
 - [ ] Write doc documentation
-- [ ] Set domain
+- [x] Set domain
 
 ***Backend***
 - [x] Initial data structure

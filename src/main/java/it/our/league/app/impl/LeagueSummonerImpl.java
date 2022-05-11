@@ -117,7 +117,10 @@ public class LeagueSummonerImpl implements LeagueSummonerManager {
             Summoner dto = riotManager.getAccountInfoBySummonerName(jpa.getGameName());
             jpa.setSummonerLevel(dto.getSummonerLevel());
             jpa.setSummonerIconId(dto.getProfileIconId());
-            summonerRepository.updateSummonerLvlAndIcon(jpa.getId(), jpa.getSummonerLevel(), jpa.getSummonerIconId());
+            jpa.setAccountId(dto.getAccountId());
+            jpa.setEncryptedSummonerId(dto.getEncryptedSummonerId());
+            jpa.setPuuid(dto.getPuuid());
+            // summonerRepository.updateSummonerLvlAndIcon(jpa.getId(), jpa.getSummonerLevel(), jpa.getSummonerIconId());
             LOGGER.info("Updated SummonerInfo {}", jpa);
         }
         updateAllRanks(list);

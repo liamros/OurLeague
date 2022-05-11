@@ -19,11 +19,11 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
      * required because in dev the proxy for websocets does not work
      */
     React.useEffect(() => {
-        // const protocolPrefix = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const protocolPrefix = window.location.protocol;
         let { host } = window.location; // nb: window location contains the port, so host will be localhost:3000 in dev
         if (host === "localhost:3000")
             host = "localhost:5000"
-        setWsURI(`http://${host}/ws`)
+        setWsURI(`${protocolPrefix}//${host}/ws`)
     }, [])
 
     const onClick = () => {

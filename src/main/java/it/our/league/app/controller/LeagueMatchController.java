@@ -16,7 +16,7 @@ import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.riot.dto.Match;
 import it.our.league.riot.dto.Participant;
 
-// TODO add security
+// TODO add basic auth
 @RestController
 @RequestMapping("match")
 public class LeagueMatchController implements LeagueMatchManager {

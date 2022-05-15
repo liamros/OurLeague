@@ -10,17 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 @Entity
 @Table(name = "RANK_INFO")
 @IdClass(RankInfoJPA.PrimaryKeys.class)
 public class RankInfoJPA {
 
-    @Data
     @SuppressWarnings("unused")
     public static class PrimaryKeys implements Serializable {
-        private Integer summInfoId;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Integer summInfoId;
         private Integer queueTypeId;
         public PrimaryKeys() {
         }   

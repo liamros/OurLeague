@@ -10,6 +10,9 @@ import it.our.league.app.impl.persistence.entity.RelSummonerMatchJPA;
 
 public interface RelSummonerMatchRepository
         extends CrudRepository<RelSummonerMatchJPA, RelSummonerMatchJPA.PrimaryKeys> {
+	
+	@Query(value = "SELECT * FROM rel_summoner_match WHERE win IS NOT NULL", nativeQuery = true)
+	public List<RelSummonerMatchJPA> findAllPopulated();
 
     @Query(value = "SELECT max(m.game_end_time) FROM summoner_info s, match_info m, rel_summoner_match rel WHERE s.id = rel.summ_info_id AND m.match_id = rel.match_id AND s.id = ?", nativeQuery = true)
     public Timestamp getLastMatchEndTimeBySummoner(long summInfoId);
@@ -40,8 +43,8 @@ public interface RelSummonerMatchRepository
     @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND rsm.match_id = ? AND si.puuid = ?", nativeQuery = true)
     public RelSummonerMatchJPA findByMatchIdAndPuuid(String matchId, String puuid);
 
-    @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND si.puuid = ?", nativeQuery = true)
-    public List<RelSummonerMatchJPA> findByPuuid(String puuid);
+    @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND si.puuid = ? AND rsm.win IS NOT NULL", nativeQuery = true)
+    public List<RelSummonerMatchJPA> findPopulatedByPuuid(String puuid);
 
     @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE si.ID = rsm.SUMM_INFO_ID AND si.PUUID = ? ORDER BY KILLS DESC LIMIT 1", nativeQuery = true)
     public RelSummonerMatchJPA findHighestKillByPuuid(String puuid);

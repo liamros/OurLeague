@@ -101,7 +101,7 @@ public class LeagueAppImpl implements LeagueAppManager {
 
         for (AppSummonerDTO summoner : summoners) {
             List<AppParticipantInfoDTO> participantInfos = leagueMatchImpl
-                    .getAllParticipantInfoByPuuid(summoner.getPuuid());
+                    .getAllPopulatedParticipantInfoByPuuid(summoner.getPuuid());
             Map<Integer, List<AppParticipantInfoDTO>> groupedByQueueId = new HashMap<>();
             for (AppParticipantInfoDTO p : participantInfos) {
                 if (!p.getQueueTypeId().equals(LeagueQueueType.RANKED_SOLO_5x5.id())
@@ -337,7 +337,7 @@ public class LeagueAppImpl implements LeagueAppManager {
     @Override
     public List<AppLineChartWrapperDTO> getAllHomeCharts() {
 
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllPopulatedParticipantInfo();
         Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner = mapMatchesByGameName(matches);
         List<AppLineChartWrapperDTO> out = new ArrayList<>();
         out.add(getGamesPerMinuteChart(matchesPerSummoner));
@@ -348,19 +348,19 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     public AppLineChartWrapperDTO getGamesPerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllPopulatedParticipantInfo();
         return getGamesPerMinuteChart(mapMatchesByGameName(matches));
     }
 
     @Override
     public AppLineChartWrapperDTO getVisionPerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllPopulatedParticipantInfo();
         return getVisionPerMinuteChart(mapMatchesByGameName(matches));
     }
 
     @Override
     public AppLineChartWrapperDTO getWinratePerMinuteChart() {
-        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllParticipantInfo();
+        List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllPopulatedParticipantInfo();
         return getWinratePerMinuteChart(mapMatchesByGameName(matches));
     }
 

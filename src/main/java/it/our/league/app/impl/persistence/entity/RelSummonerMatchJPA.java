@@ -10,18 +10,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 @Entity
 @Table(name = "REL_SUMMONER_MATCH")
 @IdClass(RelSummonerMatchJPA.PrimaryKeys.class)
 public class RelSummonerMatchJPA {
     
-    @Data
     @SuppressWarnings("unused")
     public static class PrimaryKeys implements Serializable {
         
-        private Integer summInfoId;
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Integer summInfoId;
         private String matchId;
         public PrimaryKeys() {
         }   

@@ -66,9 +66,9 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    @GetMapping("/getAllParticipantInfoByPuuid")
-    public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(@RequestParam String puuid) {
-        return leagueMatchImpl.getAllParticipantInfoByPuuid(puuid);
+    @GetMapping("/getAllPopulatedParticipantInfoByPuuid")
+    public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(@RequestParam String puuid) {
+        return leagueMatchImpl.getAllPopulatedParticipantInfoByPuuid(puuid);
     }
 
     @Override
@@ -78,9 +78,9 @@ public class LeagueMatchController implements LeagueMatchManager {
     }
 
     @Override
-    @GetMapping("/getAllParticipantInfo")
-    public List<AppParticipantInfoDTO> getAllParticipantInfo() {
-        return leagueMatchImpl.getAllParticipantInfo();
+    @GetMapping("/getAllPopulatedParticipantInfo")
+    public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfo() {
+        return leagueMatchImpl.getAllPopulatedParticipantInfo();
     }
     
 }

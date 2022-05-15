@@ -209,9 +209,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<AppParticipantInfoDTO> getAllParticipantInfoByPuuid(String puuid) {
+    public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(String puuid) {
         List<AppParticipantInfoDTO> out = new ArrayList<>();
-        relSummonerMatchRepository.findByPuuid(puuid)
+        relSummonerMatchRepository.findPopulatedByPuuid(puuid)
                 .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner())));
         return out;
     }
@@ -225,9 +225,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<AppParticipantInfoDTO> getAllParticipantInfo() {
+    public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfo() {
         List<AppParticipantInfoDTO> out = new ArrayList<>();
-        relSummonerMatchRepository.findAll()
+        relSummonerMatchRepository.findAllPopulated()
                 .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner())));
         return out;
     }

@@ -64,14 +64,17 @@ public class LeagueAppImpl implements LeagueAppManager {
 
     @Override
     @Transactional
-    public void updateShowCaseRankings() {
+	public void updateShowCaseRankings() {
 
-        List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
-        checkAndSaveShowcaseRankings(getHighestKDAShowcase(summoners));
-        checkAndSaveShowcaseRankings(getHighestKillShowcase(summoners));
-        checkAndSaveShowcaseRankings(getHighestWinrateShowcase(summoners));
-        LOGGER.info("Showcase Rankings updated");
-    }
+		List<AppSummonerDTO> summoners = leagueSummonerImpl.getAllSummoners();
+		for (LeagueQueueType queueType : LeagueQueueType.getRankedQueues()) {
+			checkAndSaveShowcaseRankings(getHighestKDAShowcase(summoners, queueType));
+			checkAndSaveShowcaseRankings(getHighestKillShowcase(summoners, queueType));
+			checkAndSaveShowcaseRankings(getHighestWinrateShowcase(summoners, queueType));
+		}
+
+		LOGGER.info("Showcase Rankings updated");
+	}
 
     @Override
     public List<Float> getWinRateByPuuid(String puuid) {
@@ -89,7 +92,7 @@ public class LeagueAppImpl implements LeagueAppManager {
         return "OK";
     }
 
-    private List<ShowCaseRankingJPA> getHighestKDAShowcase(List<AppSummonerDTO> summoners) {
+    private List<ShowCaseRankingJPA> getHighestKDAShowcase(List<AppSummonerDTO> summoners, LeagueQueueType queueType) {
 
         Queue<Map<String, Object>> maxHeap = new PriorityQueue<>((a, b) -> {
             Float aKda = (Float) a.get("value");
@@ -99,42 +102,28 @@ public class LeagueAppImpl implements LeagueAppManager {
             return -1;
         });
 
-        for (AppSummonerDTO summoner : summoners) {
-            List<AppParticipantInfoDTO> participantInfos = leagueMatchImpl
-                    .getAllPopulatedParticipantInfoByPuuid(summoner.getPuuid());
-            Map<Integer, List<AppParticipantInfoDTO>> groupedByQueueId = new HashMap<>();
-            for (AppParticipantInfoDTO p : participantInfos) {
-                if (!p.getQueueTypeId().equals(LeagueQueueType.RANKED_SOLO_5x5.id())
-                        && !p.getQueueTypeId().equals(LeagueQueueType.RANKED_FLEX_SR.id()))
-                    continue;
-                List<AppParticipantInfoDTO> l = groupedByQueueId.getOrDefault(p.getQueueTypeId(),
-                        new ArrayList<>());
-                l.add(p);
-                groupedByQueueId.putIfAbsent(p.getQueueTypeId(), l);
-            }
-            Map<String, Object> map = null;
-            for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : groupedByQueueId.entrySet()) {
-                Float kda = LeagueAppUtility.getAverageKDA(entry.getValue());
-                if (map == null || (float) map.get("value") < kda) {
-                    Map<String, Object> m = new HashMap<>();
-                    m.put("value", kda);
-                    m.put("summInfoId", summoner.getSummInfoId());
-                    String desc = MessageFormat.format(String.format("%.2f in {0}", kda),
-                            LeagueQueueType.getById(entry.getKey()).description());
-                    m.put("description", desc);
-                    map = m;
-                }
-            }
-            if (map != null)
-                maxHeap.offer(map);
-        }
-        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatName(ShowCaseType.BEST_KDA.statName());
-        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.BEST_KDA);
+		for (AppSummonerDTO summoner : summoners) {
+			List<AppParticipantInfoDTO> participantInfos = leagueMatchImpl.getAllPopulatedParticipantInfoByPuuid(summoner.getPuuid(), queueType.id());
+			Map<String, Object> map = null;
+			Float kda = LeagueAppUtility.getAverageKDA(participantInfos);
+			if (map == null || (float) map.get("value") < kda) {
+				Map<String, Object> m = new HashMap<>();
+				m.put("value", kda);
+				m.put("summInfoId", summoner.getSummInfoId());
+				String desc = MessageFormat.format(String.format("%.2f in {0}", kda), queueType.description());
+				m.put("description", desc);
+				map = m;
+			}
+			if (map != null)
+				maxHeap.offer(map);
+		}
+        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatNameAndQueueTypeId(ShowCaseType.BEST_KDA.statName(), queueType.id());
+        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.BEST_KDA, queueType);
 
         return results;
     }
 
-    private List<ShowCaseRankingJPA> getHighestWinrateShowcase(List<AppSummonerDTO> summoners) {
+    private List<ShowCaseRankingJPA> getHighestWinrateShowcase(List<AppSummonerDTO> summoners, LeagueQueueType queueType) {
 
         Queue<Map<String, Object>> maxHeap = new PriorityQueue<>((a, b) -> {
             if ((Float) b.get("value") > (Float) a.get("value"))
@@ -142,31 +131,25 @@ public class LeagueAppImpl implements LeagueAppManager {
             return -1;
         });
         for (AppSummonerDTO summoner : summoners) {
-            Map<String, Object> highestRank = null;
+            Map<String, Object> highestRank = new HashMap<>();
             for (AppRankInfoDTO rank : summoner.getRanks()) {
-                Map<String, Object> m = new HashMap<>();
-                m.put("summInfoId", rank.getSummInfoId());
-                m.put("value", rank.getWinrate());
-                String desc = MessageFormat.format("{0}% in {1}", String.format("%.2f", rank.getWinrate()),
-                        LeagueQueueType.getById(rank.getQueueTypeId()).description());
-                m.put("description", desc);
-                if (highestRank == null) {
-                    highestRank = m;
-                    continue;
-                }
-                if (rank.getWinrate() > (Float) highestRank.get("value"))
-                    highestRank = m;
+            	if (!rank.getQueueTypeId().equals(queueType.id()))
+            		continue;
+            	highestRank.put("summInfoId", rank.getSummInfoId());
+            	highestRank.put("value", rank.getWinrate());
+                String desc = MessageFormat.format("{0}% in {1}", String.format("%.2f", rank.getWinrate()), queueType.description());
+                highestRank.put("description", desc);
             }
-            if (highestRank != null)
+            if (!highestRank.isEmpty())
                 maxHeap.offer(highestRank);
         }
-        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatName(ShowCaseType.BEST_WR.statName());
-        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.BEST_WR);
+        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatNameAndQueueTypeId(ShowCaseType.BEST_WR.statName(), queueType.id());
+        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.BEST_WR, queueType);
 
         return results;
     }
 
-    private List<ShowCaseRankingJPA> getHighestKillShowcase(List<AppSummonerDTO> summoners) {
+    private List<ShowCaseRankingJPA> getHighestKillShowcase(List<AppSummonerDTO> summoners, LeagueQueueType queueType) {
 
         Queue<Map<String, Object>> maxHeap = new PriorityQueue<>((a, b) -> {
             Integer aKills = (Integer) a.get("kills");
@@ -183,7 +166,9 @@ public class LeagueAppImpl implements LeagueAppManager {
         });
 
         for (AppSummonerDTO summoner : summoners) {
-            AppParticipantInfoDTO p = leagueMatchImpl.getHighestKillParticipantInfo(summoner.getPuuid());
+            AppParticipantInfoDTO p = leagueMatchImpl.getHighestKillParticipantInfo(summoner.getPuuid(), queueType.id());
+            if (p == null)
+            	continue;
             Map<String, Object> m = new HashMap<>();
             m.put("summInfoId", p.getSummInfoId());
             m.put("kills", p.getKills());
@@ -193,14 +178,13 @@ public class LeagueAppImpl implements LeagueAppManager {
             m.put("description", desc);
             maxHeap.offer(m);
         }
-        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatName(ShowCaseType.HIGHEST_KILLS.statName());
-        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.HIGHEST_KILLS);
+        List<ShowCaseRankingJPA> list = showCaseRankingRepository.findByStatNameAndQueueTypeId(ShowCaseType.HIGHEST_KILLS.statName(), queueType.id());
+        List<ShowCaseRankingJPA> results = updateShowCaseRankingJpas(list, maxHeap, ShowCaseType.HIGHEST_KILLS, queueType);
 
         return results;
     }
 
-    private List<ShowCaseRankingJPA> updateShowCaseRankingJpas(List<ShowCaseRankingJPA> list,
-            Queue<Map<String, Object>> maxHeap, ShowCaseType showCaseType) {
+    private List<ShowCaseRankingJPA> updateShowCaseRankingJpas(List<ShowCaseRankingJPA> list, Queue<Map<String, Object>> maxHeap, ShowCaseType showCaseType, LeagueQueueType queueType) {
 
         showCaseRankingRepository.detachAllEntities(list);
         List<ShowCaseRankingJPA> results = new ArrayList<>();
@@ -218,6 +202,7 @@ public class LeagueAppImpl implements LeagueAppManager {
                 jpa = map.get(summInfoId).get(0);
             jpa.setStatName(showCaseType.statName());
             jpa.setSummInfoId(summInfoId);
+            jpa.setQueueTypeId(queueType.id());
             jpa.setPrevPosition(jpa.getPosition());
             jpa.setPosition(position++);
             jpa.setValue(value);
@@ -241,7 +226,7 @@ public class LeagueAppImpl implements LeagueAppManager {
             showCaseRankingRepository.saveExceptPosition(scr.getId(), scr.getValue(), scr.getDescription());
         }
     }
-
+    
     // TODO divide by queueId
     private AppLineChartWrapperDTO getWinratePerMinuteChart(
             Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner) {

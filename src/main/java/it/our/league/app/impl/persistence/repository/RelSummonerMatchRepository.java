@@ -45,7 +45,13 @@ public interface RelSummonerMatchRepository
 
     @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE rsm.summ_info_id = si.id AND si.puuid = ? AND rsm.win IS NOT NULL", nativeQuery = true)
     public List<RelSummonerMatchJPA> findPopulatedByPuuid(String puuid);
+    
+    @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si, match_info mi WHERE rsm.summ_info_id = si.id AND mi.match_id = rsm.match_id AND si.puuid = ? AND mi.queue_type_id = ? AND rsm.win IS NOT NULL", nativeQuery = true)
+    public List<RelSummonerMatchJPA> findPopulatedByPuuidAndQueueTypeId(String puuid, Integer queueTypeId);
 
     @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si WHERE si.ID = rsm.SUMM_INFO_ID AND si.PUUID = ? ORDER BY KILLS DESC LIMIT 1", nativeQuery = true)
     public RelSummonerMatchJPA findHighestKillByPuuid(String puuid);
+    
+    @Query(value = "SELECT rsm.* FROM rel_summoner_match rsm, summoner_info si, match_info mi WHERE si.ID = rsm.SUMM_INFO_ID AND mi.match_id = rsm.match_id AND si.PUUID = ? AND mi.queue_type_id = ? ORDER BY KILLS DESC LIMIT 1", nativeQuery = true)
+    public RelSummonerMatchJPA findHighestKillByPuuidAndQueueTypeId(String puuid, Integer queueTypeId);
 }

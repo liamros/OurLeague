@@ -211,8 +211,19 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(String puuid) {
         List<AppParticipantInfoDTO> out = new ArrayList<>();
-        relSummonerMatchRepository.findPopulatedByPuuid(puuid)
-                .forEach(jpa -> out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner())));
+        relSummonerMatchRepository.findPopulatedByPuuid(puuid).forEach(jpa -> 
+        		out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner()))
+        );
+        return out;
+    }
+    
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(String puuid, Integer queueTypeId) {
+        List<AppParticipantInfoDTO> out = new ArrayList<>();
+        relSummonerMatchRepository.findPopulatedByPuuidAndQueueTypeId(puuid, queueTypeId).forEach(jpa -> 
+        		out.add(LeagueAppUtility.generateAppParticipantInfoDto(jpa, jpa.getMatch(), jpa.getSummoner()))
+        );
         return out;
     }
 
@@ -220,8 +231,20 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid) {
         RelSummonerMatchJPA rsm = relSummonerMatchRepository.findHighestKillByPuuid(puuid);
-        return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), rsm.getSummoner());
+        if (rsm != null) 
+        	return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), rsm.getSummoner());
+        else
+        	return null;
     }
+    
+	@Override
+	public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid, Integer queueTypeId) {
+		RelSummonerMatchJPA rsm = relSummonerMatchRepository.findHighestKillByPuuidAndQueueTypeId(puuid, queueTypeId);
+		if (rsm != null) 
+			return LeagueAppUtility.generateAppParticipantInfoDto(rsm, rsm.getMatch(), rsm.getSummoner());
+		else
+			return null;
+	}
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)

@@ -18,5 +18,7 @@ public interface ShowCaseRankingRepository extends CrudRepository<ShowCaseRankin
     @Modifying
     @Query("update ShowCaseRankingJPA s set s.value = ?2, s.description = ?3 where s.id = ?1")
     public Integer saveExceptPosition(Integer id, Float value, String description);
+    
+    public List<ShowCaseRankingJPA> findByStatNameAndQueueTypeId(String statName, Integer queueTypeId);
 
 }

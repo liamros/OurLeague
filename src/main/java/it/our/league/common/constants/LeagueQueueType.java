@@ -1,5 +1,8 @@
 package it.our.league.common.constants;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum LeagueQueueType {
     UNKNOWN(0, "Unknown"),
     RANKED_SOLO_5x5(420, "Solo/Duo"),
@@ -23,5 +26,9 @@ public enum LeagueQueueType {
             if(e.id.equals(id)) return e;
         }
         return UNKNOWN;
+    }
+    
+    public static List<LeagueQueueType> getRankedQueues() {
+    	return Arrays.asList(RANKED_SOLO_5x5, RANKED_FLEX_SR);
     }
 }

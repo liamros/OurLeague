@@ -27,8 +27,12 @@ public interface LeagueMatchManager {
     public AppParticipantInfoDTO getParticipantInfo(String matchId, String puuid);
 
     public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(String puuid);
+    
+	public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfoByPuuid(String puuid, Integer queueTypeId);
 
     public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid);
+    
+    public AppParticipantInfoDTO getHighestKillParticipantInfo(String puuid, Integer queueTypeId);
 
     public List<AppParticipantInfoDTO> getAllPopulatedParticipantInfo();
 

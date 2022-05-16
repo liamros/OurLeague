@@ -20,7 +20,9 @@ public class ShowCaseRankingJPA {
     private String statName;
     @Column(name = "SUMM_INFO_ID")
     private Integer summInfoId;
-    @Column(name = "POSITION")
+    @Column(name = "QUEUE_TYPE_ID")
+    private Integer queueTypeId;
+	@Column(name = "POSITION")
     private Integer position;
     @Column(name = "PREV_POSITION")
     private Integer prevPosition;
@@ -55,6 +57,14 @@ public class ShowCaseRankingJPA {
     public void setSummInfoId(Integer summInfoId) {
         this.summInfoId = summInfoId;
     }
+    
+    public Integer getQueueTypeId() {
+		return queueTypeId;
+	}
+
+	public void setQueueTypeId(Integer queueTypeId) {
+		this.queueTypeId = queueTypeId;
+	}
 
     public Integer getPosition() {
         return position;

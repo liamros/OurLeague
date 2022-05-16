@@ -1,7 +1,7 @@
+import { Button } from "@mui/material";
 import React from 'react';
 import { connect } from "react-redux";
 import { selectShowCase } from "../../actions";
-import { Button, ButtonGroup } from "@mui/material";
 
 const QueueButtons = ({ selectShowCase, showCases, selectedQueue }) => {
 
@@ -39,9 +39,9 @@ const QueueButtons = ({ selectShowCase, showCases, selectedQueue }) => {
         )
     }
     return (
-        <ButtonGroup className="typography button-group" variant="contained" aria-label="outlined primary button group">
+        <>
             {jsx}
-        </ButtonGroup>
+        </>
     )
 }
 

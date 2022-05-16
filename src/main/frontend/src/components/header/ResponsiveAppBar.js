@@ -36,9 +36,6 @@ const ResponsiveAppBar = () => {
           >
             OurLeague
           </Typography>
-          <Box sx={{ flexGrow: 10, display: { xs: 'none', md: 'flex' } }}>
-            <QueueButtons />
-          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -85,6 +82,7 @@ const ResponsiveAppBar = () => {
             OurLeague
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            <QueueButtons />
             {/* {pages.map((page) => (
               <Button
                 key={page}

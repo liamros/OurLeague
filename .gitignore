@@ -153,8 +153,6 @@ local.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/eclipse
 
-src/main/resources/application.properties
 
 build/
-src/main/resources/application-aws.properties
-src/main/resources/application-dev.properties
+*.properties

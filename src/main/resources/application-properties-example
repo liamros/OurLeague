@@ -6,9 +6,7 @@ riot.ddragon.api.baseURL=http://ddragon.leagueoflegends.com
 riot.rate.limit=120000
 
 mongodb.db=our_league
-mongodb.host=<HOST>
-mongodb.user=<USER>
-mongodb.password=<PASSWORD>
+mongodb.uri=<URI>
 
 server.port=5000
 

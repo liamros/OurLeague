@@ -35,10 +35,14 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
 }
 
 function mapStateToProps(state) {
-    return {
-        showCaseRankings: state.showCaseRankings.data,
-        isFetching: state.isFetching,
-    }
+    const selected = state.showCaseRankings.selected
+    if (selected)
+        return {
+            showCaseRankings: state.showCaseRankings.data[selected],
+            isFetching: state.isFetching,
+        }
+    else 
+        return {} 
 }
 
 function mapDispatchToProps(dispatch) {

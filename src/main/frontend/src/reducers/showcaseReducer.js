@@ -14,30 +14,42 @@ export const showCaseRankings = (state = initialState, action) => {
 
             const obj = {}
             const map = new Map(Object.entries(action.payload))
-
-            map.forEach((value, key) => {
-                obj[key] = value.map((element) => {
-                    return {
-                        summonerName: element.summonerName,
-                        value: element.value,
-                        description: element.description,
-                        position: element.position,
-                        prevPosition: element.prevPosition,
-                        profileIcon: element.profileIcon,
-                        rank: {
-                            queueType: element.queueType,
-                            tier: element.tier,
-                            division: element.division,
-                            lp: element.lp,
-                            wins: element.wins,
-                            losses: element.losses
-                        }
-                    }
+            var selected = null
+            map.forEach((showcase, queueType) => {
+                if (!selected)
+                    selected = queueType
+                const showcaseMap = new Map(Object.entries(showcase))
+                obj[queueType] = {}
+                Array.from(showcaseMap).map((showcaseRanking) => {
+                    const out = []
+                    showcaseRanking[1].forEach((element) => {
+                        out.push(
+                            {
+                                summonerName: element.summonerName,
+                                value: element.value,
+                                description: element.description,
+                                position: element.position,
+                                prevPosition: element.prevPosition,
+                                profileIcon: element.profileIcon,
+                                rank: {
+                                    queueType: element.queueType,
+                                    tier: element.tier,
+                                    division: element.division,
+                                    lp: element.lp,
+                                    wins: element.wins,
+                                    losses: element.losses
+                                }
+                            }
+                        )
+                    })
+                    obj[queueType][showcaseRanking[0]] = out
                 })
+                
             })
 
             return {
                 ...state,
+                selected: selected,
                 data: obj,
                 isFetching: false
             }

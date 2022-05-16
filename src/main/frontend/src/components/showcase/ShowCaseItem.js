@@ -87,8 +87,9 @@ const ShowCaseItem = ({ id, showCaseRankings }) => {
 
 
 function mapStateToProps(state) {
+    const selected = state.showCaseRankings.selected
     return {
-        showCaseRankings: state.showCaseRankings.data,
+        showCaseRankings: state.showCaseRankings.data[selected],
     }
 }
 

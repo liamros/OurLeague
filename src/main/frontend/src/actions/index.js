@@ -15,17 +15,34 @@ export function fetchShowCaseRankings() {
         dispatch(initShowCase())
         getShowCaseRankings()
             .then((response) => {
-                const map = new Map(Object.entries(response))
-                var promises = Array.from(map).map((sortedRankings) => {
-                    var elem = sortedRankings[1][0]
-                    return getSummonerIcon(elem.profileIconNum).then((img) => {
-                        elem.profileIcon = img
-                        return elem
-                    })
+                const obj = {}
+                response.forEach((elem) => {
+                    obj[elem.queueType] = elem.showcaseRankingsByStatName
                 })
+                const map = new Map(Object.entries(obj))
+                
+                const promiseArrays = Array.from(map).map((showcase) => {
+                    
+                    const showcaseMap = new Map(Object.entries(showcase[1]))
+                    return Array.from(showcaseMap).map((sortedRankings) => {
+                        var elem = sortedRankings[1][0]
+                        return getSummonerIcon(elem.profileIconNum).then((img) => {
+                            const out = {}
+                            out["profileIcon"] = img
+                            out["queueType"] = showcase[0]
+                            out["statName"] = elem.statName
+                            return out
+                        })
+                    })
+
+                })
+                var promises = []
+                promiseArrays.forEach((e) => promises = [...promises, ...e])
                 Promise.all(promises).then((solved) => {
-                    solved.forEach(s => response[s.statName][0] = s)
-                    dispatch(initShowCaseSuccess(response))
+                    solved.forEach(s => {
+                        obj[s.queueType][s.statName][0].profileIcon = s.profileIcon
+                })
+                    dispatch(initShowCaseSuccess(obj))
                 })
 
             })

@@ -82,3 +82,8 @@ CREATE TABLE rel_summoner_match (
 	FOREIGN KEY(summ_info_id) REFERENCES summoner_info(id),
 	FOREIGN KEY(match_id) REFERENCES match_info(match_id)
 );
+
+
+ALTER TABLE league.showcase_ranking ADD queue_type_id INT NOT NULL;
+ALTER TABLE league.showcase_ranking ADD CONSTRAINT showcase_ranking_FK FOREIGN KEY (queue_type_id) REFERENCES league.queue(queue_type_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE league.showcase_ranking ADD CONSTRAINT showcase_ranking_un UNIQUE KEY (stat_name,summ_info_id,queue_type_id);

@@ -53,6 +53,11 @@ export const showCaseRankings = (state = initialState, action) => {
                 data: obj,
                 isFetching: false
             }
+        case 'SELECT_SHOWCASE':
+            return {
+                ...state,
+                selected: action.payload
+            }
         default:
             return state
     }

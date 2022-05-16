@@ -9,6 +9,11 @@ export const initShowCaseSuccess = (showCaseRankings) => ({
     payload: showCaseRankings,
 })
 
+export const selectShowCase = (selection) => ({
+    type: 'SELECT_SHOWCASE',
+    payload: selection,
+})
+
 
 export function fetchShowCaseRankings() {
     return (dispatch) => {
@@ -48,6 +53,7 @@ export function fetchShowCaseRankings() {
             })
     }
 }
+
 
 export const initHomeLineChart = () => ({
     type: 'INIT_HOME_LINECHART',

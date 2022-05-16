@@ -22,6 +22,7 @@ import it.our.league.app.controller.dto.AppLineChartDTO;
 import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppParticipantInfoDTO;
 import it.our.league.app.controller.dto.AppRankInfoDTO;
+import it.our.league.app.controller.dto.AppShowCaseDTO;
 import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
 import it.our.league.app.controller.dto.AppSummonerDTO;
 import it.our.league.app.impl.persistence.entity.ShowCaseRankingJPA;
@@ -46,19 +47,31 @@ public class LeagueAppImpl implements LeagueAppManager {
     private ShowCaseRankingRepository showCaseRankingRepository;
 
     @Override
-    public Map<String, List<AppShowCaseRankingDTO>> getShowCaseRankings() {
+    public List<AppShowCaseDTO> getShowCaseRankings() {
 
-        Iterable<ShowCaseRankingJPA> scrs = showCaseRankingRepository.findAllByOrderByPositionAsc();
-        Map<String, List<AppShowCaseRankingDTO>> response = new HashMap<>();
+        List<ShowCaseRankingJPA> scrs = showCaseRankingRepository.findAllByOrderByPositionAsc();
+        Map<Integer, List<ShowCaseRankingJPA>> scrsByQueueId = LeagueAppUtility.groupByQueueId(scrs);
+        List<AppShowCaseDTO> response = new ArrayList<>();
 
-        for (ShowCaseRankingJPA showCaseRanking : scrs) {
-            List<AppShowCaseRankingDTO> l = response.getOrDefault(showCaseRanking.getStatName(), new ArrayList<>());
-            List<AppRankInfoDTO> ranks = leagueSummonerImpl.getRanksByPuuid(showCaseRanking.getSummoner().getPuuid());
-            // provisory
-            AppRankInfoDTO highestRank = LeagueAppUtility.getHighestRankFromDto(ranks);
-            l.add(LeagueAppUtility.generateAppShowCaseDetailDTO(showCaseRanking, highestRank));
-            response.putIfAbsent(showCaseRanking.getStatName(), l);
-        }
+        for (Map.Entry<Integer, List<ShowCaseRankingJPA>> entry : scrsByQueueId.entrySet()) {
+			Integer key = entry.getKey();
+			List<ShowCaseRankingJPA> val = entry.getValue();
+			Map<String, List<AppShowCaseRankingDTO>> scrsByStatName = new HashMap<>();
+			for (ShowCaseRankingJPA showCaseRanking : val) {
+	            List<AppShowCaseRankingDTO> l = scrsByStatName.getOrDefault(showCaseRanking.getStatName(), new ArrayList<>());
+	            // TODO fix this, it is inefficient 
+	            List<AppRankInfoDTO> ranks = leagueSummonerImpl.getRanksByPuuid(showCaseRanking.getSummoner().getPuuid());
+	            // TODO add all ranks
+	            AppRankInfoDTO highestRank = LeagueAppUtility.getHighestRankFromDto(ranks);
+	            l.add(LeagueAppUtility.generateAppShowCaseDetailDTO(showCaseRanking, highestRank));
+	            scrsByStatName.putIfAbsent(showCaseRanking.getStatName(), l);
+	        }
+			AppShowCaseDTO showcase = new AppShowCaseDTO();
+			showcase.setQueueType(LeagueQueueType.getById(key).description());
+			showcase.setShowcaseRankingsByStatName(scrsByStatName);
+			response.add(showcase);
+		}
+        
         return response;
     }
 

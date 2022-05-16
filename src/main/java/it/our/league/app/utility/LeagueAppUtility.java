@@ -313,6 +313,17 @@ public final class LeagueAppUtility {
         return map;
     }
 
+    public static Map<Integer, List<ShowCaseRankingJPA>> groupByQueueId(List<ShowCaseRankingJPA> scrs) {
+    	Map<Integer, List<ShowCaseRankingJPA>> map = new HashMap<>();
+    	
+    	for (ShowCaseRankingJPA scr : scrs) {
+			List<ShowCaseRankingJPA> l = map.getOrDefault(scr.getQueueTypeId(), new ArrayList<>());
+			l.add(scr);
+			map.putIfAbsent(scr.getQueueTypeId(), l);
+		}
+    	return map;
+    }
+
     public static AppLineChartWrapperDTO generateAppLineChartWrapperDTO(LineChartType type, List<AppLineChartDTO> charts, Integer minY, Integer maxY) {
         AppLineChartWrapperDTO out = new AppLineChartWrapperDTO();
         out.setName(type.getName());

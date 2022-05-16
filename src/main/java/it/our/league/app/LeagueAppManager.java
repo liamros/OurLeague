@@ -1,10 +1,9 @@
 package it.our.league.app;
 
 import java.util.List;
-import java.util.Map;
 
 import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
-import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
+import it.our.league.app.controller.dto.AppShowCaseDTO;
 
 /**
  * Main Application Class which processes data fetched from the other mangagers,
@@ -12,7 +11,7 @@ import it.our.league.app.controller.dto.AppShowCaseRankingDTO;
  */
 public interface LeagueAppManager {
     
-    public Map<String, List<AppShowCaseRankingDTO>> getShowCaseRankings();
+    public List<AppShowCaseDTO> getShowCaseRankings();
 
     public void updateShowCaseRankings();
 

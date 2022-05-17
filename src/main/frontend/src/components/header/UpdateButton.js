@@ -1,4 +1,5 @@
 import { CircularProgress } from "@mui/material";
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import React from "react";
 import { connect } from "react-redux";
@@ -54,7 +55,7 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
     }
     return (
         <>
-            {updating ? <CircularProgress color="secondary" /> :
+            {updating ? <Box style={{minWidth: "70.83px"}}><CircularProgress color="secondary" /></Box> :
                 <Button
                     sx={{ my: 2, color: 'white', display: 'block' }}
                     onClick={onClick}

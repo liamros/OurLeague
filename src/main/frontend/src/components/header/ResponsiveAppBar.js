@@ -10,7 +10,6 @@ import QueueButtons from './QueueButtons';
 import QueueMenuItems from './QueueMenuItems';
 import UpdateButton from './UpdateButton';
 
-const pages = ['Home'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);

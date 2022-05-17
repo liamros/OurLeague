@@ -40,13 +40,16 @@ CREATE TABLE showcase_ranking (
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	stat_name VARCHAR(150) NOT NULL,
 	summ_info_id INTEGER NOT NULL,
+	queue_type_id INTEGER NOT NULL,
 	position INTEGER NOT NULL,
 	prev_position INTEGER,
 	value FLOAT NOT NULL,
 	description VARCHAR(150) NOT NULL,
 	insert_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	FOREIGN KEY(summ_info_id) REFERENCES summoner_info(id)
+	FOREIGN KEY(summ_info_id) REFERENCES summoner_info(id),
+	FOREIGN KEY (queue_type_id) REFERENCES queue(queue_type_id),
+	UNIQUE KEY (stat_name,summ_info_id,queue_type_id)
 );
 
 INSERT INTO queue(queue_type_id, queue_type) VALUES	(420,'RANKED_SOLO_5x5'),
@@ -82,8 +85,3 @@ CREATE TABLE rel_summoner_match (
 	FOREIGN KEY(summ_info_id) REFERENCES summoner_info(id),
 	FOREIGN KEY(match_id) REFERENCES match_info(match_id)
 );
-
-
-ALTER TABLE league.showcase_ranking ADD queue_type_id INT NOT NULL;
-ALTER TABLE league.showcase_ranking ADD CONSTRAINT showcase_ranking_FK FOREIGN KEY (queue_type_id) REFERENCES league.queue(queue_type_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE league.showcase_ranking ADD CONSTRAINT showcase_ranking_un UNIQUE KEY (stat_name,summ_info_id,queue_type_id);

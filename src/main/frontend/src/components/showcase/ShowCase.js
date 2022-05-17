@@ -1,4 +1,4 @@
-import { LinearProgress } from "@mui/material";
+import { LinearProgress, Typography } from "@mui/material";
 import { AnimatePresence } from "framer-motion";
 import React from 'react';
 import { connect } from "react-redux";
@@ -6,7 +6,7 @@ import { fetchShowCaseRankings } from "../../actions";
 import ShowCaseItem from "./ShowCaseItem";
 import ShowCaseList from "./ShowCaseList";
 
-const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }) => {
+const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings, selectedQueue }) => {
 
 
 
@@ -23,6 +23,7 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
         <>
             {!isFetching && showCaseRankings ? (
                 <>
+                        <Typography className="typography showcase title">{selectedQueue}</Typography>
                         <ShowCaseList selectedId={statName} showCaseRankings={showCaseRankings} />
                         <AnimatePresence>
                             {statName && <ShowCaseItem id={statName} key="item" />}
@@ -35,10 +36,11 @@ const ShowCase = ({ match, showCaseRankings, isFetching, fetchShowCaseRankings }
 }
 
 function mapStateToProps(state) {
-    const selected = state.showCaseRankings.selected
-    if (selected)
+    const selectedQueue = state.showCaseRankings.selected
+    if (selectedQueue)
         return {
-            showCaseRankings: state.showCaseRankings.data[selected],
+            showCaseRankings: state.showCaseRankings.data[selectedQueue],
+            selectedQueue: selectedQueue,
             isFetching: state.isFetching,
         }
     else 

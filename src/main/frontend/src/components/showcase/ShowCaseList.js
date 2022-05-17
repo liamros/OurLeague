@@ -5,6 +5,14 @@ import ShowCaseRanking from "./ShowCaseRanking";
 const ShowCaseList = ({ selectedId, showCaseRankings }) => {
 
 
+    const orderedShowCaseRankings = Object.keys(showCaseRankings).sort().reduce(
+        (obj, key) => { 
+          obj[key] = showCaseRankings[key]; 
+          return obj;
+        }, 
+        {}
+      );
+
 
     const variants = {
         visible: i => ({
@@ -19,7 +27,7 @@ const ShowCaseList = ({ selectedId, showCaseRankings }) => {
 
     var rows = []
     let i = 0
-    for (let [statName, stats] of Object.entries(showCaseRankings)) {
+    for (let [statName, stats] of Object.entries(orderedShowCaseRankings)) {
         rows.push(
             <motion.div
                 key={i}

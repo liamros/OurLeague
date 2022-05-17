@@ -117,6 +117,8 @@ public class LeagueAppImpl implements LeagueAppManager {
 
 		for (AppSummonerDTO summoner : summoners) {
 			List<AppParticipantInfoDTO> participantInfos = leagueMatchImpl.getAllPopulatedParticipantInfoByPuuid(summoner.getPuuid(), queueType.id());
+			if (participantInfos.isEmpty())
+				continue;
 			Map<String, Object> map = null;
 			Float kda = LeagueAppUtility.getAverageKDA(participantInfos);
 			if (map == null || (float) map.get("value") < kda) {

@@ -16,7 +16,9 @@ export const showCaseRankings = (state = initialState, action) => {
             const map = new Map(Object.entries(action.payload))
             var selected = null
             map.forEach((showcase, queueType) => {
-                if (!selected)
+                if (state.selected)
+                    selected = state.selected
+                else if (!selected)
                     selected = queueType
                 const showcaseMap = new Map(Object.entries(showcase))
                 obj[queueType] = {}

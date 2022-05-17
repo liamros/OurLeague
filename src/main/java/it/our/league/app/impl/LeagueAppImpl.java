@@ -123,7 +123,7 @@ public class LeagueAppImpl implements LeagueAppManager {
 				Map<String, Object> m = new HashMap<>();
 				m.put("value", kda);
 				m.put("summInfoId", summoner.getSummInfoId());
-				String desc = MessageFormat.format(String.format("%.2f in {0}", kda), queueType.description());
+				String desc = MessageFormat.format("{0} on {1} games",String.format("%.2f", kda), participantInfos.size());
 				m.put("description", desc);
 				map = m;
 			}
@@ -150,7 +150,7 @@ public class LeagueAppImpl implements LeagueAppManager {
             		continue;
             	highestRank.put("summInfoId", rank.getSummInfoId());
             	highestRank.put("value", rank.getWinrate());
-                String desc = MessageFormat.format("{0}% in {1}", String.format("%.2f", rank.getWinrate()), queueType.description());
+                String desc = MessageFormat.format("{0}% on {1} games", String.format("%.2f", rank.getWinrate()), rank.getWins()+rank.getLosses());
                 highestRank.put("description", desc);
             }
             if (!highestRank.isEmpty())

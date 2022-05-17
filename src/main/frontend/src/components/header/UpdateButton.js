@@ -54,7 +54,7 @@ const UpdateButton = ({ fetchShowCaseRankings, fetchHomeLineCharts }) => {
     }
     return (
         <>
-            {updating ? <CircularProgress  /> :
+            {updating ? <CircularProgress color="secondary" /> :
                 <Button
                     sx={{ my: 2, color: 'white', display: 'block' }}
                     onClick={onClick}

@@ -1,5 +1,5 @@
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { IconButton, Menu, MenuItem } from '@mui/material';
+import { IconButton, Menu } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -7,6 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import QueueButtons from './QueueButtons';
+import QueueMenuItems from './QueueMenuItems';
 import UpdateButton from './UpdateButton';
 
 const pages = ['Home'];
@@ -65,11 +66,7 @@ const ResponsiveAppBar = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
+              <QueueMenuItems callback={handleCloseNavMenu}/>
             </Menu>
           </Box>
           <Typography
@@ -83,15 +80,6 @@ const ResponsiveAppBar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <QueueButtons />
-            {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))} */}
           </Box>
           <UpdateButton />
         </Toolbar>

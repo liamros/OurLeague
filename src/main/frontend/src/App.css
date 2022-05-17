@@ -69,6 +69,7 @@
   overflow: hidden;
   padding: 40px 0;
   overflow-y: auto;
+  height: 90%;
   /* position: none; */
 }
 

@@ -70,10 +70,16 @@ export function fetchHomeLineCharts() {
         var obj = {}
 
         var promise = getAllHomeCharts().then((response) => {
-            response.forEach((wrapper) => {
-                wrapper.charts.push({ id: "ALL", data: [] })
-                obj[wrapper.name] = wrapper
+            const map = new Map(Object.entries(response))
+            map.forEach((charts, queue) => {
+                obj[queue] = {}
+                charts.forEach((wrapper) => {
+                    wrapper.charts.push({ id: "ALL", data: [] })
+                    obj[queue][wrapper.name] = wrapper
+                })
             })
+
+
         })
         Promise.resolve(promise).then(() => dispatch(initHomeLineChartSuccess(obj)))
     }

@@ -1,6 +1,7 @@
 package it.our.league.app.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -66,7 +67,7 @@ public class LeagueAppController implements LeagueAppManager {
 
     @Override
     @GetMapping("/getAllHomeCharts")
-    public List<AppLineChartWrapperDTO> getAllHomeCharts() {
+    public Map<String, List<AppLineChartWrapperDTO>> getAllHomeCharts() {
         return leagueAppImpl.getAllHomeCharts();
     }
 

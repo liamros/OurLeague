@@ -335,15 +335,26 @@ public class LeagueAppImpl implements LeagueAppManager {
     
 
     @Override
-    public List<AppLineChartWrapperDTO> getAllHomeCharts() {
+    public Map<String, List<AppLineChartWrapperDTO>> getAllHomeCharts() {
 
         List<AppParticipantInfoDTO> matches = leagueMatchImpl.getAllPopulatedParticipantInfo();
-        Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner = mapMatchesByGameName(matches);
-        List<AppLineChartWrapperDTO> out = new ArrayList<>();
-        out.add(getGamesPerMinuteChart(matchesPerSummoner));
-        out.add(getVisionPerMinuteChart(matchesPerSummoner));
-        out.add(getWinratePerMinuteChart(matchesPerSummoner));
-        return out;
+        Map<Integer, List<AppParticipantInfoDTO>> matchesPerQueueId = LeagueAppUtility.groupAppParticipantsByQueueId(matches);
+        List<LeagueQueueType> validQueues = LeagueQueueType.getRankedQueues();
+        Map<String, List<AppLineChartWrapperDTO>> response = new HashMap<>();
+        for (Map.Entry<Integer, List<AppParticipantInfoDTO>> entry : matchesPerQueueId.entrySet()) {
+			Integer key = entry.getKey();
+			if (!validQueues.contains(LeagueQueueType.getById(key)))
+				continue;
+			List<AppParticipantInfoDTO> val = entry.getValue();
+			Map<String, List<AppParticipantInfoDTO>> matchesPerSummoner = mapMatchesByGameName(val);
+			List<AppLineChartWrapperDTO> charts = new ArrayList<>();
+	        charts.add(getGamesPerMinuteChart(matchesPerSummoner));
+	        charts.add(getVisionPerMinuteChart(matchesPerSummoner));
+	        charts.add(getWinratePerMinuteChart(matchesPerSummoner));
+	        response.put(LeagueQueueType.getById(key).description(), charts);
+		}
+        
+        return response;
     }
 
     @Override

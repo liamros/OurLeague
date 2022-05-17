@@ -323,6 +323,17 @@ public final class LeagueAppUtility {
 		}
     	return map;
     }
+    
+    public static Map<Integer, List<AppParticipantInfoDTO>> groupAppParticipantsByQueueId(List<AppParticipantInfoDTO> participants) {
+    	Map<Integer, List<AppParticipantInfoDTO>> map = new HashMap<>();
+    	
+    	for (AppParticipantInfoDTO participant : participants) {
+			List<AppParticipantInfoDTO> l = map.getOrDefault(participant.getQueueTypeId(), new ArrayList<>());
+			l.add(participant);
+			map.putIfAbsent(participant.getQueueTypeId(), l);
+		}
+    	return map;
+    }
 
     public static AppLineChartWrapperDTO generateAppLineChartWrapperDTO(LineChartType type, List<AppLineChartDTO> charts, Integer minY, Integer maxY) {
         AppLineChartWrapperDTO out = new AppLineChartWrapperDTO();

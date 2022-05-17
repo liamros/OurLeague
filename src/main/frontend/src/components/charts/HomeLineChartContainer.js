@@ -87,10 +87,14 @@ const styles = {
 
 
 function mapStateToProps(state) {
-    return {
-        data: state.homeLineCharts.data,
-        isFetching: state.isFetching,
-    }
+    const selectedQueue = state.showCaseRankings.selected
+    if (selectedQueue)
+        return {
+            data: state.homeLineCharts.data[selectedQueue],
+            isFetching: state.isFetching,
+        }
+    else
+        return {}
 }
 
 function mapDispatchToProps(dispatch) {

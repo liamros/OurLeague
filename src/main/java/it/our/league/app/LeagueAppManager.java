@@ -1,6 +1,7 @@
 package it.our.league.app;
 
 import java.util.List;
+import java.util.Map;
 
 import it.our.league.app.controller.dto.AppLineChartWrapperDTO;
 import it.our.league.app.controller.dto.AppShowCaseDTO;
@@ -19,7 +20,7 @@ public interface LeagueAppManager {
 
     public String asyncronousDataRefresh();
 
-    public List<AppLineChartWrapperDTO> getAllHomeCharts(); 
+    public Map<String, List<AppLineChartWrapperDTO>> getAllHomeCharts(); 
 
     public AppLineChartWrapperDTO getWinratePerMinuteChart();
 

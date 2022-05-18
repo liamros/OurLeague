@@ -113,7 +113,7 @@ const LineChart = ({ data, activeCharts, callback }) => {
             legends={[
                 {
                     data: charts.map((item, _) => {
-                        var color = activeCharts[item.id] ? item.color : "transparent"
+                        var color = activeCharts[item.id] && item.data.length > 0 ? item.color : "transparent"
                         return {
                         id: item.id,
                         label: item.id,

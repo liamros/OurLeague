@@ -86,7 +86,8 @@ No use of cache is implemented yet.
 - [x] Animate and style ShowCase
 - [x] Charts
 - [x] Update button websocket
-- [ ] Maintain selected state between charts
+- [x] Maintain selected state between charts
+- [x] Group by queue 
 - [ ] StatsSection
 - [ ] PairStatsSection
 - [ ] MatchHistory

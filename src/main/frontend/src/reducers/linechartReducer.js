@@ -12,6 +12,22 @@ export const homeLineCharts = (state = initialState, action) => {
             }
         case 'INIT_HOME_LINECHART_SUCCESS':
             const obj = action.payload
+            const allSummoners = new Set()
+            Object.keys(obj).forEach((key) => {
+                Object.keys(obj[key]).forEach((subKey) => {
+                    obj[key][subKey].charts.forEach((c) => allSummoners.add(c.id))
+                })
+            })
+            Object.keys(obj).forEach((key) => {
+                Object.keys(obj[key]).forEach((subKey) => {
+                    var notSeen = new Set(allSummoners)
+                    obj[key][subKey].charts.forEach((c) => {
+                        if (allSummoners.has(c.id))
+                            notSeen.delete(c.id)
+                    })
+                    notSeen.forEach((id) => obj[key][subKey].charts.push({ id: id, data: []}))
+                })
+            })
             Object.keys(obj).forEach((key) => {
                 Object.keys(obj[key]).forEach((subKey) => {
                     obj[key][subKey].charts.sort((a, b) => {

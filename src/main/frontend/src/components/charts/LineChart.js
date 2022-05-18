@@ -6,33 +6,39 @@ import React, { useState } from 'react';
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const LineChart = ({ data }) => {
+const LineChart = ({ data, activeCharts, callback }) => {
 
-    const [allpressed, setAllpressed] = useState(false)
     const [charts, setCharts] = useState(data["charts"])
 
     React.useEffect(() => {
-        let allExists = false
-        var a = data.charts
-        a.forEach(element => {
-            element["active"] = true
-        });
-        // a.push({ id: "ALL", data: [] })
+        data.charts.map((item, idx) => {
+            item.color = colors[idx%colors.length]
+        })
+        var a = JSON.parse(JSON.stringify(data.charts))
         setCharts(a)
+        a.forEach(elem => {
+            if (!activeCharts[elem.id])
+                elem.data.forEach((d) => d.y = 0)
+        });
+        return () => {
+            callback(activeCharts)
+        }
     }, [data])
 
     const onClick = (e) => {
         var a = JSON.parse(JSON.stringify(charts))
         if (e.id === "ALL") {
-            if (!allpressed) {
+            if (activeCharts["ALL"]) {
                 a.forEach((elem) => {
                     elem.data.forEach((d) => d.y = 0)
-                    elem.active = false
+                    activeCharts[elem.id] = false
                 })
+                activeCharts["ALL"] = false
             } else {
                 a = JSON.parse(JSON.stringify(data.charts))
+                a.forEach((elem) => activeCharts[elem.id] = true)
+                activeCharts["ALL"] = true
             }
-            setAllpressed(!allpressed)
             setCharts(a)
             return
         }
@@ -40,13 +46,13 @@ const LineChart = ({ data }) => {
         while (charts[idx].id != e.id) {
             idx++
         }
-        if (a[idx].active) {
+        if (activeCharts[e.id]) {
             a[idx].data.forEach((d) => d.y = 0)
-            a[idx].active = false
+            activeCharts[e.id] = false
         }
         else {
             a[idx].data = data.charts[idx].data
-            a[idx].active = true
+            activeCharts[e.id] = true
         }
 
         setCharts(a)
@@ -95,7 +101,7 @@ const LineChart = ({ data }) => {
             }}
             pointSize={10}
             crosshairType="cross"
-            colors={{ scheme: 'blues' }}
+            colors={colors}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}
@@ -106,6 +112,18 @@ const LineChart = ({ data }) => {
             motionConfig="gentle"
             legends={[
                 {
+                    data: charts.map((item, _) => {
+                        var color = activeCharts[item.id] ? item.color : "transparent"
+                        return {
+                        id: item.id,
+                        label: item.id,
+                        color: color,
+                        style : {
+                            itemBackground: 'rgba(208, 168, 92, .03)',
+                            itemOpacity: 1
+                        }
+                      }
+                    }).reverse(),
                     anchor: 'bottom-right',
                     direction: 'column',
                     justify: false,
@@ -137,6 +155,9 @@ const LineChart = ({ data }) => {
     )
 }
 
+// const colors = ["#b0c4de","#add8e6","#87ceeb","#6495ed","#1e90ff","#4169e1","#0067a5","#004f98","#00308f","#002e63"]
+
+const colors = ["#fff100","#ff8c00","#e81123","#68217a","#00188f","#00bcf2","#00b294","#009e49","#ec008c","#FFFF"]
 
 
 const theme = {

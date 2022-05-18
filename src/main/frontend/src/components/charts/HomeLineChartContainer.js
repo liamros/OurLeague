@@ -6,8 +6,9 @@ import { connect } from "react-redux";
 import { fetchHomeLineCharts } from '../../actions';
 import LineChart from "./LineChart";
 
-const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
+const HomeLineChartContainer = ({ data, fetchHomeLineCharts, selectedQueue }) => {
 
+    const [activecharts, setActivecharts] = React.useState()
 
     var [selected, setSelected] = useState("Games/Minute")
 
@@ -15,14 +16,33 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
         fetchHomeLineCharts()
     }, [])
 
+    React.useEffect(() => {
+        if (activecharts || !data)
+            return
+        const obj = {}
+        Object.keys(data).forEach((key) => {
+            Object.keys(data[key]).forEach((subKey) => {
+                data[key][subKey].charts.forEach((e) => {
+                    obj[e.id] = true
+                })
+            })
+        })
+        setActivecharts(obj)
+    }, [data])
+
     const onClick = (e) => {
         if (selected !== e.currentTarget.id)
             setSelected(e.currentTarget.id)
     }
 
+    const linechartCallback = (chartState) => {
+        if (chartState)
+            setActivecharts(chartState)
+    }
+
     var map = null
-    if (data)
-        map = new Map(Object.entries(data))
+    if (data && selectedQueue)
+        map = new Map(Object.entries(data[selectedQueue]))
     var jsx = []
     if (map)
         map.forEach(((_, key) => {
@@ -53,7 +73,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
     }
 
     return (
-        data ?
+        data && selectedQueue ?
         <StyledEngineProvider injectFirst>
             <motion.div
                 className={"container chart"}
@@ -64,8 +84,8 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
                 <ButtonGroup className="typography button-group" variant="contained" aria-label="outlined primary button group">
                     {jsx}
                 </ButtonGroup>
-                <div className="typography-title">{data[selected].name}</div>
-                <LineChart data={data[selected]} />
+                <div className="typography-title">{data[selectedQueue][selected].name}</div>
+                <LineChart data={data[selectedQueue][selected]} activeCharts={activecharts} callback={linechartCallback} />
             </motion.div>
         </StyledEngineProvider> : <></>
     )
@@ -87,14 +107,11 @@ const styles = {
 
 
 function mapStateToProps(state) {
-    const selectedQueue = state.showCaseRankings.selected
-    if (selectedQueue)
-        return {
-            data: state.homeLineCharts.data[selectedQueue],
-            isFetching: state.isFetching,
-        }
-    else
-        return {}
+    return {
+        data: state.homeLineCharts.data,
+        selectedQueue: state.showCaseRankings.selected,
+        isFetching: state.isFetching,
+    }
 }
 
 function mapDispatchToProps(dispatch) {

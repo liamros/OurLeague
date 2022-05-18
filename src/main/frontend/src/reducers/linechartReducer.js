@@ -21,11 +21,14 @@ export const homeLineCharts = (state = initialState, action) => {
             Object.keys(obj).forEach((key) => {
                 Object.keys(obj[key]).forEach((subKey) => {
                     var notSeen = new Set(allSummoners)
+                    var minX = Number.MAX_SAFE_INTEGER
                     obj[key][subKey].charts.forEach((c) => {
                         if (allSummoners.has(c.id))
                             notSeen.delete(c.id)
+                        if (c.data && c.data[0])
+                            minX = Math.min(minX, c.data[0].x)
                     })
-                    notSeen.forEach((id) => obj[key][subKey].charts.push({ id: id, data: []}))
+                    notSeen.forEach((id) => obj[key][subKey].charts.push({ id: id, data: [{x:minX, y:0}]}))
                 })
             })
             Object.keys(obj).forEach((key) => {
@@ -36,7 +39,12 @@ export const homeLineCharts = (state = initialState, action) => {
                         else
                             return 1
                     })
-                    obj[key][subKey].charts.push({ id: "ALL", data: [] })
+                    var minX = Number.MAX_SAFE_INTEGER
+                    obj[key][subKey].charts.forEach((c) => {
+                        if (c.data && c.data[0])
+                            minX = Math.min(minX, c.data[0].x)
+                    })
+                    obj[key][subKey].charts.push({ id: "ALL", data: [{x:15, y:0}] })
                 })
                 
             })

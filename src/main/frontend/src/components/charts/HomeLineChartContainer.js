@@ -14,7 +14,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts, selectedQueue }) =>
 
     React.useEffect(() => {
         fetchHomeLineCharts()
-    }, [])
+    }, [fetchHomeLineCharts])
 
     React.useEffect(() => {
         if (activecharts || !data)
@@ -28,7 +28,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts, selectedQueue }) =>
             })
         })
         setActivecharts(obj)
-    }, [data])
+    }, [data, activecharts])
 
     const onClick = (e) => {
         if (selected !== e.currentTarget.id)

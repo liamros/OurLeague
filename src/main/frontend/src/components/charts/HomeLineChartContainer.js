@@ -53,7 +53,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
     }
 
     return (
-        data &&
+        data ?
         <StyledEngineProvider injectFirst>
             <motion.div
                 className={"container chart"}
@@ -67,7 +67,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts }) => {
                 <div className="typography-title">{data[selected].name}</div>
                 <LineChart data={data[selected]} />
             </motion.div>
-        </StyledEngineProvider>
+        </StyledEngineProvider> : <></>
     )
 
 }

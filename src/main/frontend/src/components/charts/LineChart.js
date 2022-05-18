@@ -95,7 +95,7 @@ const LineChart = ({ data }) => {
             }}
             pointSize={10}
             crosshairType="cross"
-            colors={{ scheme: 'category10' }}
+            colors={{ scheme: 'blues' }}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}

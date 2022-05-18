@@ -74,11 +74,9 @@ export function fetchHomeLineCharts() {
             map.forEach((charts, queue) => {
                 obj[queue] = {}
                 charts.forEach((wrapper) => {
-                    wrapper.charts.push({ id: "ALL", data: [] })
                     obj[queue][wrapper.name] = wrapper
                 })
             })
-
 
         })
         Promise.resolve(promise).then(() => dispatch(initHomeLineChartSuccess(obj)))

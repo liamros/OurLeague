@@ -11,9 +11,22 @@ export const homeLineCharts = (state = initialState, action) => {
                 isFetched: false
             }
         case 'INIT_HOME_LINECHART_SUCCESS':
+            const obj = action.payload
+            Object.keys(obj).forEach((key) => {
+                Object.keys(obj[key]).forEach((subKey) => {
+                    obj[key][subKey].charts.sort((a, b) => {
+                        if (a.id > b.id)
+                            return -1
+                        else
+                            return 1
+                    })
+                    obj[key][subKey].charts.push({ id: "ALL", data: [] })
+                })
+                
+            })
             return {
                 ...state,
-                data: action.payload,
+                data: obj,
                 isFetched: true
             }
         default:

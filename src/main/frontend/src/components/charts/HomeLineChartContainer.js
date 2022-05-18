@@ -73,7 +73,7 @@ const HomeLineChartContainer = ({ data, fetchHomeLineCharts, selectedQueue }) =>
     }
 
     return (
-        data && selectedQueue ?
+        (data && selectedQueue && activecharts) ?
         <StyledEngineProvider injectFirst>
             <motion.div
                 className={"container chart"}

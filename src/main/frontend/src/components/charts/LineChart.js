@@ -64,7 +64,7 @@ const LineChart = ({ data, activeCharts, callback }) => {
 
         <ResponsiveLine
             data={charts}
-            margin={{ top: 10, right: 110, bottom: 50, left: 60 }}
+            margin={{ top: 10, right: 150, bottom: 50, left: 60 }}
             theme={theme}
             xScale={{
                 type: 'point',
@@ -114,9 +114,12 @@ const LineChart = ({ data, activeCharts, callback }) => {
                 {
                     data: charts.map((item, _) => {
                         var color = activeCharts[item.id] && item.data.length > 1 ? item.color : "transparent"
+                        var label = item.id
+                        if (item.data.length <= 1 && item.id !== "ALL")
+                            label = item.id + " (No data)"
                         return {
                         id: item.id,
-                        label: item.id,
+                        label: label,
                         color: color,
                         style : {
                             itemBackground: 'rgba(208, 168, 92, .03)',
@@ -127,7 +130,7 @@ const LineChart = ({ data, activeCharts, callback }) => {
                     anchor: 'bottom-right',
                     direction: 'column',
                     justify: false,
-                    translateX: 100,
+                    translateX: 95,
                     translateY: 0,
                     itemsSpacing: 0,
                     itemDirection: 'left-to-right',

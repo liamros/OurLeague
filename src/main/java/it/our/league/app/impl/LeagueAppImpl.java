@@ -173,7 +173,7 @@ public class LeagueAppImpl implements LeagueAppManager {
                 AppRankInfoDTO aRank = (AppRankInfoDTO) a.get("highestRank");
                 AppRankInfoDTO bRank = (AppRankInfoDTO) b.get("highestRank");
                 AppRankInfoDTO highest = LeagueAppUtility.getHighestRankFromDto(Arrays.asList(aRank, bRank));
-                if (bRank.getSummInfoId() == highest.getSummInfoId())
+                if (bRank != null && bRank.getSummInfoId() == highest.getSummInfoId())
                     return 1;
                 return -1;
             }

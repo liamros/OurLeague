@@ -169,7 +169,7 @@ public final class LeagueAppUtility {
     public static AppRankInfoDTO getHighestRankFromDto(List<AppRankInfoDTO> list) {
         AppRankInfoDTO rank = null;
         for (AppRankInfoDTO rankInfo : list) {
-            if (rank != null) {
+            if (rankInfo != null && rank != null) {
                 int nextTierOrdinal = RankedTierType.valueOf(rankInfo.getTier()).ordinal();
                 int currTierOrdinal = RankedTierType.valueOf(rank.getTier()).ordinal();
                 if (nextTierOrdinal > currTierOrdinal)
@@ -181,7 +181,7 @@ public final class LeagueAppUtility {
                             || nextDivOrdinal == curreDivOrdinal && rankInfo.getLp() > rank.getLp())
                         rank = rankInfo;
                 }
-            } else
+            } else if (rankInfo != null)
                 rank = rankInfo;
         }
         return rank;

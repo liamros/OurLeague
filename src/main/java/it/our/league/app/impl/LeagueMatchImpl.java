@@ -33,9 +33,9 @@ public class LeagueMatchImpl implements LeagueMatchManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(LeagueMatchImpl.class);
 
     /**
-     * beginning of season 12 in seconds
+     * beginning of pre-season 13 in seconds
      */
-    private final long defaultTimestamp = 1641524400;
+    private final long defaultTimestamp = 1668567600;
 
     private RiotManagerInterface riotManager;
 
